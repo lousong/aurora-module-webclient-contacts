@@ -100,7 +100,7 @@ CImportView.prototype.onFileUploadComplete = function (sFileUid, bResponseReceiv
 		}
 		else
 		{
-			Screens.showError(TextUtils.i18n('CORE/ERROR_UPLOAD_FILE'));
+			Screens.showError(TextUtils.i18n('CORECLIENT/ERROR_UPLOAD_FILE'));
 		}
 	}
 };

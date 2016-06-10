@@ -25,7 +25,7 @@
 				</div>				
 				<div class="row" data-bind="visible: isOrganization">
 					<span class="label">
-						<span data-bind="i18n: {'key': 'CORE/LABEL_EMAIL'}"></span>:
+						<span data-bind="i18n: {'key': 'CORECLIENT/LABEL_EMAIL'}"></span>:
 					</span>
 					<input class="value input" type="text" id="selenium_contacts_edit_group_email"
 						   data-bind="value: email, valueUpdate: 'afterkeydown', onEnter: $root.saveCommand" />
@@ -93,7 +93,7 @@
 </div>
 <div class="panel_bottom">
 	<div class="buttons">
-		<span class="button" data-bind="i18n: {'key': 'CORE/ACTION_SAVE'}, command: $root.saveCommand" id="selenium_contacts_edit_group_save_button"></span>
-		<span class="button secondary_button" data-bind="i18n: {'key': 'CORE/ACTION_CANCEL'}, click: function () { $root.executeCancel(); }"></span>
+		<span class="button" data-bind="i18n: {'key': 'CORECLIENT/ACTION_SAVE'}, command: $root.saveCommand" id="selenium_contacts_edit_group_save_button"></span>
+		<span class="button secondary_button" data-bind="i18n: {'key': 'CORECLIENT/ACTION_CANCEL'}, click: function () { $root.executeCancel(); }"></span>
 	</div>
 </div>
