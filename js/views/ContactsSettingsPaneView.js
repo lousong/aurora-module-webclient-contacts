@@ -4,9 +4,10 @@ var
 	_ = require('underscore'),
 	ko = require('knockout'),
 	
+	Types = require('modules/CoreClient/js/utils/Types.js'),
+	
 	ModulesManager = require('modules/CoreClient/js/ModulesManager.js'),
 	CAbstractSettingsFormView = ModulesManager.run('SettingsClient', 'getAbstractSettingsFormViewClass'),
-	SettingsUtils = ModulesManager.run('SettingsClient', 'getSettingsUtils'),
 	
 	Settings = require('modules/%ModuleName%/js/Settings.js')
 ;
@@ -18,7 +19,7 @@ function CContactsSettingsPaneView()
 {
 	CAbstractSettingsFormView.call(this, Settings.ServerModuleName);
 	
-	this.contactsPerPageValues = ko.observableArray(SettingsUtils.getAdaptedPerPageList(Settings.ContactsPerPage));
+	this.contactsPerPageValues = ko.observableArray(Types.getAdaptedPerPageList(Settings.ContactsPerPage));
 	
 	this.contactsPerPage = ko.observable(Settings.ContactsPerPage);
 }
