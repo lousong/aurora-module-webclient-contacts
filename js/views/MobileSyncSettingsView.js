@@ -29,10 +29,13 @@ CMobileSyncSettingsView.prototype.ViewTemplate = '%ModuleName%_MobileSyncSetting
  */
 CMobileSyncSettingsView.prototype.populate = function (oDav)
 {
-	this.davPersonalContactsUrl(oDav.PersonalContactsUrl);
-	this.davCollectedAddressesUrl(oDav.CollectedAddressesUrl);
-	this.davSharedWithAllUrl(oDav.SharedWithAllUrl);
-	this.davGlobalAddressBookUrl(oDav.GlobalAddressBookUrl);
+	if (oDav.Contacts)
+	{
+		this.davPersonalContactsUrl(oDav.Contacts.PersonalContactsUrl);
+		this.davCollectedAddressesUrl(oDav.Contacts.CollectedAddressesUrl);
+		this.davSharedWithAllUrl(oDav.Contacts.SharedWithAllUrl);
+		this.davGlobalAddressBookUrl(oDav.Contacts.GlobalAddressBookUrl);
+	}
 };
 
 module.exports = new CMobileSyncSettingsView();
