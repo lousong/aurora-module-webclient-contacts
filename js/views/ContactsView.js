@@ -325,11 +325,14 @@ function CContactsView()
 			this.gotoContactList();
 		}
 	}, this);
+	
+	App.broadcastEvent('%ModuleName%::ConstructView::after', {'Name': this.ViewConstructorName, 'View': this});
 }
 
 _.extendOwn(CContactsView.prototype, CAbstractScreenView.prototype);
 
 CContactsView.prototype.ViewTemplate = '%ModuleName%_ContactsScreenView';
+CContactsView.prototype.ViewConstructorName = 'CContactsView';
 
 /**
  * 
