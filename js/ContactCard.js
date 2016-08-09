@@ -9,8 +9,8 @@ var
 	ModulesManager = require('modules/CoreClient/js/ModulesManager.js'),
 	Screens = require('modules/CoreClient/js/Screens.js'),
 	
-	ComposeMessageToAddressesFunc = ModulesManager.run('MailClient', 'getComposeMessageToAddresses'),
-	SearchMessagesInCurrentFolderFunc = ModulesManager.run('MailClient', 'getSearchMessagesInCurrentFolder'),
+	ComposeMessageToAddressesFunc = ModulesManager.run('MailWebclient', 'getComposeMessageToAddresses'),
+	SearchMessagesInCurrentFolderFunc = ModulesManager.run('MailWebclient', 'getSearchMessagesInCurrentFolder'),
 	
 	Popups = require('modules/CoreClient/js/Popups.js'),
 	CreateContactPopup = require('modules/%ModuleName%/js/popups/CreateContactPopup.js'),
