@@ -3,8 +3,8 @@
 var
 	ko = require('knockout'),
 			
-	TextUtils = require('modules/CoreClient/js/utils/Text.js'),
-	App = require('modules/CoreClient/js/App.js')
+	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
+	App = require('%PathToCoreWebclientModule%/js/App.js')
 ;
 
 /**

@@ -4,13 +4,13 @@ var
 	_ = require('underscore'),
 	ko = require('knockout'),
 	
-	TextUtils = require('modules/CoreClient/js/utils/Text.js'),
-	Types = require('modules/CoreClient/js/utils/Types.js'),
+	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
+	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
 	
-	App = require('modules/CoreClient/js/App.js'),
-	CJua = require('modules/CoreClient/js/CJua.js'),
-	UserSettings = require('modules/CoreClient/js/Settings.js'),
-	Screens = require('modules/CoreClient/js/Screens.js'),
+	App = require('%PathToCoreWebclientModule%/js/App.js'),
+	CJua = require('%PathToCoreWebclientModule%/js/CJua.js'),
+	UserSettings = require('%PathToCoreWebclientModule%/js/Settings.js'),
+	Screens = require('%PathToCoreWebclientModule%/js/Screens.js'),
 	
 	Settings = require('modules/%ModuleName%/js/Settings.js')
 ;

@@ -7,7 +7,7 @@ module.exports = function (oAppData) {
 		_ = require('underscore'),
 		$ = require('jquery'),
 		
-		TextUtils = require('modules/CoreClient/js/utils/Text.js'),
+		TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
 		
 		Settings = require('modules/%ModuleName%/js/Settings.js'),
 		oSettings = _.extend({}, oAppData[Settings.ServerModuleName] || {}, oAppData['%ModuleName%'] || {}),

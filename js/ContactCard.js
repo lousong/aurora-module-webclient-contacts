@@ -5,14 +5,14 @@ var
 	$ = require('jquery'),
 	ko = require('knockout'),
 	
-	CustomTooltip = require('modules/CoreClient/js/CustomTooltip.js'),
-	ModulesManager = require('modules/CoreClient/js/ModulesManager.js'),
-	Screens = require('modules/CoreClient/js/Screens.js'),
+	CustomTooltip = require('%PathToCoreWebclientModule%/js/CustomTooltip.js'),
+	ModulesManager = require('%PathToCoreWebclientModule%/js/ModulesManager.js'),
+	Screens = require('%PathToCoreWebclientModule%/js/Screens.js'),
 	
 	ComposeMessageToAddressesFunc = ModulesManager.run('MailWebclient', 'getComposeMessageToAddresses'),
 	SearchMessagesInCurrentFolderFunc = ModulesManager.run('MailWebclient', 'getSearchMessagesInCurrentFolder'),
 	
-	Popups = require('modules/CoreClient/js/Popups.js'),
+	Popups = require('%PathToCoreWebclientModule%/js/Popups.js'),
 	CreateContactPopup = require('modules/%ModuleName%/js/popups/CreateContactPopup.js'),
 	
 	ContactsCache = require('modules/%ModuleName%/js/Cache.js'),
