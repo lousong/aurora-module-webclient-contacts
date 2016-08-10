@@ -392,7 +392,7 @@ function CContactModel()
 			iIndex = 1,
 			iLen = Types.pInt(DateUtils.daysInMonth(this.otherBirthdayMonth(), this.otherBirthdayYear())),
 			sIndex = '',
-			aList = [{'text': TextUtils.i18n('CORECLIENT/LABEL_DAY'), 'value': '0'}]
+			aList = [{'text': TextUtils.i18n('COREWEBCLIENT/LABEL_DAY'), 'value': '0'}]
 		;
 
 		for (; iIndex <= iLen; iIndex++)
@@ -422,7 +422,7 @@ function CContactModel()
 CContactModel.aBirthdayMonths = DateUtils.getMonthNamesArray();
 
 CContactModel.birthdayMonthSelect = [
-	{'text': TextUtils.i18n('CORECLIENT/LABEL_MONTH'), value: '0'},
+	{'text': TextUtils.i18n('COREWEBCLIENT/LABEL_MONTH'), value: '0'},
 	{'text': CContactModel.aBirthdayMonths[0], value: '1'},
 	{'text': CContactModel.aBirthdayMonths[1], value: '2'},
 	{'text': CContactModel.aBirthdayMonths[2], value: '3'},
