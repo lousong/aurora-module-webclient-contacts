@@ -16,13 +16,13 @@
 				</div>
 				<div class="row" data-bind="visible: !itsMe()">
 					<span class="label">
-						<span class="text" data-bind="i18n: {'key': 'CORECLIENT/LABEL_EMAIL'}"></span>:
+						<span class="text" data-bind="i18n: {'key': 'COREWEBCLIENT/LABEL_EMAIL'}"></span>:
 					</span>
 					<input class="value input" type="text" data-bind="value: email" id="selenium_contacts_edit_email" />
 				</div>
 				<div class="row" data-bind="visible: itsMe()">
 					<span class="label">
-						<span class="text" data-bind="i18n: {'key': 'CORECLIENT/LABEL_EMAIL'}"></span>:
+						<span class="text" data-bind="i18n: {'key': 'COREWEBCLIENT/LABEL_EMAIL'}"></span>:
 					</span>
 					<span class="value" data-bind="text: email"></span>
 				</div>
@@ -67,7 +67,7 @@
 					</div>
 					<div class="row">
 						<span class="label">
-							<span class="text" data-bind="i18n: {'key': 'CORECLIENT/LABEL_EMAIL'}"></span>:
+							<span class="text" data-bind="i18n: {'key': 'COREWEBCLIENT/LABEL_EMAIL'}"></span>:
 						</span>
 						<span class="value" data-bind="visible: 0 === emails().length">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_NOT_SPECIFIED_YET'}"></span>
@@ -347,10 +347,10 @@
 <div class="panel_bottom">
 	<div class="buttons">
 		<span class="button" data-bind="command: $root.saveCommand" id="selenium_contacts_edit_save_button">
-			<span class="text" data-bind="i18n: {'key': 'CORECLIENT/ACTION_SAVE'}"></span>
+			<span class="text" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE'}"></span>
 		</span>
 		<span class="button secondary_button" data-bind="click: function () { $root.executeCancel(); }">
-			<span class="text" data-bind="i18n: {'key': 'CORECLIENT/ACTION_CANCEL'}"></span>
+			<span class="text" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_CANCEL'}"></span>
 		</span>
 	</div>
 </div>

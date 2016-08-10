@@ -21,9 +21,9 @@
 	</span>
 </span>
 <span class="item delete" data-bind="visible: (showPersonalContacts() && selectedGroupType() === Enums.ContactsGroupListType.Personal || showSharedToAllContacts() && selectedGroupType() === Enums.ContactsGroupListType.SharedToAll), 
-		command: deleteCommand, customTooltip: 'CORECLIENT/ACTION_DELETE'" id="selenium_contacts_delete_button">
+		command: deleteCommand, customTooltip: 'COREWEBCLIENT/ACTION_DELETE'" id="selenium_contacts_delete_button">
 	<span class="icon"></span>
-	<span class="text" data-bind="i18n: {'key': 'CORECLIENT/ACTION_DELETE'}"></span>
+	<span class="text" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_DELETE'}"></span>
 </span>
 <span class="item remove_from" data-bind="visible: showPersonalContacts() && selectedGroupType() === Enums.ContactsGroupListType.SubGroup, command: removeFromGroupCommand, customTooltip: '%MODULENAME%/ACTION_REMOVE_FROM_GROUP'">
 	<span class="icon"></span>

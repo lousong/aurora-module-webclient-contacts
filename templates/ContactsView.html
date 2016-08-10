@@ -5,7 +5,7 @@
 	</label>
 	<span class="search_block">
 		<span class="input" data-bind="css: {'focus': isSearchFocused}">
-			<span class="icon search" data-bind="i18n: {'key': 'CORECLIENT/ACTION_SEARCH'}, click: searchSubmitCommand"></span>
+			<span class="icon search" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SEARCH'}, click: searchSubmitCommand"></span>
 			<input class="field" type="text" data-bind="value: searchInput, onEnter: searchSubmitCommand, hasfocus: isSearchFocused" />
 		</span>
 	</span>
@@ -23,7 +23,7 @@
 					<span class="description" data-bind="i18n: {'key': '%MODULENAME%/INFO_DRAGNDROP_TO_GROUP'}, visible: bVisibleDragNDropDescription"></span>
 				</span>
 				<span class="list_notification" data-bind="visible: isSearch()">
-					<span class="link" data-bind="i18n: {'key': 'CORECLIENT/ACTION_CLEAR_SEARCH'}, click: onClearSearchClick"></span>
+					<span class="link" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_CLEAR_SEARCH'}, click: onClearSearchClick"></span>
 					<span class="description" data-bind="i18n: {'key': '%MODULENAME%/INFO_NO_CONTACTS_FOUND'}"></span>
 				</span>
 			</div>
@@ -33,7 +33,7 @@
 			</span>
 
 			<span class="list_notification" data-bind="visible: isSearch() && !isEmptyList()">
-				<span class="link" data-bind="i18n: {'key': 'CORECLIENT/ACTION_CLEAR_SEARCH'}, click: onClearSearchClick"></span>
+				<span class="link" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_CLEAR_SEARCH'}, click: onClearSearchClick"></span>
 				<span class="description" data-bind="text: searchText"></span>
 			</span>
 

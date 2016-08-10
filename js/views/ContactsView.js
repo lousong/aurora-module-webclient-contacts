@@ -1568,7 +1568,7 @@ CContactsView.prototype.onContactUploadComplete = function (sFileUid, bResponseR
 		}
 		else
 		{
-			Screens.showError(TextUtils.i18n('CORECLIENT/ERROR_UNKNOWN'));
+			Screens.showError(TextUtils.i18n('COREWEBCLIENT/ERROR_UNKNOWN'));
 		}
 	}
 };
