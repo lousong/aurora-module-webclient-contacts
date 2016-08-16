@@ -21,7 +21,7 @@ module.exports = function (oAppData) {
 	
 	return _.extend(ComponentsMethods, {
 		isAvailable: function (iUserRole, bPublic) {
-			return !bPublic && iUserRole === Enums.UserRole.PowerUser;
+			return !bPublic && iUserRole === Enums.UserRole.NormalUser;
 		},
 		start: function (ModulesManager) {
 			ModulesManager.run('SettingsWebclient', 'registerSettingsTab', [function () { return require('modules/%ModuleName%/js/views/ContactsSettingsPaneView.js'); }, Settings.HashModuleName, TextUtils.i18n('%MODULENAME%/LABEL_SETTINGS_TAB')]);
