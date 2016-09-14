@@ -1,6 +1,8 @@
 'use strict';
 
 module.exports = function (oAppData) {
+	require('modules/%ModuleName%/js/enums.js');
+	
 	var
 		_ = require('underscore'),
 		$ = require('jquery'),
