@@ -37,7 +37,7 @@ CImportView.prototype.ViewTemplate = '%ModuleName%_ImportView';
 CImportView.prototype.onBind = function ()
 {
 	this.oJua = new CJua({
-		'action': '?/Upload/',
+		'action': '?/Api/',
 		'name': 'jua-uploader',
 		'queueSize': 1,
 		'clickElement': this.importButtonDom(),
