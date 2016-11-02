@@ -8,17 +8,8 @@ var
 	Enums = {}
 ;
 
-/**
- * @enum {number}
- */
-Enums.ContactsGroupListType = {
-	'Personal': 0,
-	'SubGroup': 1,
-	'Global': 2,
-	'SharedToAll': 3,
-	'All': 4
-};
-
+Enums.ContactsStorage = UserSettings.EContactsStorage;
+Enums.ContactsStorage.SubGroup = 4;
 Enums.ContactsPrimaryEmail = UserSettings.EContactsPrimaryEmail;
 Enums.ContactsPrimaryPhone = UserSettings.EContactsPrimaryPhone;
 Enums.ContactsPrimaryAddress = UserSettings.EContactsPrimaryAddress;

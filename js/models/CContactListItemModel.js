@@ -36,6 +36,7 @@ function CContactListItemModel()
  */
 CContactListItemModel.prototype.parse = function (oData)
 {
+	console.log('oData', oData);
 	this.sId = Types.pString(oData.Id);
 	this.sName = Types.pString(oData.Name);
 	this.sEmail = Types.pString(oData.Email);
@@ -138,15 +139,15 @@ CContactListItemModel.prototype.getGroupType = function (oData)
 {
 	if (oData.SharedToAll)
 	{
-		return Enums.ContactsGroupListType.SharedToAll;
+		return Enums.ContactsStorage.Shared;
 	}
 	else if (oData.Global)
 	{
-		return Enums.ContactsGroupListType.Global;
+		return Enums.ContactsStorage.Global_;
 	}
 	else if (!oData.Global)
 	{
-		return Enums.ContactsGroupListType.Personal;
+		return Enums.ContactsStorage.Personal;
 	}
 
 	return null;

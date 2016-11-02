@@ -25,7 +25,7 @@ function CContactModel()
 		return true;//AppData.App.AllowWebMail && AppData.Accounts.isCurrentAllowsMail();
 	}, this);
 	
-	this.sEmailDefaultType = Enums.ContactsPrimaryEmail.Home;
+	this.sEmailDefaultType = Enums.ContactsPrimaryEmail.Personal;
 	this.sPhoneDefaultType = Enums.ContactsPrimaryPhone.Mobile;
 	this.sAddressDefaultType = Enums.ContactsPrimaryAddress.Personal;
 	
@@ -60,13 +60,13 @@ function CContactModel()
 	this.mainPrimaryEmail = ko.computed({
 		'read': this.primaryEmail,
 		'write': function (mValue) {
-			if (mValue && 0 <= $.inArray(mValue, [Enums.ContactsPrimaryEmail.Home, Enums.ContactsPrimaryEmail.Business, Enums.ContactsPrimaryEmail.Other]))
+			if (mValue && 0 <= $.inArray(mValue, [Enums.ContactsPrimaryEmail.Personal, Enums.ContactsPrimaryEmail.Business, Enums.ContactsPrimaryEmail.Other]))
 			{
 				this.primaryEmail(mValue);
 			}
 			else
 			{
-				this.primaryEmail(Enums.ContactsPrimaryEmail.Home);
+				this.primaryEmail(Enums.ContactsPrimaryEmail.Personal);
 			}
 		},
 		'owner': this
@@ -179,7 +179,7 @@ function CContactModel()
 		'read': function () {
 			var sResult = '';
 			switch (this.primaryEmail()) {
-				case Enums.ContactsPrimaryEmail.Home:
+				case Enums.ContactsPrimaryEmail.Personal:
 					sResult = this.personalEmail();
 					break;
 				case Enums.ContactsPrimaryEmail.Business:
@@ -193,7 +193,7 @@ function CContactModel()
 		},
 		'write': function (sEmail) {
 			switch (this.primaryEmail()) {
-				case Enums.ContactsPrimaryEmail.Home:
+				case Enums.ContactsPrimaryEmail.Personal:
 					this.personalEmail(sEmail);
 					break;
 				case Enums.ContactsPrimaryEmail.Business:
@@ -320,7 +320,7 @@ function CContactModel()
 		
 		if ('' !== this.personalEmail())
 		{
-			aList.push({'text': TextUtils.i18n('%MODULENAME%/LABEL_PERSONAL') + ': ' + this.personalEmail(), 'value': Enums.ContactsPrimaryEmail.Home});
+			aList.push({'text': TextUtils.i18n('%MODULENAME%/LABEL_PERSONAL') + ': ' + this.personalEmail(), 'value': Enums.ContactsPrimaryEmail.Personal});
 		}
 		if ('' !== this.businessEmail())
 		{
@@ -546,23 +546,23 @@ CContactModel.prototype.toObject = function ()
 		'Skype': this.skype(),
 		'Facebook': this.facebook(),
 
-		'HomeEmail': this.personalEmail(),
-		'HomeStreet': this.personalStreetAddress(),
-		'HomeCity': this.personalCity(),
-		'HomeState': this.personalState(),
-		'HomeZip': this.personalZipCode(),
-		'HomeCountry': this.personalCountry(),
-		'HomeFax': this.personalFax(),
-		'HomePhone': this.personalPhone(),
-		'HomeMobile': this.personalMobile(),
-		'HomeWeb': this.personalWeb(),
+		'PersonalEmail': this.personalEmail(),
+		'PersonalAddress': this.personalStreetAddress(),
+		'PersonalCity': this.personalCity(),
+		'PersonalState': this.personalState(),
+		'PersonalZip': this.personalZipCode(),
+		'PersonalCountry': this.personalCountry(),
+		'PersonalWeb': this.personalWeb(),
+		'PersonalFax': this.personalFax(),
+		'PersonalPhone': this.personalPhone(),
+		'PersonalMobile': this.personalMobile(),
 
 		'BusinessEmail': this.businessEmail(),
 		'BusinessCompany': this.businessCompany(),
 		'BusinessJobTitle': this.businessJob(),
 		'BusinessDepartment': this.businessDepartment(),
 		'BusinessOffice': this.businessOffice(),
-		'BusinessStreet': this.businessStreetAddress(),
+		'BusinessAddress': this.businessStreetAddress(),
 		'BusinessCity': this.businessCity(),
 		'BusinessState': this.businessState(),
 		'BusinessZip': this.businessZipCode(),
@@ -610,23 +610,23 @@ CContactModel.prototype.parse = function (oData)
 	this.primaryPhone(Types.pInt(oData.PrimaryPhone));
 	this.primaryAddress(Types.pInt(oData.PrimaryAddress));
 
-	this.personalEmail(Types.pString(oData.HomeEmail));
-	this.personalStreetAddress(Types.pString(oData.HomeStreet));
-	this.personalCity(Types.pString(oData.HomeCity));
-	this.personalState(Types.pString(oData.HomeState));
-	this.personalZipCode(Types.pString(oData.HomeZip));
-	this.personalCountry(Types.pString(oData.HomeCountry));
-	this.personalWeb(Types.pString(oData.HomeWeb));
-	this.personalFax(Types.pString(oData.HomeFax));
-	this.personalPhone(Types.pString(oData.HomePhone));
-	this.personalMobile(Types.pString(oData.HomeMobile));
+	this.personalEmail(Types.pString(oData.PersonalEmail));
+	this.personalStreetAddress(Types.pString(oData.PersonalAddress));
+	this.personalCity(Types.pString(oData.PersonalCity));
+	this.personalState(Types.pString(oData.PersonalState));
+	this.personalZipCode(Types.pString(oData.PersonalZip));
+	this.personalCountry(Types.pString(oData.PersonalCountry));
+	this.personalWeb(Types.pString(oData.PersonalWeb));
+	this.personalFax(Types.pString(oData.PersonalFax));
+	this.personalPhone(Types.pString(oData.PersonalPhone));
+	this.personalMobile(Types.pString(oData.PersonalMobile));
 
 	this.businessEmail(Types.pString(oData.BusinessEmail));
 	this.businessCompany(Types.pString(oData.BusinessCompany));
 	this.businessDepartment(Types.pString(oData.BusinessDepartment));
 	this.businessJob(Types.pString(oData.BusinessJobTitle));
 	this.businessOffice(Types.pString(oData.BusinessOffice));
-	this.businessStreetAddress(Types.pString(oData.BusinessStreet));
+	this.businessStreetAddress(Types.pString(oData.BusinessAddress));
 	this.businessCity(Types.pString(oData.BusinessCity));
 	this.businessState(Types.pString(oData.BusinessState));
 	this.businessZipCode(Types.pString(oData.BusinessZip));

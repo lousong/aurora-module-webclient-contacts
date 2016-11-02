@@ -76,11 +76,11 @@ CCreateContactPopup.prototype.onSaveClick = function ()
 	{
 		var
 			oParameters = {
-				'PrimaryEmail': 'Home',
+				'PrimaryEmail': Enums.ContactsPrimaryEmail.Personal,
 				'FullName': this.displayName(),
-				'HomeEmail': this.email(),
-				'HomePhone': this.phone(),
-				'HomeStreet': this.address(),
+				'PersonalEmail': this.email(),
+				'PersonalPhone': this.phone(),
+				'PersonalAddress': this.address(),
 				'Skype': this.skype(),
 				'Facebook': this.facebook()
 			}
@@ -115,8 +115,8 @@ CCreateContactPopup.prototype.onCreateContactResponse = function (oResponse, oRe
 	else
 	{
 		Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_CONTACT_SUCCESSFULLY_ADDED'));
-		ContactsCache.clearInfoAboutEmail(oParameters.HomeEmail);
-		ContactsCache.getContactsByEmails([oParameters.HomeEmail], this.fCallback);
+		ContactsCache.clearInfoAboutEmail(oParameters.PersonalEmail);
+		ContactsCache.getContactsByEmails([oParameters.PersonalEmail], this.fCallback);
 		this.closePopup();
 		
 		if (!HeaderItemView.isCurrent())

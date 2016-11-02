@@ -2,9 +2,9 @@
 	<div class="scroll-inner">
 		<div class="items_list">
 			<div class="item canSelect" data-bind="visible: showAllContacts,
-					css: {'selected': Enums.ContactsGroupListType.All === selectedGroupType()},
+					css: {'selected': Enums.ContactsStorage.All === selectedGroupType()},
 					click: $parent.gotoContactList">
-				<a href="javascript: void(0);" class="title" data-bind="click: function () { changeGroupType(Enums.ContactsGroupListType.All); }">
+				<a href="javascript: void(0);" class="title" data-bind="click: function () { changeGroupType(Enums.ContactsStorage.All); }">
 					<span class="name fadeout">
 						<span class="icon"></span>
 						<span class="text animGoal" data-bind="i18n: {'key': '%MODULENAME%/LABEL_STORAGE_ALL'}"></span>
@@ -13,12 +13,12 @@
 			</div>
 			
 			<div class="item canSelect" data-bind="visible: showPersonalContacts, 
-					css: {'selected': Enums.ContactsGroupListType.Personal === selectedGroupType()},
+					css: {'selected': Enums.ContactsStorage.Personal === selectedGroupType()},
 					click: $parent.gotoContactList">
 				<a href="javascript: void(0);" class="title" id="selenium_contacts_personal_button" data-bind="
 						css: {'recivedAnim': recivedAnimUnshare()},
 						droppable: {valueFunc: function (oEvent, oUi) { $root.contactsDropToGroupType(0, oEvent, oUi); }, switchObserv: isAllOrSubOrGlobalGroupSelect},
-						click: function () { changeGroupType(Enums.ContactsGroupListType.Personal); }">
+						click: function () { changeGroupType(Enums.ContactsStorage.Personal); }">
 					<span class="name fadeout">
 						<span class="icon type1"></span>
 						<span class="text animGoal" data-bind="i18n: {'key': '%MODULENAME%/LABEL_STORAGE_PERSONAL'}"></span>
@@ -27,12 +27,12 @@
 			</div>
 
 			<div class="item canSelect" data-bind="visible: showSharedToAllContacts, 
-					css: {'selected': Enums.ContactsGroupListType.SharedToAll === selectedGroupType()},
+					css: {'selected': Enums.ContactsStorage.Shared === selectedGroupType()},
 					click: $parent.gotoContactList">
 				<a href="javascript: void(0);" class="title" data-bind="
 						css: {'recivedAnim': recivedAnimShare()},
 						droppable: {valueFunc: function (oEvent, oUi) { $root.contactsDropToGroupType(3, oEvent, oUi); }, switchObserv: isGlobalGroupSelect},
-						click: function () { changeGroupType(Enums.ContactsGroupListType.SharedToAll); }">
+						click: function () { changeGroupType(Enums.ContactsStorage.Shared); }">
 					<span class="name fadeout">
 						<span class="icon type3"></span>
 						<span class="text animGoal" data-bind="i18n: {'key': '%MODULENAME%/LABEL_STORAGE_SHARED'}"></span>
@@ -41,9 +41,9 @@
 			</div>
 
 			<div class="item canSelect" data-bind="visible: showGlobalContacts, 
-					css: {'selected': Enums.ContactsGroupListType.Global === selectedGroupType()},
+					css: {'selected': Enums.ContactsStorage.Global_ === selectedGroupType()},
 					click: $parent.gotoContactList">
-				<a href="javascript: void(0);" class="title" data-bind="click: function () { changeGroupType(Enums.ContactsGroupListType.Global); }">
+				<a href="javascript: void(0);" class="title" data-bind="click: function () { changeGroupType(Enums.ContactsStorage.Global_); }">
 					<span class="name fadeout">
 						<span class="icon type2"></span>
 						<span class="text animGoal" data-bind="i18n: {'key': '%MODULENAME%/LABEL_STORAGE_GLOBAL'}"></span>

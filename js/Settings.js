@@ -21,6 +21,7 @@ module.exports = {
 			this.ImportContactsLink = Types.pString(oAppDataSection.ImportingContacts);
 			this.Storages = _.isArray(oAppDataSection.Storages) ? oAppDataSection.Storages : [];
 			
+			this.EContactsStorage = oAppDataSection.EContactsStorage;
 			this.EContactsPrimaryEmail = oAppDataSection.EContactsPrimaryEmail;
 			this.EContactsPrimaryPhone = oAppDataSection.EContactsPrimaryPhone;
 			this.EContactsPrimaryAddress = oAppDataSection.EContactsPrimaryAddress;

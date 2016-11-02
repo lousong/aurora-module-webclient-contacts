@@ -50,7 +50,7 @@
 							</span>
 						</span>
 						<span class="data fadeout">
-							<span class="group" data-bind="visible: $parent.selectedGroupType() === Enums.ContactsGroupListType.All, css: {'personal': groupType() === Enums.ContactsGroupListType.Personal, 'shared': groupType() === Enums.ContactsGroupListType.SharedToAll, 'global': groupType() === Enums.ContactsGroupListType.Global}"></span>
+							<span class="group" data-bind="visible: $parent.selectedGroupType() === Enums.ContactsStorage.All, css: {'personal': groupType() === Enums.ContactsStorage.Personal, 'shared': groupType() === Enums.ContactsStorage.Shared, 'global': groupType() === Enums.ContactsStorage.Global_}"></span>
 							<span class="me" data-bind="visible: ItsMe(), i18n: {'key': '%MODULENAME%/LABEL_ITS_ME'}"></span>
 							<span class="name" data-bind="text: Name(), visible: !!Name()"></span>
 							<span class="name" data-bind="i18n: {'key': '%MODULENAME%/LABEL_NO_NAME'}, visible: Name() === ''"></span>
@@ -61,7 +61,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="uploader_mask" data-bind="initDom: uploaderArea, css: {'active': bDragActiveComp}, visible: selectedGroupType() !== Enums.ContactsGroupListType.Global">
+			<div class="uploader_mask" data-bind="initDom: uploaderArea, css: {'active': bDragActiveComp}, visible: selectedGroupType() !== Enums.ContactsStorage.Global_">
 				<div class="inner"></div>
 			</div>
 		</div>
