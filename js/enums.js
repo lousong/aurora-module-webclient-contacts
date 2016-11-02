@@ -2,6 +2,9 @@
 
 var
 	_ = require('underscore'),
+	
+	UserSettings = require('modules/%ModuleName%/js/Settings.js'),
+	
 	Enums = {}
 ;
 
@@ -16,40 +19,10 @@ Enums.ContactsGroupListType = {
 	'All': 4
 };
 
-/**
- * @enum {string}
- */
-Enums.ContactEmailType = {
-	'Personal': 'Personal',
-	'Business': 'Business',
-	'Other': 'Other'
-};
-
-/**
- * @enum {string}
- */
-Enums.ContactPhoneType = {
-	'Mobile': 'Mobile',
-	'Personal': 'Personal',
-	'Business': 'Business'
-};
-
-/**
- * @enum {string}
- */
-Enums.ContactAddressType = {
-	'Personal': 'Personal',
-	'Business': 'Business'
-};
-
-/**
- * @enum {string}
- */
-Enums.ContactSortType = {
-	'Email': 'Email',
-	'Name': 'Name',
-	'Frequency': 'Frequency'
-};
+Enums.ContactsPrimaryEmail = UserSettings.EContactsPrimaryEmail;
+Enums.ContactsPrimaryPhone = UserSettings.EContactsPrimaryPhone;
+Enums.ContactsPrimaryAddress = UserSettings.EContactsPrimaryAddress;
+Enums.ContactSortField = UserSettings.EContactSortField;
 
 if (typeof window.Enums === 'undefined')
 {

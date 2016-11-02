@@ -156,7 +156,7 @@ function CContactsView()
 	});
 
 	this.sortOrder = ko.observable(true);
-	this.sortType = ko.observable(Enums.ContactSortType.Name);
+	this.sortType = ko.observable(Enums.ContactSortField.Name);
 
 	this.collection = ko.observableArray([]);
 	this.contactUidForRequest = ko.observable('');
@@ -386,7 +386,7 @@ CContactsView.prototype.changeSelectedPanel = function (iPanel)
 CContactsView.prototype.executeSave = function (oData)
 {
 	var
-		oParameters = {},
+		oContact = {},
 		aList = []
 	;
 
@@ -423,18 +423,14 @@ CContactsView.prototype.executeSave = function (oData)
 				this.recivedAnimUnshare(true);
 			}
 
-			oParameters = oData.toObject();
+			oContact = oData.toObject();
 			
 			if (oData.isNew())
 			{
-				oParameters.SharedToAll = (Enums.ContactsGroupListType.SharedToAll === this.selectedGroupType()) ? '1' : '0';
-			}
-			else
-			{
-				oParameters.SharedToAll = oData.sharedToAll() ? '1' : '0';
+				oContact.SharedToAll = (Enums.ContactsGroupListType.SharedToAll === this.selectedGroupType());
 			}
 
-			Ajax.send(oData.isNew() ? 'CreateContact' : 'UpdateContact', oParameters, this.onCreateContactResponse, this);
+			Ajax.send(oData.isNew() ? 'CreateContact' : 'UpdateContact', {Contact: oContact}, this.onCreateContactResponse, this);
 		}
 		else if (oData instanceof CGroupModel && !oData.readOnly())
 		{
@@ -1072,7 +1068,7 @@ CContactsView.prototype.mailGroup = function (oGroup)
 		Ajax.send('GetContacts', {
 			'Offset': 0,
 			'Limit': 99,
-			'SortField': Enums.ContactSortType.Email,
+			'SortField': Enums.ContactSortField.Email,
 			'SortOrder': true ? '1' : '0',
 			'GroupId': oGroup.idGroup()
 		}, function (oResponse) {

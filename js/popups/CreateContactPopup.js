@@ -77,7 +77,6 @@ CCreateContactPopup.prototype.onSaveClick = function ()
 		var
 			oParameters = {
 				'PrimaryEmail': 'Home',
-				'UseFriendlyName': '1',
 				'FullName': this.displayName(),
 				'HomeEmail': this.email(),
 				'HomePhone': this.phone(),

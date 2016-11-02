@@ -1,8 +1,6 @@
 'use strict';
 
 module.exports = function (oAppData) {
-	require('modules/%ModuleName%/js/enums.js');
-	
 	var
 		_ = require('underscore'),
 		$ = require('jquery'),
@@ -23,6 +21,8 @@ module.exports = function (oAppData) {
 	;
 
 	Settings.init(oSettings);
+	
+	require('modules/%ModuleName%/js/enums.js');
 	
 	if (App.getUserRole() === Enums.UserRole.NormalUser)
 	{

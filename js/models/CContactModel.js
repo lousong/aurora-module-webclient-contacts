@@ -25,9 +25,9 @@ function CContactModel()
 		return true;//AppData.App.AllowWebMail && AppData.Accounts.isCurrentAllowsMail();
 	}, this);
 	
-	this.sEmailDefaultType = Enums.ContactEmailType.Personal;
-	this.sPhoneDefaultType = Enums.ContactPhoneType.Mobile;
-	this.sAddressDefaultType = Enums.ContactAddressType.Personal;
+	this.sEmailDefaultType = Enums.ContactsPrimaryEmail.Home;
+	this.sPhoneDefaultType = Enums.ContactsPrimaryPhone.Mobile;
+	this.sAddressDefaultType = Enums.ContactsPrimaryAddress.Personal;
 	
 	this.idContact = ko.observable('');
 	this.idUser = ko.observable('');
@@ -60,13 +60,13 @@ function CContactModel()
 	this.mainPrimaryEmail = ko.computed({
 		'read': this.primaryEmail,
 		'write': function (mValue) {
-			if (mValue && 0 <= $.inArray(mValue, [Enums.ContactEmailType.Personal, Enums.ContactEmailType.Business, Enums.ContactEmailType.Other]))
+			if (mValue && 0 <= $.inArray(mValue, [Enums.ContactsPrimaryEmail.Home, Enums.ContactsPrimaryEmail.Business, Enums.ContactsPrimaryEmail.Other]))
 			{
 				this.primaryEmail(mValue);
 			}
 			else
 			{
-				this.primaryEmail(Enums.ContactEmailType.Personal);
+				this.primaryEmail(Enums.ContactsPrimaryEmail.Home);
 			}
 		},
 		'owner': this
@@ -75,13 +75,13 @@ function CContactModel()
 	this.mainPrimaryPhone = ko.computed({
 		'read': this.primaryPhone,
 		'write': function (mValue) {
-			if (mValue && 0 <= $.inArray(mValue, [Enums.ContactPhoneType.Mobile, Enums.ContactPhoneType.Personal, Enums.ContactPhoneType.Business]))
+			if (mValue && 0 <= $.inArray(mValue, [Enums.ContactsPrimaryPhone.Mobile, Enums.ContactsPrimaryPhone.Personal, Enums.ContactsPrimaryPhone.Business]))
 			{
 				this.primaryPhone(mValue);
 			}
 			else
 			{
-				this.primaryPhone(Enums.ContactPhoneType.Mobile);
+				this.primaryPhone(Enums.ContactsPrimaryPhone.Mobile);
 			}
 		},
 		'owner': this
@@ -90,13 +90,13 @@ function CContactModel()
 	this.mainPrimaryAddress = ko.computed({
 		'read': this.primaryAddress,
 		'write': function (mValue) {
-			if (mValue && 0 <= $.inArray(mValue, [Enums.ContactAddressType.Personal, Enums.ContactAddressType.Business]))
+			if (mValue && 0 <= $.inArray(mValue, [Enums.ContactsPrimaryAddress.Personal, Enums.ContactsPrimaryAddress.Business]))
 			{
 				this.primaryAddress(mValue);
 			}
 			else
 			{
-				this.primaryAddress(Enums.ContactAddressType.Personal);
+				this.primaryAddress(Enums.ContactsPrimaryAddress.Personal);
 			}
 		},
 		'owner': this
@@ -179,13 +179,13 @@ function CContactModel()
 		'read': function () {
 			var sResult = '';
 			switch (this.primaryEmail()) {
-				case Enums.ContactEmailType.Personal:
+				case Enums.ContactsPrimaryEmail.Home:
 					sResult = this.personalEmail();
 					break;
-				case Enums.ContactEmailType.Business:
+				case Enums.ContactsPrimaryEmail.Business:
 					sResult = this.businessEmail();
 					break;
-				case Enums.ContactEmailType.Other:
+				case Enums.ContactsPrimaryEmail.Other:
 					sResult = this.otherEmail();
 					break;
 			}
@@ -193,13 +193,13 @@ function CContactModel()
 		},
 		'write': function (sEmail) {
 			switch (this.primaryEmail()) {
-				case Enums.ContactEmailType.Personal:
+				case Enums.ContactsPrimaryEmail.Home:
 					this.personalEmail(sEmail);
 					break;
-				case Enums.ContactEmailType.Business:
+				case Enums.ContactsPrimaryEmail.Business:
 					this.businessEmail(sEmail);
 					break;
-				case Enums.ContactEmailType.Other:
+				case Enums.ContactsPrimaryEmail.Other:
 					this.otherEmail(sEmail);
 					break;
 				default:
@@ -253,13 +253,13 @@ function CContactModel()
 		'read': function () {
 			var sResult = '';
 			switch (this.primaryPhone()) {
-				case Enums.ContactPhoneType.Mobile:
+				case Enums.ContactsPrimaryPhone.Mobile:
 					sResult = this.personalMobile();
 					break;
-				case Enums.ContactPhoneType.Personal:
+				case Enums.ContactsPrimaryPhone.Personal:
 					sResult = this.personalPhone();
 					break;
-				case Enums.ContactPhoneType.Business:
+				case Enums.ContactsPrimaryPhone.Business:
 					sResult = this.businessPhone();
 					break;
 			}
@@ -267,13 +267,13 @@ function CContactModel()
 		},
 		'write': function (sPhone) {
 			switch (this.primaryPhone()) {
-				case Enums.ContactPhoneType.Mobile:
+				case Enums.ContactsPrimaryPhone.Mobile:
 					this.personalMobile(sPhone);
 					break;
-				case Enums.ContactPhoneType.Personal:
+				case Enums.ContactsPrimaryPhone.Personal:
 					this.personalPhone(sPhone);
 					break;
-				case Enums.ContactPhoneType.Business:
+				case Enums.ContactsPrimaryPhone.Business:
 					this.businessPhone(sPhone);
 					break;
 				default:
@@ -289,10 +289,10 @@ function CContactModel()
 		'read': function () {
 			var sResult = '';
 			switch (this.primaryAddress()) {
-				case Enums.ContactAddressType.Personal:
+				case Enums.ContactsPrimaryAddress.Personal:
 					sResult = this.personalStreetAddress();
 					break;
-				case Enums.ContactAddressType.Business:
+				case Enums.ContactsPrimaryAddress.Business:
 					sResult = this.businessStreetAddress();
 					break;
 			}
@@ -300,10 +300,10 @@ function CContactModel()
 		},
 		'write': function (sAddress) {
 			switch (this.primaryAddress()) {
-				case Enums.ContactAddressType.Personal:
+				case Enums.ContactsPrimaryAddress.Personal:
 					this.personalStreetAddress(sAddress);
 					break;
-				case Enums.ContactAddressType.Business:
+				case Enums.ContactsPrimaryAddress.Business:
 					this.businessStreetAddress(sAddress);
 					break;
 				default:
@@ -320,15 +320,15 @@ function CContactModel()
 		
 		if ('' !== this.personalEmail())
 		{
-			aList.push({'text': TextUtils.i18n('%MODULENAME%/LABEL_PERSONAL') + ': ' + this.personalEmail(), 'value': Enums.ContactEmailType.Personal});
+			aList.push({'text': TextUtils.i18n('%MODULENAME%/LABEL_PERSONAL') + ': ' + this.personalEmail(), 'value': Enums.ContactsPrimaryEmail.Home});
 		}
 		if ('' !== this.businessEmail())
 		{
-			aList.push({'text': TextUtils.i18n('%MODULENAME%/LABEL_BUSINESS') + ': ' + this.businessEmail(), 'value': Enums.ContactEmailType.Business});
+			aList.push({'text': TextUtils.i18n('%MODULENAME%/LABEL_BUSINESS') + ': ' + this.businessEmail(), 'value': Enums.ContactsPrimaryEmail.Business});
 		}
 		if ('' !== this.otherEmail())
 		{
-			aList.push({'text': TextUtils.i18n('%MODULENAME%/LABEL_OTHER') + ': ' + this.otherEmail(), 'value': Enums.ContactEmailType.Other});
+			aList.push({'text': TextUtils.i18n('%MODULENAME%/LABEL_OTHER') + ': ' + this.otherEmail(), 'value': Enums.ContactsPrimaryEmail.Other});
 		}
 
 		return aList;
@@ -340,15 +340,15 @@ function CContactModel()
 
 		if ('' !== this.personalMobile())
 		{
-			aList.push({'text': TextUtils.i18n('%MODULENAME%/LABEL_MOBILE') + ': ' + this.personalMobile(), 'value': Enums.ContactPhoneType.Mobile});
+			aList.push({'text': TextUtils.i18n('%MODULENAME%/LABEL_MOBILE') + ': ' + this.personalMobile(), 'value': Enums.ContactsPrimaryPhone.Mobile});
 		}
 		if ('' !== this.personalPhone())
 		{
-			aList.push({'text': TextUtils.i18n('%MODULENAME%/LABEL_PERSONAL') + ': ' + this.personalPhone(), 'value': Enums.ContactPhoneType.Personal});
+			aList.push({'text': TextUtils.i18n('%MODULENAME%/LABEL_PERSONAL') + ': ' + this.personalPhone(), 'value': Enums.ContactsPrimaryPhone.Personal});
 		}
 		if ('' !== this.businessPhone())
 		{
-			aList.push({'text': TextUtils.i18n('%MODULENAME%/LABEL_BUSINESS') + ': ' + this.businessPhone(), 'value': Enums.ContactPhoneType.Business});
+			aList.push({'text': TextUtils.i18n('%MODULENAME%/LABEL_BUSINESS') + ': ' + this.businessPhone(), 'value': Enums.ContactsPrimaryPhone.Business});
 		}
 		return aList;
 
@@ -359,11 +359,11 @@ function CContactModel()
 
 		if ('' !== this.personalStreetAddress())
 		{
-			aList.push({'text': TextUtils.i18n('%MODULENAME%/LABEL_PERSONAL') + ': ' + this.personalStreetAddress(), 'value': Enums.ContactAddressType.Personal});
+			aList.push({'text': TextUtils.i18n('%MODULENAME%/LABEL_PERSONAL') + ': ' + this.personalStreetAddress(), 'value': Enums.ContactsPrimaryAddress.Personal});
 		}
 		if ('' !== this.businessStreetAddress())
 		{
-			aList.push({'text': TextUtils.i18n('%MODULENAME%/LABEL_BUSINESS') + ': ' + this.businessStreetAddress(), 'value': Enums.ContactAddressType.Business});
+			aList.push({'text': TextUtils.i18n('%MODULENAME%/LABEL_BUSINESS') + ': ' + this.businessStreetAddress(), 'value': Enums.ContactsPrimaryAddress.Business});
 		}
 		return aList;
 
@@ -535,15 +535,13 @@ CContactModel.prototype.toObject = function ()
 		'PrimaryEmail': this.primaryEmail(),
 		'PrimaryPhone': this.primaryPhone(),
 		'PrimaryAddress': this.primaryAddress(),
-		'UseFriendlyName': '1',
-		'Title': '',
 		'FullName': this.displayName(),
 		'FirstName': this.firstName(),
 		'LastName': this.lastName(),
 		'NickName': this.nickName(),
 
-		'Global': this.global() ? '1' : '0',
-		'ItsMe': this.itsMe() ? '1' : '0',
+		'Global': !!this.global(),
+		'ItsMe': !!this.itsMe(),
 
 		'Skype': this.skype(),
 		'Facebook': this.facebook(),
@@ -580,7 +578,7 @@ CContactModel.prototype.toObject = function ()
 		'BirthdayMonth': this.otherBirthdayMonth(),
 		'BirthdayYear': this.otherBirthdayYear(),
 
-		'SharedToAll': this.sharedToAll() ? '1' : '0',
+		'SharedToAll': !!this.sharedToAll(),
 		
 		'GroupsIds': this.groups()
 	};
@@ -593,12 +591,6 @@ CContactModel.prototype.toObject = function ()
  */
 CContactModel.prototype.parse = function (oData)
 {
-	var
-		iPrimaryEmail = 0,
-		iPrimaryPhone = 0,
-		iPrimaryAddress = 0
-	;
-
 	this.idContact(Types.pString(oData.IdContact));
 	this.idUser(Types.pString(oData.IdUser));
 
@@ -614,50 +606,9 @@ CContactModel.prototype.parse = function (oData)
 	this.skype(Types.pString(oData.Skype));
 	this.facebook(Types.pString(oData.Facebook));
 
-	iPrimaryEmail = Types.pInt(oData.PrimaryEmail);
-	switch (iPrimaryEmail)
-	{
-		case 1:
-			iPrimaryEmail = Enums.ContactEmailType.Business;
-			break;
-		case 2:
-			iPrimaryEmail = Enums.ContactEmailType.Other;
-			break;
-		default:
-		case 0:
-			iPrimaryEmail = Enums.ContactEmailType.Personal;
-			break;
-	}
-	this.primaryEmail(iPrimaryEmail);
-
-	iPrimaryPhone = Types.pInt(oData.PrimaryPhone);
-	switch (iPrimaryPhone)
-	{
-		case 2:
-			iPrimaryPhone = Enums.ContactPhoneType.Business;
-			break;
-		case 1:
-			iPrimaryPhone = Enums.ContactPhoneType.Personal;
-			break;
-		default:
-		case 0:
-			iPrimaryPhone = Enums.ContactPhoneType.Mobile;
-			break;
-	}
-	this.primaryPhone(iPrimaryPhone);
-
-	iPrimaryAddress = Types.pInt(oData.PrimaryAddress);
-	switch (iPrimaryAddress)
-	{
-		case 1:
-			iPrimaryAddress = Enums.ContactAddressType.Business;
-			break;
-		default:
-		case 0:
-			iPrimaryAddress = Enums.ContactAddressType.Personal;
-			break;
-	}
-	this.primaryAddress(iPrimaryAddress);
+	this.primaryEmail(Types.pInt(oData.PrimaryEmail));
+	this.primaryPhone(Types.pInt(oData.PrimaryPhone));
+	this.primaryAddress(Types.pInt(oData.PrimaryAddress));
 
 	this.personalEmail(Types.pString(oData.HomeEmail));
 	this.personalStreetAddress(Types.pString(oData.HomeStreet));
