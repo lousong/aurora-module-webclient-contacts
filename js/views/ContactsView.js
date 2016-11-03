@@ -545,7 +545,7 @@ CContactsView.prototype.deleteContacts = function (aChecked)
 
 		Ajax.send('DeleteContacts', {
 			'ContactsId': aContactsId.join(','),
-			'SharedToAll': (Enums.ContactsStorage.Shared === this.selectedGroupType()) ? '1' : '0'
+			'SharedToAll': Enums.ContactsStorage.Shared === this.selectedGroupType()
 		}, this.requestContactList, this);
 		
 		ContactsCache.markVcardsNonexistentByUid(aContactsId);
