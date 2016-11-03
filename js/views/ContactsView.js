@@ -446,7 +446,7 @@ CContactsView.prototype.executeSave = function (oData)
 				this.selectedItem(null);
 			}
 
-			Ajax.send(oData.isNew() ? 'CreateGroup' : 'UpdateGroup', oData.toObject(), this.onCreateGroupResponse, this);
+			Ajax.send(oData.isNew() ? 'CreateGroup' : 'UpdateGroup', {'Group': oData.toObject()}, this.onCreateGroupResponse, this);
 		}
 	}
 	else
@@ -1347,6 +1347,7 @@ CContactsView.prototype.onGetGroupsResponse = function (oResponse, oRequest)
 		{
 			if (oResult[iIndex])
 			{
+				oResult[iIndex].IsGroup = true;
 				oObject = new CContactListItemModel();
 				oObject.parse(oResult[iIndex]);
 				
