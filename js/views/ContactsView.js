@@ -55,7 +55,7 @@ function CContactsView()
 
 	this.sImportContactsLink = Settings.ImportContactsLink;
 
-	this.allowSendEmails = ko.observable(true);
+	this.allowSendEmails = ko.observable(false);
 //	this.allowSendEmails = ko.computed(function () {
 //		return AppData.App.AllowWebMail && AppData.Accounts.isCurrentAllowsMail();
 //	}, this);
@@ -154,9 +154,6 @@ function CContactsView()
 		},
 		'owner': this
 	});
-
-	this.sortOrder = ko.observable(true);
-	this.sortType = ko.observable(Enums.ContactSortField.Name);
 
 	this.collection = ko.observableArray([]);
 	this.contactUidForRequest = ko.observable('');
@@ -851,8 +848,7 @@ CContactsView.prototype.requestContactList = function ()
 	Ajax.send('GetContacts', {
 		'Offset': (this.oPageSwitcher.currentPage() - 1) * Settings.ContactsPerPage,
 		'Limit': Settings.ContactsPerPage,
-		'SortField': this.sortType(),
-		'SortOrder': this.sortOrder(),
+		'SortField': Enums.ContactSortField.Email,
 		'Search': this.search(),
 		'GroupId': this.selectedGroupInList() ? this.selectedGroupInList().Id() : '',
 		'Storage': iStorage
@@ -1068,7 +1064,6 @@ CContactsView.prototype.mailGroup = function (oGroup)
 			'Offset': 0,
 			'Limit': 99,
 			'SortField': Enums.ContactSortField.Email,
-			'SortOrder': true ? '1' : '0',
 			'GroupId': oGroup.idGroup()
 		}, function (oResponse) {
 			var
