@@ -445,8 +445,9 @@ CContactsView.prototype.executeSave = function (oData)
 			{
 				this.selectedItem(null);
 			}
-
-			Ajax.send(oData.isNew() ? 'CreateGroup' : 'UpdateGroup', {'Group': oData.toObject()}, this.onCreateGroupResponse, this);
+			
+			var aContactsId = _.map(this.selector.listCheckedOrSelected(), function (oItem) { return oItem.Id(); });
+			Ajax.send(oData.isNew() ? 'CreateGroup' : 'UpdateGroup', {'Group': oData.toObject(aContactsId)}, this.onCreateGroupResponse, this);
 		}
 	}
 	else
@@ -584,7 +585,7 @@ CContactsView.prototype.executeRemoveFromGroup = function ()
 
 		Ajax.send('RemoveContactsFromGroup', {
 			'GroupId': oGroup.Id(),
-			'ContactsId': aContactsId.join(',')
+			'ContactsId': aContactsId
 		}, this.requestContactList, this);
 	}
 };
@@ -697,7 +698,8 @@ CContactsView.prototype.executeAddSelectedContactsToGroup = function (oGroup)
 		_.each(aList, function (oItem) {
 			if (oItem && !oItem.IsGroup())
 			{
-				aContactIds.push([oItem.Id(), oItem.Global() ? '1' : '0']);
+				aContactIds.push(oItem.Id());
+//				aContactIds.push([oItem.Id(), oItem.Global() ? '1' : '0']);
 			}
 		}, this);
 	}
@@ -1102,7 +1104,8 @@ CContactsView.prototype.dragAndDropHelper = function (oContact)
 		oHelper = Utils.draggableItems(),
 		nCount = this.selector.listCheckedOrSelected().length,
 		aUids = 0 < nCount ? _.map(this.selector.listCheckedOrSelected(), function (oItem) {
-			return [oItem.Id(), oItem.Global() ? '1' : '0'];
+			return oItem.Id();
+//			return [oItem.Id(), oItem.Global() ? '1' : '0'];
 		}) : []
 	;
 
@@ -1375,12 +1378,6 @@ CContactsView.prototype.onCreateGroupResponse = function (oResponse, oRequest)
 {
 	if (oResponse && oResponse.Result)
 	{
-		var aCheckedIds = _.map(this.selector.listChecked(), function (oItem) {
-			return [oItem.Id(), oItem.Global() ? '1' : '0'];
-		});
-		
-		this.executeAddContactsToGroupId(Types.pString(oResponse.Result.IdGroup), aCheckedIds);
-
 		if (!App.isMobile())
 		{
 			this.selectedItem(null);

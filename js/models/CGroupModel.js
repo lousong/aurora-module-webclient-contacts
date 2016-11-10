@@ -121,7 +121,7 @@ CGroupModel.prototype.switchToView = function ()
 /**
  * @return {Object}
  */
-CGroupModel.prototype.toObject = function ()
+CGroupModel.prototype.toObject = function (aContactsId)
 {
 	return {
 		'GroupId': this.idGroup(),
@@ -136,7 +136,8 @@ CGroupModel.prototype.toObject = function ()
 		'State': this.state(),
 		'Street': this.street(),
 		'Web': this.web(),
-		'Zip': this.zip()			
+		'Zip': this.zip(),
+		'Contacts': aContactsId
 	};
 };
 
