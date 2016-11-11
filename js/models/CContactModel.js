@@ -29,7 +29,7 @@ function CContactModel()
 	this.sPhoneDefaultType = Enums.ContactsPrimaryPhone.Mobile;
 	this.sAddressDefaultType = Enums.ContactsPrimaryAddress.Personal;
 	
-	this.idContact = ko.observable('');
+	this.idContact = ko.observable(0);
 	this.idUser = ko.observable('');
 	this.global = ko.observable(false);
 	this.itsMe = ko.observable(false);
@@ -128,9 +128,9 @@ function CContactModel()
 	this.businessPhone = ko.observable('');
 
 	this.otherEmail = ko.observable('');
-	this.otherBirthdayMonth = ko.observable('0');
-	this.otherBirthdayDay = ko.observable('0');
-	this.otherBirthdayYear = ko.observable('0');
+	this.otherBirthMonth = ko.observable(0);
+	this.otherBirthDay = ko.observable(0);
+	this.otherBirthYear = ko.observable(0);
 	this.otherNotes = ko.observable('');
 	this.etag = ko.observable('');
 	
@@ -138,9 +138,9 @@ function CContactModel()
 
 	this.birthdayIsEmpty = ko.computed(function () {
 		var
-			bMonthEmpty = '0' === this.otherBirthdayMonth(),
-			bDayEmpty = '0' === this.otherBirthdayDay(),
-			bYearEmpty = '0' === this.otherBirthdayYear()
+			bMonthEmpty = 0 === this.otherBirthMonth(),
+			bDayEmpty = 0 === this.otherBirthDay(),
+			bYearEmpty = 0 === this.otherBirthYear()
 		;
 
 		return (bMonthEmpty || bDayEmpty || bYearEmpty);
@@ -149,9 +149,9 @@ function CContactModel()
 	this.otherBirthday = ko.computed(function () {
 		var
 			sBirthday = '',
-			iYear = Types.pInt(this.otherBirthdayYear()),
-			iMonth = Types.pInt(this.otherBirthdayMonth()),
-			iDay = Types.pInt(this.otherBirthdayDay()),
+			iYear = this.otherBirthYear(),
+			iMonth = this.otherBirthMonth(),
+			iDay = this.otherBirthDay(),
 			oDateModel = new CDateModel()
 		;
 		
@@ -383,37 +383,29 @@ function CContactModel()
 		}
 	}, this);
 
-	this.birthdayMonthSelect = CContactModel.birthdayMonthSelect;
-	this.birthdayYearSelect = CContactModel.birthdayYearSelect;
-
-	this.birthdayDaySelect = ko.computed(function () {
-
+	this.birthMonthSelect = CContactModel.birthMonthSelect;
+	
+	this.birthDaySelect = ko.computed(function () {
 		var
 			iIndex = 1,
-			iLen = Types.pInt(DateUtils.daysInMonth(this.otherBirthdayMonth(), this.otherBirthdayYear())),
-			sIndex = '',
-			aList = [{'text': TextUtils.i18n('COREWEBCLIENT/LABEL_DAY'), 'value': '0'}]
+			iDaysInMonth = DateUtils.daysInMonth(this.otherBirthMonth(), this.otherBirthYear()),
+			aList = [{'text': TextUtils.i18n('COREWEBCLIENT/LABEL_DAY'), 'value': 0}]
 		;
 
-		for (; iIndex <= iLen; iIndex++)
+		for (; iIndex <= iDaysInMonth; iIndex++)
 		{
-			sIndex = iIndex.toString();
-			aList.push({'text': sIndex, 'value': sIndex});
+			aList.push({'text': iIndex.toString(), 'value': iIndex});
 		}
 
 		return aList;
-
 	}, this);
-
-
-	for (var oDate = new Date(), sIndex = '', iIndex = oDate.getFullYear(), iLen = 2012 - 80; iIndex >= iLen; iIndex--)
+	
+	this.birthYearSelect = CContactModel.birthYearSelect;
+	for (var iCurrYear = (new Date()).getFullYear(), iIndex = iCurrYear, iFirstYear = iCurrYear - 100; iIndex >= iFirstYear; iIndex--)
 	{
-		sIndex = iIndex.toString();
-		this.birthdayYearSelect.push(
-			{'text': sIndex, 'value': sIndex}
-		);
+		this.birthYearSelect.push({ 'text': iIndex.toString(), 'value': iIndex });
 	}
-
+	
 	this.canBeSave = ko.computed(function () {
 		return this.displayName() !== '' || !!this.emails().length;
 	}, this);
@@ -421,24 +413,24 @@ function CContactModel()
 
 CContactModel.aBirthdayMonths = DateUtils.getMonthNamesArray();
 
-CContactModel.birthdayMonthSelect = [
-	{'text': TextUtils.i18n('COREWEBCLIENT/LABEL_MONTH'), value: '0'},
-	{'text': CContactModel.aBirthdayMonths[0], value: '1'},
-	{'text': CContactModel.aBirthdayMonths[1], value: '2'},
-	{'text': CContactModel.aBirthdayMonths[2], value: '3'},
-	{'text': CContactModel.aBirthdayMonths[3], value: '4'},
-	{'text': CContactModel.aBirthdayMonths[4], value: '5'},
-	{'text': CContactModel.aBirthdayMonths[5], value: '6'},
-	{'text': CContactModel.aBirthdayMonths[6], value: '7'},
-	{'text': CContactModel.aBirthdayMonths[7], value: '8'},
-	{'text': CContactModel.aBirthdayMonths[8], value: '9'},
-	{'text': CContactModel.aBirthdayMonths[9], value: '10'},
-	{'text': CContactModel.aBirthdayMonths[10], value: '11'},
-	{'text': CContactModel.aBirthdayMonths[11], value: '12'}
+CContactModel.birthMonthSelect = [
+	{'text': TextUtils.i18n('COREWEBCLIENT/LABEL_MONTH'), value: 0},
+	{'text': CContactModel.aBirthdayMonths[0], value: 1},
+	{'text': CContactModel.aBirthdayMonths[1], value: 2},
+	{'text': CContactModel.aBirthdayMonths[2], value: 3},
+	{'text': CContactModel.aBirthdayMonths[3], value: 4},
+	{'text': CContactModel.aBirthdayMonths[4], value: 5},
+	{'text': CContactModel.aBirthdayMonths[5], value: 6},
+	{'text': CContactModel.aBirthdayMonths[6], value: 7},
+	{'text': CContactModel.aBirthdayMonths[7], value: 8},
+	{'text': CContactModel.aBirthdayMonths[8], value: 9},
+	{'text': CContactModel.aBirthdayMonths[9], value: 10},
+	{'text': CContactModel.aBirthdayMonths[10], value: 11},
+	{'text': CContactModel.aBirthdayMonths[11], value: 12}
 ];
 
-CContactModel.birthdayYearSelect = [
-	{'text': TextUtils.i18n('%MODULENAME%/LABEL_YEAR'), 'value': '0'}
+CContactModel.birthYearSelect = [
+	{'text': TextUtils.i18n('%MODULENAME%/LABEL_YEAR'), 'value': 0}
 ];
 
 CContactModel.prototype.clear = function ()
@@ -446,7 +438,7 @@ CContactModel.prototype.clear = function ()
 	this.isNew(false);
 	this.readOnly(false);
 
-	this.idContact('');
+	this.idContact(0);
 	this.idUser('');
 	this.global(false);
 	this.itsMe(false);
@@ -496,9 +488,9 @@ CContactModel.prototype.clear = function ()
 	this.businessPhone('');
 
 	this.otherEmail('');
-	this.otherBirthdayMonth('0');
-	this.otherBirthdayDay('0');
-	this.otherBirthdayYear('0');
+	this.otherBirthMonth(0);
+	this.otherBirthDay(0);
+	this.otherBirthYear(0);
 	this.otherNotes('');
 
 	this.etag('');
@@ -531,7 +523,7 @@ CContactModel.prototype.switchToView = function ()
 CContactModel.prototype.toObject = function ()
 {
 	var oResult = {
-		'ContactId': this.idContact(),
+		'IdContact': this.idContact(),
 		'PrimaryEmail': this.primaryEmail(),
 		'PrimaryPhone': this.primaryPhone(),
 		'PrimaryAddress': this.primaryAddress(),
@@ -574,13 +566,13 @@ CContactModel.prototype.toObject = function ()
 		'OtherEmail': this.otherEmail(),
 		'Notes': this.otherNotes(),
 		'ETag': this.etag(),
-		'BirthdayDay': this.otherBirthdayDay(),
-		'BirthdayMonth': this.otherBirthdayMonth(),
-		'BirthdayYear': this.otherBirthdayYear(),
+		'BirthDay': this.otherBirthDay(),
+		'BirthMonth': this.otherBirthMonth(),
+		'BirthYear': this.otherBirthYear(),
 
 		'SharedToAll': !!this.sharedToAll(),
 		
-		'GroupsIds': this.groups()
+		'GroupIds': this.groups()
 	};
 
 	return oResult;
@@ -591,7 +583,7 @@ CContactModel.prototype.toObject = function ()
  */
 CContactModel.prototype.parse = function (oData)
 {
-	this.idContact(Types.pString(oData.IdContact));
+	this.idContact(Types.pInt(oData.IdContact));
 	this.idUser(Types.pString(oData.IdUser));
 
 	this.global(!!oData.Global);
@@ -636,20 +628,20 @@ CContactModel.prototype.parse = function (oData)
 	this.businessPhone(Types.pString(oData.BusinessPhone));
 
 	this.otherEmail(Types.pString(oData.OtherEmail));
-	this.otherBirthdayMonth(Types.pString(oData.BirthdayMonth));
-	this.otherBirthdayDay(Types.pString(oData.BirthdayDay));
-	this.otherBirthdayYear(Types.pString(oData.BirthdayYear));
+	this.otherBirthMonth(Types.pInt(oData.BirthMonth));
+	this.otherBirthDay(Types.pInt(oData.BirthDay));
+	this.otherBirthYear(Types.pInt(oData.BirthYear));
 	this.otherNotes(Types.pString(oData.Notes));
 
 	this.etag(Types.pString(oData.ETag));
 
 	this.sharedToAll(!!oData.SharedToAll);
 
-	if (_.isArray(oData.GroupsIds))
+	if (_.isArray(oData.GroupIds))
 	{
 		this.groups(
-			_.map(oData.GroupsIds, function (sItem) {
-				return Types.pString(sItem);
+			_.map(oData.GroupIds, function (iIdGroup) {
+				return iIdGroup;
 			})
 		);
 	}

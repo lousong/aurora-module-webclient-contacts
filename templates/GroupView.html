@@ -3,7 +3,7 @@
 		<span class="button clear_button" id="selenium_contacts_delete_group_button" data-bind="i18n: {'key': '%MODULENAME%/ACTION_DELETE_GROUP'}, 
 				click: function() { $root.deleteGroup(idGroup()); }"></span>
 		<span class="button clear_button" data-bind="i18n: {'key': '%MODULENAME%/ACTION_EDIT_GROUP'}, click: function (oItem) { $root.editGroup(oItem); }"></span>
-		<span class="button" data-bind="visible: $root.bAllowComposeMessageToAddresses, i18n: {'key': '%MODULENAME%/ACTION_EMAIL_TO_GROUP'}, 
+		<span class="button" data-bind="visible: $root.allowSendEmails() && $root.bAllowComposeMessageToAddresses, i18n: {'key': '%MODULENAME%/ACTION_EMAIL_TO_GROUP'}, 
 				click: function() { $root.mailGroup($data); }"></span>
 	</div>
 	<h2 class="contacts_heading" data-bind="i18n: {'key': '%MODULENAME%/HEADING_VIEW_GROUP'}, visible: !isNew()"></h2>

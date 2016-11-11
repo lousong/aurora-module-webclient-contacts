@@ -69,7 +69,7 @@ CContactsCache.prototype.getContactsByEmails = function (aEmails, fResponseHandl
 		this.aRequestedEmails = _.union(this.aRequestedEmails, aEmailsForRequest);
 		
 		Ajax.send('GetContactsByEmails', {
-			'Emails': aEmailsForRequest.join(','),
+			'Emails': aEmailsForRequest,
 			'HandlerId': sHandlerId
 		}, this.onGetContactsByEmailsResponse, this);
 	}

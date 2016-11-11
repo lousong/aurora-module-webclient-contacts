@@ -22,7 +22,7 @@ function Callback(oRequest, fResponse, sExceptEmail, bGlobalOnly)
 		sTerm = oRequest.term,
 		oParameters = {
 			'Search': sTerm,
-			'GlobalOnly': bGlobalOnly ? '1' : '0'
+			'GlobalOnly': !!bGlobalOnly
 		}
 	;
 
@@ -122,7 +122,7 @@ function PhoneCallback(oRequest, fResponse)
 		sTerm = $.trim(oRequest.term),
 		oParameters = {
 			'Search': sTerm,
-			'PhoneOnly': '1'
+			'PhoneOnly': true
 		}
 	;
 
@@ -157,8 +157,8 @@ function PhoneCallback(oRequest, fResponse)
 function DeleteHandler(oContact)
 {
 	Ajax.send('DeleteSuggestion', {
-		'ContactId': oContact.id,
-		'SharedToAll': oContact.sharedToAll ? '1' : '0'
+		'IdContact': oContact.id,
+		'SharedToAll': !!oContact.sharedToAll
 	});
 }
 
@@ -166,7 +166,7 @@ function RequestUserByPhone(sNumber, fCallBack, oContext)
 {
 	oParameters = {
 		'Search': sNumber,
-		'PhoneOnly': '1'
+		'PhoneOnly': true
 	};
 	
 	Ajax.send('GetSuggestions', oParameters, function (oResponse) {

@@ -6,7 +6,7 @@
 	<span class="search_block">
 		<span class="input" data-bind="css: {'focus': isSearchFocused}">
 			<span class="icon search" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SEARCH'}, click: searchSubmitCommand"></span>
-			<input class="field" type="text" data-bind="value: searchInput, onEnter: searchSubmitCommand, hasfocus: isSearchFocused" />
+			<input class="field" type="text" data-bind="valueUpdate: 'afterkeydown', value: searchInput, onEnter: searchSubmitCommand, hasfocus: isSearchFocused" />
 		</span>
 	</span>
 </div>

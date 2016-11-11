@@ -17,7 +17,7 @@ function CContactListItemModel()
 	this.bReadOnly = false;
 	this.bItsMe = false;
 	this.bGlobal = false;
-	this.sId = '';
+	this.iId = 0;
 	this.sName = '';
 	this.sEmail = '';
 	this.bSharedToAll = false;
@@ -36,7 +36,7 @@ function CContactListItemModel()
  */
 CContactListItemModel.prototype.parse = function (oData)
 {
-	this.sId = Types.pString(oData.Id);
+	this.iId = Types.pInt(oData.Id);
 	this.sName = Types.pString(oData.Name);
 	this.sEmail = Types.pString(oData.Email);
 	
@@ -91,7 +91,7 @@ CContactListItemModel.prototype.ItsMe = function ()
  */
 CContactListItemModel.prototype.Id = function ()
 {
-	return this.sId;
+	return this.iId;
 };
 
 /**

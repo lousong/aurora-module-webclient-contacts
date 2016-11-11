@@ -87,7 +87,7 @@ CCreateContactPopup.prototype.onSaveClick = function ()
 		;
 
 		this.loading(true);
-		Ajax.send('CreateContact', oParameters, this.onCreateContactResponse, this);
+		Ajax.send('CreateContact', { 'Contact': oParameters }, this.onCreateContactResponse, this);
 	}
 };
 

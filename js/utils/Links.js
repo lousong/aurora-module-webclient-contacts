@@ -61,10 +61,10 @@ LinksUtils.parseContacts = function (aParam)
 		iIndex = 0,
 		aGroupTypes = [Enums.ContactsStorage.Personal, Enums.ContactsStorage.Shared, Enums.ContactsStorage.Global_, Enums.ContactsStorage.All],
 		iType = Enums.ContactsStorage.All,
-		sGroupId = '',
+		iIdGroup = 0,
 		sSearch = '',
 		iPage = 1,
-		sUid = ''
+		iIdContact = 0
 	;
 
 	if (Types.isNonEmptyArray(aParam))
@@ -80,7 +80,7 @@ LinksUtils.parseContacts = function (aParam)
 		{
 			if (aParam.length > iIndex)
 			{
-				sGroupId = Types.pString(aParam[iIndex]);
+				iIdGroup = Types.pInt(aParam[iIndex]);
 				iIndex++;
 			}
 			else
@@ -107,17 +107,17 @@ LinksUtils.parseContacts = function (aParam)
 		
 		if (aParam.length > iIndex && LinksUtils.isContactParam(aParam[iIndex]))
 		{
-			sUid = Types.pString(aParam[iIndex].substr(3));
+			iIdContact = Types.pInt(aParam[iIndex].substr(3));
 			iIndex++;
 		}
 	}
 	
 	return {
 		'Type': iType,
-		'GroupId': sGroupId,
+		'IdGroup': iIdGroup,
 		'Search': sSearch,
 		'Page': iPage,
-		'Uid': sUid
+		'IdContact': iIdContact
 	};
 };
 
