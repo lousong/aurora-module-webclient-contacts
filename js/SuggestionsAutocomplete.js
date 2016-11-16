@@ -38,8 +38,8 @@ function Callback(oRequest, fResponse, sExceptEmail, bGlobalOnly)
 					email: oItem.Email,
 					frequency: oItem.Frequency,
 					id: oItem.Id,
-					global: oItem.Global,
-					sharedToAll: oItem.SharedToAll
+					global: oItem.Storage === 'global',
+					sharedToAll: oItem.Storage === 'shared'
 				} :
 				null;
 			});
@@ -97,8 +97,8 @@ function ComposeCallback(oRequest, fResponse)
 					'value': sValue,
 					'frequency': oItem.Frequency,
 					'id': oItem.Id,
-					'global': oItem.Global,
-					'sharedToAll': oItem.SharedToAll
+					'global': oItem.Storage === 'global',
+					'sharedToAll': oItem.Storage === 'shared'
 				};
 			});
 
@@ -158,7 +158,7 @@ function DeleteHandler(oContact)
 {
 	Ajax.send('DeleteSuggestion', {
 		'IdContact': oContact.id,
-		'SharedToAll': !!oContact.sharedToAll
+		'Storage': oContact.storage
 	});
 }
 

@@ -532,7 +532,7 @@ CContactModel.prototype.toObject = function ()
 		'LastName': this.lastName(),
 		'NickName': this.nickName(),
 
-		'Global': !!this.global(),
+		'Storage': !!this.global() ? 'global' : 'personal',
 		'ItsMe': !!this.itsMe(),
 
 		'Skype': this.skype(),
@@ -570,8 +570,6 @@ CContactModel.prototype.toObject = function ()
 		'BirthMonth': this.otherBirthMonth(),
 		'BirthYear': this.otherBirthYear(),
 
-		'SharedToAll': !!this.sharedToAll(),
-		
 		'GroupIds': this.groups()
 	};
 
@@ -586,7 +584,7 @@ CContactModel.prototype.parse = function (oData)
 	this.idContact(Types.pInt(oData.IdContact));
 	this.idUser(Types.pString(oData.IdUser));
 
-	this.global(!!oData.Global);
+	this.global(oData.Storage === 'global');
 	this.itsMe(!!oData.ItsMe);
 	this.readOnly(!!oData.ReadOnly);
 
@@ -635,7 +633,7 @@ CContactModel.prototype.parse = function (oData)
 
 	this.etag(Types.pString(oData.ETag));
 
-	this.sharedToAll(!!oData.SharedToAll);
+	this.sharedToAll(oData.Storage === 'shared');
 
 	if (_.isArray(oData.GroupIds))
 	{

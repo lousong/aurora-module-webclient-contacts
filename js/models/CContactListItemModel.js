@@ -4,7 +4,9 @@ var
 	ko = require('knockout'),
 	
 	AddressUtils = require('%PathToCoreWebclientModule%/js/utils/Address.js'),
-	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js')
+	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
+	
+	Settings = require('modules/%ModuleName%/js/Settings.js')
 ;
 
 /**
@@ -27,7 +29,7 @@ function CContactListItemModel()
 	this.checked = ko.observable(false);
 	this.selected = ko.observable(false);
 	this.recivedAnim = ko.observable(false).extend({'autoResetToFalse': 500});
-	this.groupType = ko.observable([]);
+	this.sStorage = Settings.DefaultStorage;
 }
 
 /**
@@ -49,9 +51,9 @@ CContactListItemModel.prototype.parse = function (oData)
 	this.bIsOrganization = !!oData.IsOrganization;
 	this.bReadOnly = !!oData.ReadOnly;
 	this.bItsMe = !!oData.ItsMe;
-	this.bGlobal = !!oData.Global;
-	this.bSharedToAll =  !!oData.SharedToAll;
-	this.groupType(this.getGroupType(oData));
+	this.bGlobal = oData.Storage === 'global';
+	this.bSharedToAll =  oData.Storage === 'shared';
+	this.sStorage = oData.Storage;
 };
 
 /**
@@ -132,24 +134,6 @@ CContactListItemModel.prototype.IsSharedToAll = function ()
 CContactListItemModel.prototype.IsOrganization = function ()
 {
 	return this.bIsOrganization;
-};
-
-CContactListItemModel.prototype.getGroupType = function (oData)
-{
-	if (oData.SharedToAll)
-	{
-		return Enums.ContactsStorage.Shared;
-	}
-	else if (oData.Global)
-	{
-		return Enums.ContactsStorage.Global_;
-	}
-	else if (!oData.Global)
-	{
-		return Enums.ContactsStorage.Personal;
-	}
-
-	return null;
 };
 
 module.exports = CContactListItemModel;

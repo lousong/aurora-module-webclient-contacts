@@ -14,11 +14,11 @@
 	<div class="contact_list_scroll scroll-inner">
 		<div class="items_list contact_list">
 			<div data-bind="visible: isEmptyList() && !preLoadingList()">
-				<span class="list_notification" data-bind="visible: !isSearch() && !inGroup()">
+				<span class="list_notification" data-bind="visible: !isSearch() && !isGlobalStorageSelected()">
 					<span class="description" data-bind="i18n: {'key': '%MODULENAME%/INFO_NO_CONTACTS'}"></span>
 					<span class="description" data-bind="i18n: {'key': '%MODULENAME%/INFO_CREATE_OR_IMPORT'}"></span>
 				</span>
-				<span class="list_notification" data-bind="visible: !isSearch() && inGroup()">
+				<span class="list_notification" data-bind="visible: !isSearch() && isGlobalStorageSelected()">
 					<span class="description" data-bind="i18n: {'key': '%MODULENAME%/INFO_NO_CONTACTS'}"></span>
 					<span class="description" data-bind="i18n: {'key': '%MODULENAME%/INFO_DRAGNDROP_TO_GROUP'}, visible: bVisibleDragNDropDescription"></span>
 				</span>
@@ -50,7 +50,7 @@
 							</span>
 						</span>
 						<span class="data fadeout">
-							<span class="group" data-bind="visible: $parent.selectedGroupType() === Enums.ContactsStorage.All, css: {'personal': groupType() === Enums.ContactsStorage.Personal, 'shared': groupType() === Enums.ContactsStorage.Shared, 'global': groupType() === Enums.ContactsStorage.Global_}"></span>
+							<span class="group" data-bind="visible: $parent.selectedStorage() === 'all', css: {'personal': sStorage}"></span>
 							<span class="me" data-bind="visible: ItsMe(), i18n: {'key': '%MODULENAME%/LABEL_ITS_ME'}"></span>
 							<span class="name" data-bind="text: Name(), visible: !!Name()"></span>
 							<span class="name" data-bind="i18n: {'key': '%MODULENAME%/LABEL_NO_NAME'}, visible: Name() === ''"></span>
@@ -61,7 +61,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="uploader_mask" data-bind="initDom: uploaderArea, css: {'active': bDragActiveComp}, visible: selectedGroupType() !== Enums.ContactsStorage.Global_">
+			<div class="uploader_mask" data-bind="initDom: uploaderArea, css: {'active': bDragActiveComp}, visible: isNotGlobalStorageSelected">
 				<div class="inner"></div>
 			</div>
 		</div>

@@ -8,8 +8,6 @@ var
 	Enums = {}
 ;
 
-Enums.ContactsStorage = UserSettings.EContactsStorage;
-Enums.ContactsStorage.SubGroup = 4;
 Enums.ContactsPrimaryEmail = UserSettings.EContactsPrimaryEmail;
 Enums.ContactsPrimaryPhone = UserSettings.EContactsPrimaryPhone;
 Enums.ContactsPrimaryAddress = UserSettings.EContactsPrimaryAddress;

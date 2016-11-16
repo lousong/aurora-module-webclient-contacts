@@ -3,9 +3,7 @@
 		<span class="item checkstate command" data-bind="click: reload, checkstate: {'activeClass': 'process', 'state': preLoadingList(), 'duration': 800}">
 			<span class="icon"></span>
 		</span>
-		<span class="item new_group" data-bind="visible: showPersonalContacts() &&
-			selectedGroupType() !== Enums.ContactsStorage.Global_ &&
-			selectedGroupType() !== Enums.ContactsStorage.Shared,
+		<span class="item new_group" data-bind="visible: showPersonalContacts() && isNotGlobalStorageSelected() && selectedStorage() !== 'shared',
 			command: newGroupCommand, customTooltip: '%MODULENAME%/ACTION_NEW_GROUP'" id="selenium_contacts_new_group_button">
 			<span class="icon"></span>
 			<span class="text" data-bind="i18n: {'key': '%MODULENAME%/ACTION_NEW_GROUP'}"></span>
@@ -22,7 +20,7 @@
 			<span class="text" data-bind="i18n: {'key': '%MODULENAME%/ACTION_UNSHARE'}"></span>
 		</span>
 
-		<span class="item control" data-bind="visible: showPersonalContacts() && selectedGroupType() === Enums.ContactsStorage.Personal, dropdown: {control: false}">
+		<span class="item control" data-bind="visible: showPersonalContacts() && selectedStorage() === 'personal', dropdown: {control: false}">
 			<span class="icon arrow"></span>
 			<span class="dropdown">
 				<span class="dropdown_helper">
