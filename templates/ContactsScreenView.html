@@ -1,8 +1,8 @@
 <div class="screen ContactsLayout" style="display: none;">
-	<!--<div class="panels" data-bind="splitter: {name: 'groups', sizeLeft: 200, minLeft: 20, minRight: 40, resizeToWidth: true}, css: {'groups': selectedPanel() === Enums.MobilePanel.Groups,  'list_active': selectedPanel() === Enums.MobilePanel.Items,  'viewer_active': selectedPanel() === Enums.MobilePanel.View}">-->
-	<div class="panels">
+	<div class="panels" data-bind="splitter1: {name: 'groups', sizeLeft: 200, minLeft: 20, minRight: 40, resizeToWidth: true}, css: {'groups': selectedPanel() === Enums.MobilePanel.Groups,  'list_active': selectedPanel() === Enums.MobilePanel.Items,  'viewer_active': selectedPanel() === Enums.MobilePanel.View}">
+<!--	<div class="panels">-->
 		<div class="panel left_panel groups_panel" data-splitter="groups">
-			<div class="resize_handler"></div>
+<!--			<div class="resize_handler"></div>-->
 			<div class="panel_content">
 				<!-- ko template: { name: sGroupsToolbarTemplate} --><!-- /ko -->
 				<div class="middle_bar">
@@ -10,9 +10,9 @@
 				</div>
 			</div>
 		</div>
-		<div class="panel_helper" data-bind="splitter: {name: 'contacts', sizeLeft: 450, minLeft: (showSharedToAllContacts() ? 418 : 368), minRight: 10}">
+		<!--<div class="panel_helper" data-bind="splitter: {name: 'contacts', sizeLeft: 450, minLeft: (showSharedToAllContacts() ? 418 : 368), minRight: 10}">-->
 			<div class="panel center_panel contacts_panel">
-				<div class="resize_handler"></div>
+<!--				<div class="resize_handler"></div>-->
 				<div class="panel_content">
 					<!-- ko template: { name: sContactsToolbarTemplate} --><!-- /ko -->
 					<div class="middle_bar" data-bind="template: {name: '%ModuleName%_ContactsView'}"></div>
@@ -41,6 +41,6 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		<!--</div>-->
 	</div>
 </div>
