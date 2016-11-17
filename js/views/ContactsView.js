@@ -83,14 +83,14 @@ function CContactsView()
 	this.isGlobalStorageSelected = ko.observable(false);
 	this.isNotGlobalStorageSelected = ko.observable(false);
 	this.allowDropToPersonal = ko.observable(false);
-	this.sSelectedStorage = Settings.DefaultStorage;
+	this.hiddenSelectedStorage = ko.observable(Settings.DefaultStorage);
 	this.selectedStorage = ko.computed({
 		'read': function () {
-			return this.sSelectedStorage;
+			return this.hiddenSelectedStorage();
 		},
 		'write': function (sValue) {
-			this.sSelectedStorage = ($.inArray(sValue, Settings.Storages) !== -1) ? sValue : Settings.DefaultStorage;
-			if (this.sSelectedStorage !== 'group')
+			this.hiddenSelectedStorage(($.inArray(sValue, Settings.Storages) !== -1) ? sValue : Settings.DefaultStorage);
+			if (this.hiddenSelectedStorage() !== 'group')
 			{
 				this.selectedGroupInList(null);
 				this.selectedItem(null);
@@ -98,12 +98,15 @@ function CContactsView()
 				this.requestContactList();
 				this.currentGroupId('');
 			}
-			this.isGlobalStorageSelected(this.sSelectedStorage === 'global');
-			this.isNotGlobalStorageSelected(this.sSelectedStorage !== 'global');
-			this.allowDropToPersonal(this.sSelectedStorage === 'group' || this.isGlobalStorageSelected() || this.sSelectedStorage === 'all');
+			this.isGlobalStorageSelected(this.hiddenSelectedStorage() === 'global');
+			this.isNotGlobalStorageSelected(this.hiddenSelectedStorage() !== 'global');
+			this.allowDropToPersonal(this.hiddenSelectedStorage() === 'group' || this.isGlobalStorageSelected() || this.hiddenSelectedStorage() === 'all');
 		},
 		'owner': this
 	});
+//	this.selectedStorage.subscribe(function () {
+//		console.log('this.selectedStorage', this.selectedStorage());
+//	}, this);
 
 	this.selectedGroupInList = ko.observable(null);
 
@@ -863,11 +866,11 @@ CContactsView.prototype.editGroup = function (oData)
 };
 
 /**
- * @param {number} iType
+ * @param {string} sStorage
  */
-CContactsView.prototype.changeGroupType = function (iType)
+CContactsView.prototype.changeGroupType = function (sStorage)
 {
-	Routing.setHash(LinksUtils.getContacts(iType));
+	Routing.setHash(LinksUtils.getContacts(sStorage));
 };
 
 /**
@@ -910,7 +913,7 @@ CContactsView.prototype.onRoute = function (aParams)
 		bRequestContacts = true;
 	}
 	
-	if (-1 !== $.inArray(oParams.Storage, Settings.Storages))
+	if (-1 !== $.inArray(oParams.Storage, Settings.Storages) && oParams.Storage !== 'group')
 	{
 		this.selectedStorage(oParams.Storage);
 	}

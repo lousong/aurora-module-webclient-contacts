@@ -11,20 +11,20 @@ var
 ;
 
 /**
- * @param {number=} iType
+ * @param {number=} sStorage
  * @param {string=} sGroupId
  * @param {string=} sSearch
  * @param {number=} iPage
  * @param {string=} sUid
  * @returns {Array}
  */
-LinksUtils.getContacts = function (iType, sGroupId, sSearch, iPage, sUid)
+LinksUtils.getContacts = function (sStorage, sGroupId, sSearch, iPage, sUid)
 {
 	var aParams = [Settings.HashModuleName];
 	
-	if (typeof iType === 'number')
+	if (sStorage && sStorage !== '')
 	{
-		aParams.push(iType);
+		aParams.push(sStorage);
 	}
 	
 	if (sGroupId && sGroupId !== '')
