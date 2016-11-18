@@ -4,8 +4,10 @@ var
 	_ = require('underscore'),
 	ko = require('knockout'),
 	
+	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
 	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
 	
+	Api = require('%PathToCoreWebclientModule%/js/Api.js'),
 	App = require('%PathToCoreWebclientModule%/js/App.js'),
 	Ajax = require('modules/%ModuleName%/js/Ajax.js'),
 	
@@ -45,14 +47,18 @@ CVcardModel.prototype.parse = function (oData)
 };
 
 /**
- * @param {Object} oData
- * @param {Object} oParameters
+ * @param {Object} oResponse
+ * @param {Object} oRequest
  */
-CVcardModel.prototype.onContactsSaveVcfResponse = function (oData, oParameters)
+CVcardModel.prototype.onContactsSaveVcfResponse = function (oResponse, oRequest)
 {
-	if (oData && oData.Result && oData.Result.Uid)
+	if (!oResponse.Result)
 	{
-		this.uid(oData.Result.Uid);
+		Api.showErrorByCode(oResponse, TextUtils.i18n('%MODULENAME%/ERROR_CREATE_CONTACT'));
+	}
+	else
+	{
+		this.uid(oResponse.Result.Uid);
 	}
 };
 

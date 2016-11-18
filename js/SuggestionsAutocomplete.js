@@ -128,12 +128,12 @@ function PhoneCallback(oRequest, fResponse)
 
 	if ('' !== sTerm)
 	{
-		Ajax.send('GetSuggestions', oParameters, function (oData) {
+		Ajax.send('GetSuggestions', oParameters, function (oResponse) {
 			var aList = [];
 
-			if (oData && oData.Result && oData.Result.List)
+			if (oResponse && oResponse.Result && oResponse.Result.List)
 			{
-				_.each(oData.Result.List, function (oItem) {
+				_.each(oResponse.Result.List, function (oItem) {
 					_.each(oItem.Phones, function (sPhone, sKey) {
 						aList.push({
 							label: oItem.Name !== '' ? oItem.Name + ' ' + '<' + oItem.Email + '> ' + sPhone : oItem.Email + ' ' + sPhone,
