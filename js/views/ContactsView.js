@@ -504,10 +504,7 @@ CContactsView.prototype.deleteContacts = function (aChecked)
 			});
 		}, 500);
 
-		Ajax.send('DeleteContacts', {
-			'ContactIds': aContactIds,
-			'Storage': this.selectedStorage()
-		}, function (oResponse) {
+		Ajax.send('DeleteContacts', { 'ContactIds': aContactIds }, function (oResponse) {
 			if (!oResponse.Result)
 			{
 				Api.showErrorByCode(oResponse, TextUtils.i18n('%MODULENAME%/ERROR_DELETE_CONTACTS'));
@@ -843,28 +840,14 @@ CContactsView.prototype.requestContact = function (iIdContact)
 {
 	this.loadingViewPane(true);
 	
-	var
-		oItem = _.find(this.collection(), function (oItm) {
-			return oItm.Id() === iIdContact;
-		}),
-		iStorage = 'personal'
-	;
+	var oItem = _.find(this.collection(), function (oItm) {
+		return oItm.Id() === iIdContact;
+	});
 	
 	if (oItem)
 	{
 		this.selector.itemSelected(oItem);
-		if (oItem.Global())
-		{
-			iStorage = 'global';
-		}
-		else if (oItem.IsSharedToAll())
-		{
-			iStorage = 'shared';
-		}
-		Ajax.send('GetContact', {
-			'IdContact': oItem.Id(),
-			'Storage': iStorage
-		}, this.onGetContactResponse, this);
+		Ajax.send('GetContact', { 'IdContact': oItem.Id() }, this.onGetContactResponse, this);
 	}
 };
 
@@ -1448,10 +1431,7 @@ CContactsView.prototype.executeShare = function ()
 			this.recivedAnimShare(true);
 		}
 	
-		Ajax.send('UpdateShared', {
-			'ContactIds': aContactIds,
-			'Storage': this.selectedStorage()
-		});
+		Ajax.send('UpdateShared', { 'ContactIds': aContactIds });
 	}
 };
 

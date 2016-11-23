@@ -22,7 +22,7 @@ function Callback(oRequest, fResponse, sExceptEmail, bGlobalOnly)
 		sTerm = oRequest.term,
 		oParameters = {
 			'Search': sTerm,
-			'GlobalOnly': !!bGlobalOnly
+			'Storage': bGlobalOnly ? 'global' : 'all'
 		}
 	;
 
@@ -156,10 +156,7 @@ function PhoneCallback(oRequest, fResponse)
  */
 function DeleteHandler(oContact)
 {
-	Ajax.send('DeleteSuggestion', {
-		'IdContact': oContact.id,
-		'Storage': oContact.storage
-	});
+	Ajax.send('DeleteSuggestion', { 'IdContact': oContact.id });
 }
 
 function RequestUserByPhone(sNumber, fCallBack, oContext)
