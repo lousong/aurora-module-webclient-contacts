@@ -19,7 +19,7 @@ function CContactListItemModel()
 	this.bReadOnly = false;
 	this.bItsMe = false;
 	this.bGlobal = false;
-	this.iId = 0;
+	this.sUUID = '';
 	this.sName = '';
 	this.sEmail = '';
 	this.bSharedToAll = false;
@@ -38,7 +38,7 @@ function CContactListItemModel()
  */
 CContactListItemModel.prototype.parse = function (oData)
 {
-	this.iId = Types.pInt(oData.Id);
+	this.sUUID = Types.pString(oData.UUID);
 	this.sName = Types.pString(oData.Name);
 	this.sEmail = Types.pString(oData.Email);
 	
@@ -91,9 +91,9 @@ CContactListItemModel.prototype.ItsMe = function ()
 /**
  * @return {string}
  */
-CContactListItemModel.prototype.Id = function ()
+CContactListItemModel.prototype.UUID = function ()
 {
-	return this.iId;
+	return this.sUUID;
 };
 
 /**

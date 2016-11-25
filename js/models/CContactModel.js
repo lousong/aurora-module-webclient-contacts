@@ -29,7 +29,7 @@ function CContactModel()
 	this.sPhoneDefaultType = Enums.ContactsPrimaryPhone.Mobile;
 	this.sAddressDefaultType = Enums.ContactsPrimaryAddress.Personal;
 	
-	this.idContact = ko.observable(0);
+	this.uuid = ko.observable('');
 	this.idUser = ko.observable('');
 	this.global = ko.observable(false);
 	this.itsMe = ko.observable(false);
@@ -438,7 +438,7 @@ CContactModel.prototype.clear = function ()
 	this.isNew(false);
 	this.readOnly(false);
 
-	this.idContact(0);
+	this.uuid('');
 	this.idUser('');
 	this.global(false);
 	this.itsMe(false);
@@ -523,7 +523,7 @@ CContactModel.prototype.switchToView = function ()
 CContactModel.prototype.toObject = function ()
 {
 	var oResult = {
-		'IdContact': this.idContact(),
+		'UUID': this.uuid(),
 		'PrimaryEmail': this.primaryEmail(),
 		'PrimaryPhone': this.primaryPhone(),
 		'PrimaryAddress': this.primaryAddress(),
@@ -570,7 +570,7 @@ CContactModel.prototype.toObject = function ()
 		'BirthMonth': this.otherBirthMonth(),
 		'BirthYear': this.otherBirthYear(),
 
-		'GroupIds': this.groups()
+		'GroupUUIDs': this.groups()
 	};
 
 	return oResult;
@@ -581,7 +581,7 @@ CContactModel.prototype.toObject = function ()
  */
 CContactModel.prototype.parse = function (oData)
 {
-	this.idContact(Types.pInt(oData.IdContact));
+	this.uuid(Types.pString(oData.UUID));
 	this.idUser(Types.pString(oData.IdUser));
 
 	this.global(oData.Storage === 'global');
@@ -635,13 +635,9 @@ CContactModel.prototype.parse = function (oData)
 
 	this.sharedToAll(oData.Storage === 'shared');
 
-	if (_.isArray(oData.GroupIds))
+	if (_.isArray(oData.GroupUUIDs))
 	{
-		this.groups(
-			_.map(oData.GroupIds, function (iIdGroup) {
-				return iIdGroup;
-			})
-		);
+		this.groups(oData.GroupUUIDs);
 	}
 };
 

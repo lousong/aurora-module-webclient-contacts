@@ -15,7 +15,7 @@ function CGroupModel()
 	this.isNew = ko.observable(false);
 	this.readOnly = ko.observable(false);
 
-	this.idGroup = ko.observable(0);
+	this.uuid = ko.observable('');
 	this.idUser = ko.observable('');
 
 	this.name = ko.observable('');
@@ -57,7 +57,7 @@ CGroupModel.prototype.clear = function ()
 {
 	this.isNew(false);
 
-	this.idGroup(0);
+	this.uuid('');
 	this.idUser('');
 
 	this.name('');
@@ -82,7 +82,7 @@ CGroupModel.prototype.populate = function (oGroup)
 {
 	this.isNew(oGroup.isNew());
 
-	this.idGroup(oGroup.idGroup());
+	this.uuid(oGroup.uuid());
 	this.idUser(oGroup.idUser());
 
 	this.name(oGroup.name());
@@ -121,10 +121,10 @@ CGroupModel.prototype.switchToView = function ()
 /**
  * @return {Object}
  */
-CGroupModel.prototype.toObject = function (aContactIds)
+CGroupModel.prototype.toObject = function (aContactUUIDs)
 {
 	return {
-		'IdGroup': this.idGroup(),
+		'GroupUUID': this.uuid(),
 		'Name': this.name(),
 		'IsOrganization': this.isOrganization() ? '1' : '0',
 		'Email': this.email(),
@@ -137,7 +137,7 @@ CGroupModel.prototype.toObject = function (aContactIds)
 		'Street': this.street(),
 		'Web': this.web(),
 		'Zip': this.zip(),
-		'Contacts': aContactIds
+		'Contacts': aContactUUIDs
 	};
 };
 

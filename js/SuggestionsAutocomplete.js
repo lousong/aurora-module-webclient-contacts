@@ -37,7 +37,7 @@ function Callback(oRequest, fResponse, sExceptEmail, bGlobalOnly)
 					name: oItem.Name,
 					email: oItem.Email,
 					frequency: oItem.Frequency,
-					id: oItem.Id,
+					id: oItem.UUID,
 					global: oItem.Storage === 'global',
 					sharedToAll: oItem.Storage === 'shared'
 				} :
@@ -96,7 +96,7 @@ function ComposeCallback(oRequest, fResponse)
 					'label': sLabel,
 					'value': sValue,
 					'frequency': oItem.Frequency,
-					'id': oItem.Id,
+					'id': oItem.UUID,
 					'global': oItem.Storage === 'global',
 					'sharedToAll': oItem.Storage === 'shared'
 				};
@@ -156,7 +156,7 @@ function PhoneCallback(oRequest, fResponse)
  */
 function DeleteHandler(oContact)
 {
-	Ajax.send('DeleteSuggestion', { 'IdContact': oContact.id });
+	Ajax.send('DeleteSuggestion', { 'ContactUUID': oContact.id });
 }
 
 function RequestUserByPhone(sNumber, fCallBack, oContext)
