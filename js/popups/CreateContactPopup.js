@@ -82,7 +82,8 @@ CCreateContactPopup.prototype.onSaveClick = function ()
 				'PersonalPhone': this.phone(),
 				'PersonalAddress': this.address(),
 				'Skype': this.skype(),
-				'Facebook': this.facebook()
+				'Facebook': this.facebook(),
+				'Storage': 'personale'
 			}
 		;
 

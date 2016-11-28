@@ -11,6 +11,26 @@ var
 ;
 
 /**
+ * @param {string} sTemp
+ * 
+ * @return {boolean}
+ */
+function IsPageParam(sTemp)
+{
+	return ('p' === sTemp.substr(0, 1) && (/^[1-9][\d]*$/).test(sTemp.substr(1)));
+};
+
+/**
+ * @param {string} sTemp
+ * 
+ * @return {boolean}
+ */
+function IsContactParam(sTemp)
+{
+	return 'cnt' === sTemp.substr(0, 3);
+};
+
+/**
  * @param {number=} sStorage
  * @param {string=} sGroupUUID
  * @param {string=} sSearch
@@ -88,13 +108,13 @@ LinksUtils.parseContacts = function (aParam)
 			}
 		}
 		
-		if (aParam.length > iIndex && !LinksUtils.isPageParam(aParam[iIndex]) && !LinksUtils.isContactParam(aParam[iIndex]))
+		if (aParam.length > iIndex && !IsPageParam(aParam[iIndex]) && !IsContactParam(aParam[iIndex]))
 		{
 			sSearch = Types.pString(aParam[iIndex]);
 			iIndex++;
 		}
 		
-		if (aParam.length > iIndex && LinksUtils.isPageParam(aParam[iIndex]))
+		if (aParam.length > iIndex && IsPageParam(aParam[iIndex]))
 		{
 			iPage = Types.pInt(aParam[iIndex].substr(1));
 			iIndex++;
@@ -104,7 +124,7 @@ LinksUtils.parseContacts = function (aParam)
 			}
 		}
 		
-		if (aParam.length > iIndex && LinksUtils.isContactParam(aParam[iIndex]))
+		if (aParam.length > iIndex && IsContactParam(aParam[iIndex]))
 		{
 			sContactUUID = Types.pString(aParam[iIndex].substr(3));
 			iIndex++;
@@ -120,27 +140,4 @@ LinksUtils.parseContacts = function (aParam)
 	};
 };
 
-/**
- * @param {string} sTemp
- * 
- * @return {boolean}
- */
-LinksUtils.isPageParam = function (sTemp)
-{
-	return ('p' === sTemp.substr(0, 1) && (/^[1-9][\d]*$/).test(sTemp.substr(1)));
-};
-
-/**
- * @param {string} sTemp
- * 
- * @return {boolean}
- */
-LinksUtils.isContactParam = function (sTemp)
-{
-	return 'cnt' === sTemp.substr(0, 3);
-};
-
-module.exports = {
-	getContacts: LinksUtils.getContacts,
-	parseContacts: LinksUtils.parseContacts
-};
+module.exports = LinksUtils;

@@ -387,7 +387,7 @@ CContactsView.prototype.executeSave = function (oData)
 			
 			if (oData.isNew())
 			{
-				oContact.Storage = this.selectedStorage();
+				oContact.Storage = 'personal';
 			}
 
 			Ajax.send(oData.isNew() ? 'CreateContact' : 'UpdateContact', { Contact: oContact }, this.onCreateContactResponse, this);
@@ -689,15 +689,17 @@ CContactsView.prototype.groupsInContactView = function (oContact)
 		aResult = [],
 		aGroupUUIDs = []
 	;
-
+	console.log('oContact && !oContact.groupsIsEmpty()', oContact && !oContact.groupsIsEmpty());
 	if (oContact && !oContact.groupsIsEmpty())
 	{
 		aGroupUUIDs = oContact.groups();
+		console.log('aGroupUUIDs', aGroupUUIDs);
 		aResult = _.filter(this.groupFullCollection(), function (oItem) {
+			console.log('oItem.UUID()', oItem.UUID());
 			return 0 <= $.inArray(oItem.UUID(), aGroupUUIDs);
 		});
 	}
-
+	console.log('aResult', aResult);
 	return aResult;
 };
 
@@ -816,14 +818,19 @@ CContactsView.prototype.hotKeysBind = function ()
 
 CContactsView.prototype.requestContactList = function ()
 {
+	var
+		sGroupUUID = this.selectedStorage() === 'group' && this.selectedGroupInList() ? this.selectedGroupInList().UUID() : '',
+		sStorage = sGroupUUID !== '' ? 'all' : this.selectedStorage()
+	;
+	
 	this.loadingList(true);
 	Ajax.send('GetContacts', {
 		'Offset': (this.currentPage() - 1) * Settings.ContactsPerPage,
 		'Limit': Settings.ContactsPerPage,
 		'SortField': Enums.ContactSortField.Email,
 		'Search': this.search(),
-		'GroupUUID': this.selectedGroupInList() ? this.selectedGroupInList().UUID() : '',
-		'Storage': this.selectedStorage()
+		'GroupUUID': sGroupUUID,
+		'Storage': sStorage
 	}, this.onGetContactsResponse, this);
 };
 
@@ -866,6 +873,7 @@ CContactsView.prototype.editGroup = function (oData)
  */
 CContactsView.prototype.changeGroupType = function (sStorage)
 {
+	console.log('changeGroupType', sStorage);
 	Routing.setHash(LinksUtils.getContacts(sStorage));
 };
 
@@ -874,6 +882,7 @@ CContactsView.prototype.changeGroupType = function (sStorage)
  */
 CContactsView.prototype.onViewGroupClick = function (oData)
 {
+	console.log('onViewGroupClick', oData);
 	Routing.setHash(LinksUtils.getContacts('group', oData.UUID()));
 };
 
