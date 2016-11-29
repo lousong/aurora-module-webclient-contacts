@@ -38,7 +38,6 @@ function CContactListItemModel()
  */
 CContactListItemModel.prototype.parse = function (oData)
 {
-	console.log('oData', oData);
 	this.sUUID = Types.pString(oData.UUID);
 	this.sName = Types.pString(oData.Name);
 	this.sEmail = Types.pString(oData.Email);

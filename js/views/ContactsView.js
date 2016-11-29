@@ -689,17 +689,15 @@ CContactsView.prototype.groupsInContactView = function (oContact)
 		aResult = [],
 		aGroupUUIDs = []
 	;
-	console.log('oContact && !oContact.groupsIsEmpty()', oContact && !oContact.groupsIsEmpty());
+	
 	if (oContact && !oContact.groupsIsEmpty())
 	{
 		aGroupUUIDs = oContact.groups();
-		console.log('aGroupUUIDs', aGroupUUIDs);
 		aResult = _.filter(this.groupFullCollection(), function (oItem) {
-			console.log('oItem.UUID()', oItem.UUID());
 			return 0 <= $.inArray(oItem.UUID(), aGroupUUIDs);
 		});
 	}
-	console.log('aResult', aResult);
+	
 	return aResult;
 };
 
@@ -873,7 +871,6 @@ CContactsView.prototype.editGroup = function (oData)
  */
 CContactsView.prototype.changeGroupType = function (sStorage)
 {
-	console.log('changeGroupType', sStorage);
 	Routing.setHash(LinksUtils.getContacts(sStorage));
 };
 
@@ -882,7 +879,6 @@ CContactsView.prototype.changeGroupType = function (sStorage)
  */
 CContactsView.prototype.onViewGroupClick = function (oData)
 {
-	console.log('onViewGroupClick', oData);
 	Routing.setHash(LinksUtils.getContacts('group', oData.UUID()));
 };
 
