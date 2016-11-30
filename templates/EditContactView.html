@@ -12,13 +12,13 @@
 					<span class="label">
 						<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_DISPLAY_NAME'}"></span>:
 					</span>
-					<input class="value input" type="text" data-bind="value: displayName, hasfocus: displayNameFocused" id="selenium_contacts_edit_name" />
+					<input class="value input" type="text" data-bind="value: displayName, hasfocus: displayNameFocused, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" id="selenium_contacts_edit_name" />
 				</div>
 				<div class="row" data-bind="visible: !itsMe()">
 					<span class="label">
 						<span class="text" data-bind="i18n: {'key': 'COREWEBCLIENT/LABEL_EMAIL'}"></span>:
 					</span>
-					<input class="value input" type="text" data-bind="value: email" id="selenium_contacts_edit_email" />
+					<input class="value input" type="text" data-bind="value: email, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" id="selenium_contacts_edit_email" />
 				</div>
 				<div class="row" data-bind="visible: itsMe()">
 					<span class="label">
@@ -30,25 +30,25 @@
 					<span class="label">
 						<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PHONE'}"></span>:
 					</span>
-					<input class="value input" type="text" data-bind="value: phone" />
+					<input class="value input" type="text" data-bind="value: phone, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 				</div>
 				<div class="row">
 					<span class="label">
 						<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_ADDRESS'}"></span>:
 					</span>
-					<input class="value input" type="text" data-bind="value: address" />
+					<input class="value input" type="text" data-bind="value: address, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 				</div>
 				<div class="row">
 					<span class="label">
 						<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SKYPE'}"></span>:
 					</span>
-					<input class="value input" type="text" data-bind="value: skype" />
+					<input class="value input" type="text" data-bind="value: skype, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 				</div>
 				<div class="row">
 					<span class="label">
 						<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_FACEBOOK'}"></span>:
 					</span>
-					<input class="value input" type="text" data-bind="value: facebook" />
+					<input class="value input" type="text" data-bind="value: facebook, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 				</div>
 
 				<div class="clear"></div>
@@ -63,7 +63,7 @@
 						<span class="label">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_DISPLAY_NAME'}"></span>:
 						</span>
-						<input class="value input" type="text" data-bind="value: displayName" />
+						<input class="value input" type="text" data-bind="value: displayName, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 					</div>
 					<div class="row">
 						<span class="label">
@@ -102,13 +102,13 @@
 					<span class="label">
 						<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SKYPE'}"></span>:
 					</span>
-						<input class="value input" type="text" data-bind="value: skype" />
+						<input class="value input" type="text" data-bind="value: skype, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 					</div>
 					<div class="row">
 					<span class="label">
 						<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_FACEBOOK'}"></span>:
 					</span>
-						<input class="value input" type="text" data-bind="value: facebook" />
+						<input class="value input" type="text" data-bind="value: facebook, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 					</div>
 				</div>
 
@@ -124,19 +124,19 @@
 						<span class="label">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_FIRST_NAME'}"></span>:
 						</span>
-						<input class="value input" type="text" data-bind="value: firstName" />
+						<input class="value input" type="text" data-bind="value: firstName, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 					</div>
 					<div class="row">
 						<span class="label">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_LAST_NAME'}"></span>:
 						</span>
-						<input class="value input" type="text" data-bind="value: lastName" />
+						<input class="value input" type="text" data-bind="value: lastName, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 					</div>
 					<div class="row">
 						<span class="label">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_NICK_NAME'}"></span>:
 						</span>
-						<input class="value input" type="text" data-bind="value: nickName" />
+						<input class="value input" type="text" data-bind="value: nickName, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 					</div>
 
 					<h2 class="subheading" data-bind="i18n: {'key': '%MODULENAME%/HEADING_HOME'}, click: function () { personalCollapsed(!personalCollapsed()); }"></h2>
@@ -145,61 +145,61 @@
 						<span class="label">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PERSONAL_EMAIL'}"></span>:
 						</span>
-						<input class="value input" type="text" data-bind="value: personalEmail" />
+						<input class="value input" type="text" data-bind="value: personalEmail, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 					</div>
 					<div class="row">
 						<span class="label">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_STREET_ADDRESS'}"></span>:
 						</span>
-						<textarea class="value input" data-bind="value: personalStreetAddress"></textarea>
+						<textarea class="value input" data-bind="value: personalStreetAddress, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }"></textarea>
 					</div>
 					<div class="row">
 						<span class="label">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_CITY'}"></span>:
 						</span>
-						<input class="value input" type="text" data-bind="value: personalCity" />
+						<input class="value input" type="text" data-bind="value: personalCity, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 					</div>
 					<div class="row">
 						<span class="label">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_STATE_PROVINCE'}"></span>:
 						</span>
-						<input class="value input" type="text" data-bind="value: personalState" />
+						<input class="value input" type="text" data-bind="value: personalState, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 					</div>
 					<div class="row">
 						<span class="label">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_ZIP_CODE'}"></span>:
 						</span>
-						<input class="value input" type="text" data-bind="value: personalZipCode" />
+						<input class="value input" type="text" data-bind="value: personalZipCode, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 					</div>
 					<div class="row">
 						<span class="label">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_COUNTRY_REGION'}"></span>:
 						</span>
-						<input class="value input" type="text" data-bind="value: personalCountry" />
+						<input class="value input" type="text" data-bind="value: personalCountry, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 					</div>
 					<div class="row">
 						<span class="label">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_WEB_PAGE'}"></span>:
 						</span>
-						<input class="value input" type="text" data-bind="value: personalWeb" />
+						<input class="value input" type="text" data-bind="value: personalWeb, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 					</div>
 					<div class="row">
 						<span class="label">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_FAX'}"></span>:
 						</span>
-						<input class="value input" type="text" data-bind="value: personalFax" />
+						<input class="value input" type="text" data-bind="value: personalFax, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 					</div>
 					<div class="row">
 						<span class="label">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PHONE'}"></span>:
 						</span>
-						<input class="value input" type="text" data-bind="value: personalPhone" />
+						<input class="value input" type="text" data-bind="value: personalPhone, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 					</div>
 					<div class="row">
 						<span class="label">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_MOBILE'}"></span>:
 						</span>
-						<input class="value input" type="text" data-bind="value: personalMobile" />
+						<input class="value input" type="text" data-bind="value: personalMobile, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 					</div>
 				</div>
 
@@ -211,7 +211,7 @@
 						<span class="label">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_BUSINESS_EMAIL'}"></span>:
 						</span>
-						<input class="value input" type="text" data-bind="value: businessEmail" />
+						<input class="value input" type="text" data-bind="value: businessEmail, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 					</div>
 					<div class="row" data-bind="visible: itsMe()">
 						<span class="label">
@@ -223,73 +223,73 @@
 						<span class="label">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_COMPANY'}"></span>:
 						</span>
-						<input class="value input" type="text" data-bind="value: businessCompany" />
+						<input class="value input" type="text" data-bind="value: businessCompany, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 					</div>
 					<div class="row">
 						<span class="label">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_DEPARTMENT'}"></span>:
 						</span>
-						<input class="value input" type="text" data-bind="value: businessDepartment" />
+						<input class="value input" type="text" data-bind="value: businessDepartment, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 					</div>
 					<div class="row">
 						<span class="label">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_JOB_TITLE'}"></span>:
 						</span>
-						<input class="value input" type="text" data-bind="value: businessJob" />
+						<input class="value input" type="text" data-bind="value: businessJob, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 					</div>
 					<div class="row">
 						<span class="label">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_OFFICE'}"></span>:
 						</span>
-						<input class="value input" type="text" data-bind="value: businessOffice" />
+						<input class="value input" type="text" data-bind="value: businessOffice, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 					</div>
 					<div class="row">
 						<span class="label">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_STREET_ADDRESS'}"></span>:
 						</span>
-						<textarea class="value input" data-bind="value: businessStreetAddress"></textarea>
+						<textarea class="value input" data-bind="value: businessStreetAddress, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }"></textarea>
 					</div>
 					<div class="row">
 						<span class="label">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_CITY'}"></span>:
 						</span>
-						<input class="value input" type="text" data-bind="value: businessCity" />
+						<input class="value input" type="text" data-bind="value: businessCity, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 					</div>
 					<div class="row">
 						<span class="label">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_STATE_PROVINCE'}"></span>:
 						</span>
-						<input class="value input" type="text" data-bind="value: businessState" />
+						<input class="value input" type="text" data-bind="value: businessState, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 					</div>
 					<div class="row">
 						<span class="label">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_ZIP_CODE'}"></span>:
 						</span>
-						<input class="value input" type="text" data-bind="value: businessZipCode" />
+						<input class="value input" type="text" data-bind="value: businessZipCode, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 					</div>
 					<div class="row">
 						<span class="label">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_COUNTRY_REGION'}"></span>:
 						</span>
-						<input class="value input" type="text" data-bind="value: businessCountry" />
+						<input class="value input" type="text" data-bind="value: businessCountry, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 					</div>
 					<div class="row">
 						<span class="label">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_WEB_PAGE'}"></span>:
 						</span>
-						<input class="value input" type="text" data-bind="value: businessWeb" />
+						<input class="value input" type="text" data-bind="value: businessWeb, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 					</div>
 					<div class="row">
 						<span class="label">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_FAX'}"></span>:
 						</span>
-						<input class="value input" type="text" data-bind="value: businessFax" />
+						<input class="value input" type="text" data-bind="value: businessFax, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 					</div>
 					<div class="row">
 						<span class="label">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PHONE'}"></span>:
 						</span>
-						<input class="value input" type="text" data-bind="value: businessPhone" />
+						<input class="value input" type="text" data-bind="value: businessPhone, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 					</div>
 				</div>
 
@@ -311,13 +311,13 @@
 						<span class="label">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_OTHER_EMAIL'}"></span>:
 						</span>
-						<input class="value input" type="text" data-bind="value: otherEmail" />
+						<input class="value input" type="text" data-bind="value: otherEmail, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }" />
 					</div>
 					<div class="row">
 						<span class="label">
 							<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_NOTES'}"></span>:
 						</span>
-						<textarea class="value input" data-bind="value: otherNotes"></textarea>
+						<textarea class="value input" data-bind="value: otherNotes, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }"></textarea>
 					</div>
 				</div>
 

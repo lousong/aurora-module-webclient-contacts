@@ -504,7 +504,7 @@ CContactsView.prototype.deleteContacts = function (aChecked)
 			});
 		}, 500);
 
-		Ajax.send('DeleteContacts', { 'ContactUUIDs': aContactUUIDs }, function (oResponse) {
+		Ajax.send('DeleteContacts', { 'UUIDs': aContactUUIDs }, function (oResponse) {
 			if (!oResponse.Result)
 			{
 				Api.showErrorByCode(oResponse, TextUtils.i18n('%MODULENAME%/ERROR_DELETE_CONTACTS'));
@@ -992,7 +992,7 @@ CContactsView.prototype.viewGroup = function (sGroupUUID)
 		this.selector.itemSelected(null);
 		this.selector.listCheckedOrSelected(false);
 		
-		Ajax.send('GetGroupEvents', { 'GroupUUID': sGroupUUID }, this.onGetGroupEventsResponse, this);
+		Ajax.send('GetGroupEvents', { 'UUID': sGroupUUID }, this.onGetGroupEventsResponse, this);
 	}
 	
 	return !!oGroup;
@@ -1005,7 +1005,7 @@ CContactsView.prototype.deleteGroup = function (sGroupUUID)
 {
 	if (sGroupUUID)
 	{
-		Ajax.send('DeleteGroup', { 'GroupUUID': sGroupUUID }, function (oResponse) {
+		Ajax.send('DeleteGroup', { 'UUID': sGroupUUID }, function (oResponse) {
 			if (!oResponse.Result)
 			{
 				Api.showErrorByCode(oResponse);
@@ -1433,7 +1433,7 @@ CContactsView.prototype.executeShare = function ()
 			this.recivedAnimShare(true);
 		}
 	
-		Ajax.send('UpdateShared', { 'ContactUUIDs': aContactUUIDs });
+		Ajax.send('UpdateSharedContacts', { 'UUIDs': aContactUUIDs });
 	}
 };
 
@@ -1447,7 +1447,7 @@ CContactsView.prototype.requestGroup = function (oItem)
 	if (oItem)
 	{
 		Ajax.send('GetGroup', {
-			'GroupUUID': oItem.UUID()
+			'UUID': oItem.UUID()
 		}, this.onGetGroupResponse, this);
 	}
 };
@@ -1462,7 +1462,7 @@ CContactsView.prototype.onGetGroupResponse = function (oResponse, oRequest)
 	{
 		var oGroup = oResponse.Result;
 		this.oGroupModel
-			.uuid(Types.pString(oGroup.GroupUUID))
+			.uuid(Types.pString(oGroup.UUID))
 			.name(oGroup.Name)
 			.isOrganization(oGroup.IsOrganization)
 			.company(oGroup.Company)
