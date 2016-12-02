@@ -15,7 +15,8 @@ module.exports = {
 	Storages: ['personal', 'global', 'shared'],
 	DefaultStorage: 'personal',
 	
-	init: function (oAppDataSection) {
+	init: function (oAppDataSection)
+	{
 		if (oAppDataSection)
 		{
 			this.ContactsPerPage = Types.pInt(oAppDataSection.ContactsPerPage);
@@ -29,5 +30,10 @@ module.exports = {
 			this.EContactsPrimaryAddress = oAppDataSection.EContactsPrimaryAddress;
 			this.EContactSortField = oAppDataSection.EContactSortField;
 		}
+	},
+	
+	update: function (iContactsPerPage)
+	{
+		this.ContactsPerPage = iContactsPerPage;
 	}
 };
