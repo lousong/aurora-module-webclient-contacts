@@ -570,12 +570,12 @@ CContactsView.prototype.executeImport = function ()
 
 CContactsView.prototype.executeCSVExport = function ()
 {
-	UrlUtils.downloadByUrl('?/Download/' + Settings.ServerModuleName + '/DownloadContactsAsCSV/');
+	Utils.downloadViaApiRequest(Settings.ServerModuleName, 'Export', {'Type': 'csv', 'Storage': 'personal'});
 };
 
 CContactsView.prototype.executeVCFExport = function ()
 {
-	UrlUtils.downloadByUrl('?/Download/' + Settings.ServerModuleName + '/DownloadContactsAsVCF/');
+	Utils.downloadViaApiRequest(Settings.ServerModuleName, 'Export', {'Type': 'vcf', 'Storage': 'personal'});
 };
 
 CContactsView.prototype.executeCancel = function ()
@@ -1503,8 +1503,6 @@ CContactsView.prototype.reload = function ()
 
 CContactsView.prototype.initUploader = function ()
 {
-	var self = this;
-
 	if (this.uploaderArea())
 	{
 		this.oJua = new CJua({
@@ -1518,12 +1516,12 @@ CContactsView.prototype.initUploader = function ()
 			'hidden': _.extendOwn({
 				'Module': Settings.ServerModuleName,
 				'Method': 'UploadContacts',
-				'Parameters':  function () {
+				'Parameters':  _.bind(function () {
 					return JSON.stringify({
-						'GroupUUID': self.currentGroupUUID(),
-						'Storage': self.selectedStorage()
+						'GroupUUID': this.currentGroupUUID(),
+						'Storage': 'personal'
 					});
-				}
+				}, this)
 			}, App.getCommonRequestParameters())
 		});
 

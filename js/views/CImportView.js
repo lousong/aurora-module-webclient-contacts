@@ -47,7 +47,13 @@ CImportView.prototype.onBind = function ()
 		'disableMultiple': true,
 		'hidden': _.extendOwn({
 			'Module': Settings.ServerModuleName,
-			'Method': 'UploadContacts'
+			'Method': 'UploadContacts',
+			'Parameters':  _.bind(function () {
+				return JSON.stringify({
+					'GroupUUID': this.oParent.currentGroupUUID(),
+					'Storage': 'personal'
+				});
+			}, this)
 		}, App.getCommonRequestParameters())
 	});
 
