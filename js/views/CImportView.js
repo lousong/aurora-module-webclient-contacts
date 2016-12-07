@@ -76,7 +76,7 @@ CImportView.prototype.onFileUploadStart = function ()
 CImportView.prototype.onFileUploadComplete = function (sFileUid, bResponseReceived, oResponse)
 {
 	var
-		bError = !bResponseReceived || !oResponse || oResponse.Error|| oResponse.Result.Error || false,
+		bError = !bResponseReceived || !oResponse || !oResponse.Result || false,
 		iImportedCount = 0
 	;
 

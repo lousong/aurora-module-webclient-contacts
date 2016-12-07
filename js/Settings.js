@@ -14,6 +14,7 @@ module.exports = {
 	ImportContactsLink: '',
 	Storages: ['personal', 'global', 'shared'],
 	DefaultStorage: 'personal',
+	ImportExportFormats: [],
 	
 	init: function (oAppDataSection)
 	{
@@ -29,6 +30,7 @@ module.exports = {
 			this.EContactsPrimaryPhone = oAppDataSection.EContactsPrimaryPhone;
 			this.EContactsPrimaryAddress = oAppDataSection.EContactsPrimaryAddress;
 			this.EContactSortField = oAppDataSection.EContactSortField;
+			this.ImportExportFormats = oAppDataSection.ImportExportFormats;
 		}
 	},
 	

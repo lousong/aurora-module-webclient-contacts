@@ -20,14 +20,15 @@
 			<span class="text" data-bind="i18n: {'key': '%MODULENAME%/ACTION_UNSHARE'}"></span>
 		</span>
 
-		<span class="item control" data-bind="visible: showPersonalContacts() && selectedStorage() === 'personal', dropdown: {control: false}">
+		<span class="item control" data-bind="visible: visibleImportExport, dropdown: {control: false}">
 			<span class="icon arrow"></span>
 			<span class="dropdown">
 				<span class="dropdown_helper">
 					<span class="dropdown_arrow"><span></span></span>
 					<span class="dropdown_content">
-						<span class="item export" data-bind="i18n: {'key': '%MODULENAME%/ACTION_EXPORT_CSV'}, command: exportCSVCommand"></span>
-						<span class="item export" data-bind="i18n: {'key': '%MODULENAME%/ACTION_EXPORT_VCF'}, command: exportVCFCommand"></span>
+						<!-- ko foreach: aExportData -->
+						<span class="item export" data-bind="text: text, command: command"></span>
+						<!-- /ko -->
 						<span class="item import" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_IMPORT'}, command: importCommand"></span>
 					</span>
 				</span>

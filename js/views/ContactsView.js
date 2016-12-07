@@ -7,7 +7,6 @@ var
 	
 	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
 	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
-	UrlUtils = require('%PathToCoreWebclientModule%/js/utils/Url.js'),
 	Utils = require('%PathToCoreWebclientModule%/js/utils/Common.js'),
 	
 	Api = require('%PathToCoreWebclientModule%/js/Api.js'),
@@ -232,10 +231,6 @@ function CContactsView()
 		return this.showPersonalContacts() && this.showSharedToAllContacts() && this.selectedStorage() === 'shared';
 	}, this);
 
-	this.isExport = ko.computed(function () {
-		return this.contactCount();
-	}, this);
-	
 	this.isExactlyOneContactSelected = ko.computed(function () {
 		return 1 === this.selector.listCheckedOrSelected().length;
 	}, this);
@@ -247,8 +242,6 @@ function CContactsView()
 	this.shareCommand = Utils.createCommand(this, this.executeShare, this.isEnableSharing);
 	this.removeFromGroupCommand = Utils.createCommand(this, this.executeRemoveFromGroup, this.isEnableRemoveContactsFromGroup);
 	this.importCommand = Utils.createCommand(this, this.executeImport);
-	this.exportCSVCommand = Utils.createCommand(this, this.executeCSVExport, this.isExport);
-	this.exportVCFCommand = Utils.createCommand(this, this.executeVCFExport, this.isExport);
 	this.saveCommand = Utils.createCommand(this, this.executeSave);
 	this.updateSharedToAllCommand = Utils.createCommand(this, this.executeUpdateSharedToAll, this.isExactlyOneContactSelected);
 	this.composeMessageCommand = Utils.createCommand(this, this.composeMessage, this.isCheckedOrSelected);
@@ -289,6 +282,23 @@ function CContactsView()
 		{
 			this.gotoContactList();
 		}
+	}, this);
+	
+	this.enableExport = ko.computed(function () {
+		return this.contactCount() > 0;
+	}, this);
+	this.aExportData = [];
+	_.each(Settings.ImportExportFormats, function (sFormat) {
+		if (Types.isNonEmptyString(sFormat))
+		{
+			this.aExportData.push({
+				'text': TextUtils.i18n('%MODULENAME%/ACTION_EXPORT_AS', {'FORMAT': sFormat.toUpperCase()}),
+				'command': Utils.createCommand(this, function () { this.executeExport(sFormat); }, this.enableExport)
+			});
+		}
+	}, this);
+	this.visibleImportExport = ko.computed(function () {
+		return this.aExportData.length > 0 && this.showPersonalContacts() && this.selectedStorage() === 'personal';
 	}, this);
 	
 	App.broadcastEvent('%ModuleName%::ConstructView::after', {'Name': this.ViewConstructorName, 'View': this});
@@ -568,14 +578,10 @@ CContactsView.prototype.executeImport = function ()
 	this.gotoViewPane();
 };
 
-CContactsView.prototype.executeCSVExport = function ()
-{
-	Utils.downloadViaApiRequest(Settings.ServerModuleName, 'Export', {'Type': 'csv', 'Storage': 'personal'});
-};
 
-CContactsView.prototype.executeVCFExport = function ()
+CContactsView.prototype.executeExport = function (sFormat)
 {
-	Utils.downloadViaApiRequest(Settings.ServerModuleName, 'Export', {'Type': 'vcf', 'Storage': 'personal'});
+	Utils.downloadViaApiRequest(Settings.ServerModuleName, 'Export', {'Type': sFormat, 'Storage': 'personal'});
 };
 
 CContactsView.prototype.executeCancel = function ()
