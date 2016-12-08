@@ -14,12 +14,12 @@ function CMobileSyncSettingsView()
 {
 	this.bVisiblePersonalContacts = -1 !== $.inArray('personal', Settings.Storages);
 	this.bVisibleSharedWithAllContacts = -1 !== $.inArray('shared', Settings.Storages);
-	this.bVisibleGlobalContacts = -1 !== $.inArray('global', Settings.Storages);
+	this.bVisibleTeamContacts = -1 !== $.inArray('team', Settings.Storages);
 
 	this.davPersonalContactsUrl = ko.observable('');
 	this.davCollectedAddressesUrl = ko.observable('');
 	this.davSharedWithAllUrl = ko.observable('');
-	this.davGlobalAddressBookUrl = ko.observable('');
+	this.davTeamAddressBookUrl = ko.observable('');
 }
 
 CMobileSyncSettingsView.prototype.ViewTemplate = '%ModuleName%_MobileSyncSettingsView';
@@ -34,7 +34,7 @@ CMobileSyncSettingsView.prototype.populate = function (oDav)
 		this.davPersonalContactsUrl(oDav.Contacts.PersonalContactsUrl);
 		this.davCollectedAddressesUrl(oDav.Contacts.CollectedAddressesUrl);
 		this.davSharedWithAllUrl(oDav.Contacts.SharedWithAllUrl);
-		this.davGlobalAddressBookUrl(oDav.Contacts.GlobalAddressBookUrl);
+		this.davTeamAddressBookUrl(oDav.Contacts.TeamAddressBookUrl);
 	}
 };
 

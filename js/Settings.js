@@ -12,7 +12,7 @@ module.exports = {
 	
 	ContactsPerPage: 20,
 	ImportContactsLink: '',
-	Storages: ['personal', 'global', 'shared'],
+	Storages: ['personal', 'team', 'shared'],
 	DefaultStorage: 'personal',
 	ImportExportFormats: [],
 	

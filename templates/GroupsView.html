@@ -31,7 +31,7 @@
 					click: $parent.gotoContactList">
 				<a href="javascript: void(0);" class="title" data-bind="
 						css: {'recivedAnim': recivedAnimShare()},
-						droppable: {valueFunc: function (oEvent, oUi) { $root.contactsDropToGroupType(3, oEvent, oUi); }, switchObserv: isNotGlobalStorageSelected},
+						droppable: {valueFunc: function (oEvent, oUi) { $root.contactsDropToGroupType(3, oEvent, oUi); }, switchObserv: isNotTeamStorageSelected},
 						click: function () { changeGroupType('shared'); }">
 					<span class="name fadeout">
 						<span class="icon type3"></span>
@@ -40,13 +40,13 @@
 				</a>
 			</div>
 
-			<div class="item canSelect" data-bind="visible: showGlobalContacts, 
-					css: {'selected': isGlobalStorageSelected},
+			<div class="item canSelect" data-bind="visible: showTeamContacts, 
+					css: {'selected': isTeamStorageSelected},
 					click: $parent.gotoContactList">
-				<a href="javascript: void(0);" class="title" data-bind="click: function () { changeGroupType('global'); }">
+				<a href="javascript: void(0);" class="title" data-bind="click: function () { changeGroupType('team'); }">
 					<span class="name fadeout">
 						<span class="icon type2"></span>
-						<span class="text animGoal" data-bind="i18n: {'key': '%MODULENAME%/LABEL_STORAGE_GLOBAL'}"></span>
+						<span class="text animGoal" data-bind="i18n: {'key': '%MODULENAME%/LABEL_STORAGE_TEAM'}"></span>
 					</span>
 				</a>
 			</div>

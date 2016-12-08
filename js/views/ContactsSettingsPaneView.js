@@ -35,7 +35,7 @@ CContactsSettingsPaneView.prototype.getCurrentValues = function ()
 	];
 };
 
-CContactsSettingsPaneView.prototype.revertGlobalValues = function ()
+CContactsSettingsPaneView.prototype.revertTeamValues = function ()
 {
 	this.contactsPerPage(Settings.ContactsPerPage);
 };

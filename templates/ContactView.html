@@ -239,7 +239,7 @@
 					</div>
 				</div>
 
-				<div class="fields groups" data-bind="visible: !global() && 0 < $root.groupsInContactView($data).length">
+				<div class="fields groups" data-bind="visible: !team() && 0 < $root.groupsInContactView($data).length">
 					<h2 class="subheading" data-bind="i18n: {'key': '%MODULENAME%/HEADING_GROUPS'}"></h2>
 					<div class="fieldset">
 						<div class="row" data-bind="foreach: $root.groupsInContactView($data)"><span

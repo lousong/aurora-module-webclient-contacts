@@ -18,7 +18,7 @@ function CContactListItemModel()
 	this.bIsOrganization = false;
 	this.bReadOnly = false;
 	this.bItsMe = false;
-	this.bGlobal = false;
+	this.bTeam = false;
 	this.sUUID = '';
 	this.sName = '';
 	this.sEmail = '';
@@ -51,7 +51,7 @@ CContactListItemModel.prototype.parse = function (oData)
 	this.bIsOrganization = !!oData.IsOrganization;
 	this.bReadOnly = !!oData.ReadOnly;
 	this.bItsMe = !!oData.ItsMe;
-	this.bGlobal = oData.Storage === 'global';
+	this.bTeam = oData.Storage === 'team';
 	this.bSharedToAll =  oData.Storage === 'shared';
 	this.sStorage = oData.Storage;
 };
@@ -67,9 +67,9 @@ CContactListItemModel.prototype.IsGroup = function ()
 /**
  * @return {boolean}
  */
-CContactListItemModel.prototype.Global = function ()
+CContactListItemModel.prototype.Team = function ()
 {
-	return this.bGlobal;
+	return this.bTeam;
 };
 
 /**

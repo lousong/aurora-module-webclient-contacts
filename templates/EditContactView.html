@@ -321,7 +321,7 @@
 					</div>
 				</div>
 
-				<div class="fieldset" data-bind="visible: !global() && $root.groupFullCollection().length, css: {'collapsed': groupsCollapsed}">
+				<div class="fieldset" data-bind="visible: !team() && $root.groupFullCollection().length, css: {'collapsed': groupsCollapsed}">
 
 					<h2 class="subheading" data-bind="click: function () { groupsCollapsed(!groupsCollapsed()); }"
 						data-bind="i18n: {'key': '%MODULENAME%/HEADING_GROUPS'}"></h2>

@@ -14,15 +14,15 @@ var
  * @param {object} oRequest
  * @param {function} fResponse
  * @param {string} sExceptEmail
- * @param {boolean} bGlobalOnly
+ * @param {boolean} bTeamOnly
  */
-function Callback(oRequest, fResponse, sExceptEmail, bGlobalOnly)
+function Callback(oRequest, fResponse, sExceptEmail, bTeamOnly)
 {
 	var
 		sTerm = oRequest.term,
 		oParameters = {
 			'Search': sTerm,
-			'Storage': bGlobalOnly ? 'global' : 'all'
+			'Storage': bTeamOnly ? 'team' : 'all'
 		}
 	;
 
@@ -38,7 +38,7 @@ function Callback(oRequest, fResponse, sExceptEmail, bGlobalOnly)
 					email: oItem.Email,
 					frequency: oItem.Frequency,
 					id: oItem.UUID,
-					global: oItem.Storage === 'global',
+					team: oItem.Storage === 'team',
 					sharedToAll: oItem.Storage === 'shared'
 				} :
 				null;
@@ -97,7 +97,7 @@ function ComposeCallback(oRequest, fResponse)
 					'value': sValue,
 					'frequency': oItem.Frequency,
 					'id': oItem.UUID,
-					'global': oItem.Storage === 'global',
+					'team': oItem.Storage === 'team',
 					'sharedToAll': oItem.Storage === 'shared'
 				};
 			});

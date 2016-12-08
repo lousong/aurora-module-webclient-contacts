@@ -76,8 +76,8 @@ module.exports = function (oAppData) {
 						name: Settings.HashModuleName
 					};
 				},
-				isGlobalContactsAllowed: function () {
-					return _.indexOf(Settings.Storages, 'global') !== -1;
+				isTeamContactsAllowed: function () {
+					return _.indexOf(Settings.Storages, 'team') !== -1;
 				},
 				getMobileSyncSettingsView: function () {
 					return require('modules/%ModuleName%/js/views/MobileSyncSettingsView.js');

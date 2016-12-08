@@ -66,12 +66,12 @@ function CContactsView()
 	this.loadingViewPane = ko.observable(false);
 	
 	this.showPersonalContacts = ko.observable(false);
-	this.showGlobalContacts = ko.observable(false);
+	this.showTeamContacts = ko.observable(false);
 	this.showSharedToAllContacts = ko.observable(false);
 
 	this.showAllContacts = ko.computed(function () {
 		return 1 < [this.showPersonalContacts() ? '1' : '',
-			this.showGlobalContacts() ? '1' : '',
+			this.showTeamContacts() ? '1' : '',
 			this.showSharedToAllContacts() ? '1' : ''
 		].join('').length;
 	}, this);
@@ -79,8 +79,8 @@ function CContactsView()
 	this.recivedAnimShare = ko.observable(false).extend({'autoResetToFalse': 500});
 	this.recivedAnimUnshare = ko.observable(false).extend({'autoResetToFalse': 500});
 
-	this.isGlobalStorageSelected = ko.observable(false);
-	this.isNotGlobalStorageSelected = ko.observable(false);
+	this.isTeamStorageSelected = ko.observable(false);
+	this.isNotTeamStorageSelected = ko.observable(false);
 	this.allowDropToPersonal = ko.observable(false);
 	this.hiddenSelectedStorage = ko.observable(Settings.DefaultStorage);
 	this.selectedStorage = ko.computed({
@@ -97,9 +97,9 @@ function CContactsView()
 				this.requestContactList();
 				this.currentGroupUUID('');
 			}
-			this.isGlobalStorageSelected(this.hiddenSelectedStorage() === 'global');
-			this.isNotGlobalStorageSelected(this.hiddenSelectedStorage() !== 'global');
-			this.allowDropToPersonal(this.hiddenSelectedStorage() === 'group' || this.isGlobalStorageSelected() || this.hiddenSelectedStorage() === 'all');
+			this.isTeamStorageSelected(this.hiddenSelectedStorage() === 'team');
+			this.isNotTeamStorageSelected(this.hiddenSelectedStorage() !== 'team');
+			this.allowDropToPersonal(this.hiddenSelectedStorage() === 'group' || this.isTeamStorageSelected() || this.hiddenSelectedStorage() === 'all');
 		},
 		'owner': this
 	});
@@ -235,7 +235,7 @@ function CContactsView()
 		return 1 === this.selector.listCheckedOrSelected().length;
 	}, this);
 
-	this.newContactCommand = Utils.createCommand(this, this.executeNewContact, this.isNotGlobalStorageSelected);
+	this.newContactCommand = Utils.createCommand(this, this.executeNewContact, this.isNotTeamStorageSelected);
 	this.newGroupCommand = Utils.createCommand(this, this.executeNewGroup);
 	this.addContactsCommand = Utils.createCommand(this, function () {}, this.isEnableAddContacts);
 	this.deleteCommand = Utils.createCommand(this, this.deleteContact, this.isEnableDeleting);
@@ -388,7 +388,7 @@ CContactsView.prototype.executeSave = function (oData)
 				this.selectedItem(null);
 			}
 			
-			if (this.selectedStorage() === 'global' || this.selectedStorage() === 'all')
+			if (this.selectedStorage() === 'team' || this.selectedStorage() === 'all')
 			{
 				this.recivedAnimUnshare(true);
 			}
@@ -759,7 +759,7 @@ CContactsView.prototype.onBind = function ()
 	});
 
 	this.showPersonalContacts(-1 !== $.inArray('personal', Settings.Storages));
-	this.showGlobalContacts(-1 !== $.inArray('global', Settings.Storages));
+	this.showTeamContacts(-1 !== $.inArray('team', Settings.Storages));
 	this.showSharedToAllContacts(-1 !== $.inArray('shared', Settings.Storages));
 	
 	this.selectedStorage(this.selectedStorage());
