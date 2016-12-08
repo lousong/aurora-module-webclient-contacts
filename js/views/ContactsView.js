@@ -831,7 +831,7 @@ CContactsView.prototype.requestContactList = function ()
 	Ajax.send('GetContacts', {
 		'Offset': (this.currentPage() - 1) * Settings.ContactsPerPage,
 		'Limit': Settings.ContactsPerPage,
-		'SortField': Enums.ContactSortField.Email,
+		'SortField': Enums.ContactSortField.Name,
 		'Search': this.search(),
 		'GroupUUID': sGroupUUID,
 		'Storage': sStorage
