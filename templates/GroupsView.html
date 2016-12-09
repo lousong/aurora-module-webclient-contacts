@@ -17,7 +17,7 @@
 					click: $parent.gotoContactList">
 				<a href="javascript: void(0);" class="title" id="selenium_contacts_personal_button" data-bind="
 						css: {'recivedAnim': recivedAnimUnshare()},
-						droppable: {valueFunc: function (oEvent, oUi) { $root.contactsDropToGroupType(0, oEvent, oUi); }, switchObserv: allowDropToPersonal},
+						droppable: {valueFunc: showSharedToAllContacts () ? function (oEvent, oUi) { $root.contactsDropToGroupType(0, oEvent, oUi); } : false, switchObserv: allowDropToPersonal},
 						click: function () { changeGroupType('personal'); }">
 					<span class="name fadeout">
 						<span class="icon type1"></span>
