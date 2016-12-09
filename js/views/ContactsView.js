@@ -533,7 +533,7 @@ CContactsView.prototype.executeRemoveFromGroup = function ()
 		oGroup = this.selectedGroupInList(),
 		aChecked = this.selector.listCheckedOrSelected(),
 		aContactUUIDs = _.map(aChecked, function (oItem) {
-			return oItem.ReadOnly() ? '' : oItem.UUID();
+			return oItem.UUID();
 		})
 	;
 
