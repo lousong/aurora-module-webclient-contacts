@@ -443,6 +443,10 @@ CContactsView.prototype.executeNewGroup = function ()
 {
 	this.oGroupModel.switchToNew();
 	this.selectedItem(this.oGroupModel);
+	if (this.selector.itemSelected() instanceof CContactListItemModel)
+	{
+		this.selector.itemSelected().checked(true);
+	}
 	this.selector.itemSelected(null);
 	this.gotoViewPane();
 };
