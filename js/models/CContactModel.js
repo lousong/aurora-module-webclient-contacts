@@ -400,7 +400,9 @@ function CContactModel()
 		return aList;
 	}, this);
 	
-	this.birthYearSelect = CContactModel.birthYearSelect;
+	this.birthYearSelect = [
+		{'text': TextUtils.i18n('%MODULENAME%/LABEL_YEAR'), 'value': 0}
+	];
 	for (var iCurrYear = (new Date()).getFullYear(), iIndex = iCurrYear, iFirstYear = iCurrYear - 100; iIndex >= iFirstYear; iIndex--)
 	{
 		this.birthYearSelect.push({ 'text': iIndex.toString(), 'value': iIndex });
@@ -427,10 +429,6 @@ CContactModel.birthMonthSelect = [
 	{'text': CContactModel.aBirthdayMonths[9], value: 10},
 	{'text': CContactModel.aBirthdayMonths[10], value: 11},
 	{'text': CContactModel.aBirthdayMonths[11], value: 12}
-];
-
-CContactModel.birthYearSelect = [
-	{'text': TextUtils.i18n('%MODULENAME%/LABEL_YEAR'), 'value': 0}
 ];
 
 CContactModel.prototype.clear = function ()
