@@ -263,7 +263,9 @@ function CContactsView()
 		});
 	}, this);
 	
-	this.bVisibleDragNDropDescription = !App.isMobile();
+	this.visibleDragNDropToGroupText = ko.computed(function () {
+		return !App.isMobile() && this.selectedStorage() === 'group';
+	}, this);
 	this.sGroupsToolbarTemplate = App.isMobile() ? '%ModuleName%_Toolbar_GroupsMobileView' : '%ModuleName%_Toolbar_GroupsView';
 	this.sContactsToolbarTemplate = App.isMobile() ? '%ModuleName%_Toolbar_ContactsMobileView' : '%ModuleName%_Toolbar_ContactsView';
 	this.sBeforeContactToolbarTemplate = App.isMobile() ? '%ModuleName%_Toolbar_ContactMobileView' : '';
@@ -297,8 +299,8 @@ function CContactsView()
 			});
 		}
 	}, this);
-	this.visibleImport = ko.computed(function () {
-		return this.showPersonalContacts() && this.selectedStorage() === 'personal';
+	this.isPersonalStorageSelected = ko.computed(function () {
+		return this.selectedStorage() === 'personal';
 	}, this);
 	this.visibleImportExport = ko.computed(function () {
 		return this.aExportData.length > 0;
