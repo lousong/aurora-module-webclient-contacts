@@ -297,10 +297,12 @@ function CContactsView()
 			});
 		}
 	}, this);
-	this.visibleImportExport = ko.computed(function () {
-		return this.aExportData.length > 0 && this.showPersonalContacts() && this.selectedStorage() === 'personal';
+	this.visibleImport = ko.computed(function () {
+		return this.showPersonalContacts() && this.selectedStorage() === 'personal';
 	}, this);
-	
+	this.visibleImportExport = ko.computed(function () {
+		return this.aExportData.length > 0;
+	}, this);
 	App.broadcastEvent('%ModuleName%::ConstructView::after', {'Name': this.ViewConstructorName, 'View': this});
 }
 
@@ -585,7 +587,15 @@ CContactsView.prototype.executeImport = function ()
 
 CContactsView.prototype.executeExport = function (sFormat)
 {
-	Utils.downloadViaApiRequest(Settings.ServerModuleName, 'Export', {'Type': sFormat, 'Storage': 'personal'});
+	var aContactUUIDs = _.map(this.selector.listCheckedOrSelected(), function (oContact) {
+		return oContact.sUUID;
+	});
+	Utils.downloadViaApiRequest(Settings.ServerModuleName, 'Export', {
+		'Type': sFormat,
+		'Storage': this.selectedStorage(),
+		'GroupUUID': this.currentGroupUUID(),
+		'ContactUUIDs': aContactUUIDs
+	});
 };
 
 CContactsView.prototype.executeCancel = function ()

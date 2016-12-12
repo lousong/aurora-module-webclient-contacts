@@ -29,7 +29,7 @@
 						<!-- ko foreach: aExportData -->
 						<span class="item export" data-bind="text: text, command: command"></span>
 						<!-- /ko -->
-						<span class="item import" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_IMPORT'}, command: importCommand"></span>
+						<span class="item import" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_IMPORT'}, command: importCommand, visible: visibleImport"></span>
 					</span>
 				</span>
 			</span>
