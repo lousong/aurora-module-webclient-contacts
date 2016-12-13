@@ -873,6 +873,10 @@ CContactsView.prototype.requestContact = function (sContactUUID)
 		this.selector.itemSelected(oItem);
 		Ajax.send('GetContact', { 'UUID': oItem.UUID() }, this.onGetContactResponse, this);
 	}
+	else
+	{
+		this.contactUidForRequest(sContactUUID);
+	}
 };
 
 /**
