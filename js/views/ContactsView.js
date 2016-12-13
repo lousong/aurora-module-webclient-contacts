@@ -33,7 +33,9 @@ var
 	CContactModel = require('modules/%ModuleName%/js/models/CContactModel.js'),
 	CGroupModel = require('modules/%ModuleName%/js/models/CGroupModel.js'),
 	
-	CImportView = require('modules/%ModuleName%/js/views/CImportView.js')
+	CImportView = require('modules/%ModuleName%/js/views/CImportView.js'),
+	
+	Enums = window.Enums
 ;
 
 /**
@@ -51,9 +53,9 @@ function CContactsView()
 	this.bDragActiveComp = ko.computed(function () {
 		return this.bDragActive();
 	}, this);
-
+	
 	this.sImportContactsLink = Settings.ImportContactsLink;
-
+	
 	this.allowSendEmails = ko.observable(false);
 //	this.allowSendEmails = ko.computed(function () {
 //		return AppData.App.AllowWebMail && AppData.Accounts.isCurrentAllowsMail();
@@ -68,7 +70,7 @@ function CContactsView()
 	this.showPersonalContacts = ko.observable(false);
 	this.showTeamContacts = ko.observable(false);
 	this.showSharedToAllContacts = ko.observable(false);
-
+	
 	this.showAllContacts = ko.computed(function () {
 		return 1 < [this.showPersonalContacts() ? '1' : '',
 			this.showTeamContacts() ? '1' : '',
@@ -78,7 +80,7 @@ function CContactsView()
 	
 	this.recivedAnimShare = ko.observable(false).extend({'autoResetToFalse': 500});
 	this.recivedAnimUnshare = ko.observable(false).extend({'autoResetToFalse': 500});
-
+	
 	this.isTeamStorageSelected = ko.observable(false);
 	this.isNotTeamStorageSelected = ko.observable(false);
 	this.allowDropToPersonal = ko.observable(false);
@@ -103,9 +105,9 @@ function CContactsView()
 		},
 		'owner': this
 	});
-
+	
 	this.selectedGroupInList = ko.observable(null);
-
+	
 	this.selectedGroupInList.subscribe(function () {
 		var oPrev = this.selectedGroupInList();
 		if (oPrev)
@@ -113,7 +115,7 @@ function CContactsView()
 			oPrev.selected(false);
 		}
 	}, this, 'beforeChange');
-
+	
 	this.selectedGroupInList.subscribe(function (oGroup) {
 		if (oGroup && this.showPersonalContacts())
 		{
@@ -122,18 +124,18 @@ function CContactsView()
 			this.requestContactList();
 		}
 	}, this);
-
+	
 	this.selectedGroup = ko.observable(null);
 	this.selectedContact = ko.observable(null);
 	this.selectedGroupEmails = ko.observableArray([]);
 	
 	this.currentGroupUUID = ko.observable('');
-
+	
 	this.oContactModel = new CContactModel();
 	this.oGroupModel = new CGroupModel();
 	
 	this.oImportView = new CImportView(this);
-
+	
 	this.selectedOldItem = ko.observable(null);
 	this.selectedItem = ko.computed({
 		'read': function () {
@@ -158,12 +160,12 @@ function CContactsView()
 				this.selectedGroup(null);
 				this.selectedContact(null);
 			}
-
+			
 			this.loadingViewPane(false);
 		},
 		'owner': this
 	});
-
+	
 	this.collection = ko.observableArray([]);
 	this.contactUidForRequest = ko.observable('');
 	this.collection.subscribe(function () {
@@ -177,9 +179,9 @@ function CContactsView()
 	this.isSearchFocused = ko.observable(false);
 	this.searchInput = ko.observable('');
 	this.search = ko.observable('');
-
+	
 	this.groupFullCollection = ko.observableArray([]);
-
+	
 	this.selectedContact.subscribe(function (oContact) {
 		if (oContact)
 		{
@@ -189,7 +191,7 @@ function CContactsView()
 			});
 		}
 	}, this);
-
+	
 	this.pageSwitcherLocked = ko.observable(false);
 	this.oPageSwitcher = new CPageSwitcherView(0, Settings.ContactsPerPage);
 	this.oPageSwitcher.currentPage.subscribe(function () {
@@ -199,24 +201,24 @@ function CContactsView()
 		}
 	}, this);
 	this.currentPage = ko.observable(1);
-
+	
 	this.search.subscribe(function (sValue) {
 		this.searchInput(sValue);
 	}, this);
-
+	
 	this.searchSubmitCommand = Utils.createCommand(this, function () {
 		Routing.setHash(LinksUtils.getContacts(this.selectedStorage(), this.currentGroupUUID(), this.searchInput()));
 	});
-
+	
 	this.searchMessagesInInbox = ModulesManager.run('MailWebclient', 'getSearchMessagesInInbox');
 	this.bAllowSearchMessagesInInbox = $.isFunction(this.searchMessagesInInbox);
 	this.composeMessageToAddresses = ModulesManager.run('MailWebclient', 'getComposeMessageToAddresses');
 	this.bAllowComposeMessageToAddresses = $.isFunction(this.composeMessageToAddresses);
 	this.selector = new CSelector(this.collection, _.bind(this.viewContact, this), _.bind(this.deleteContact, this), this.bAllowComposeMessageToAddresses ? _.bind(this.composeMessageToContact, this) : null);
-
+	
 	this.checkAll = this.selector.koCheckAll();
 	this.checkAllIncomplite = this.selector.koCheckAllIncomplete();
-
+	
 	this.isCheckedOrSelected = ko.computed(function () {
 		return 0 < this.selector.listCheckedOrSelected().length;
 	}, this);
@@ -230,11 +232,11 @@ function CContactsView()
 	this.visibleUnshareCommand = ko.computed(function () {
 		return this.showPersonalContacts() && this.showSharedToAllContacts() && this.selectedStorage() === 'shared';
 	}, this);
-
+	
 	this.isExactlyOneContactSelected = ko.computed(function () {
 		return 1 === this.selector.listCheckedOrSelected().length;
 	}, this);
-
+	
 	this.newContactCommand = Utils.createCommand(this, this.executeNewContact, this.isNotTeamStorageSelected);
 	this.newGroupCommand = Utils.createCommand(this, this.executeNewGroup);
 	this.addContactsCommand = Utils.createCommand(this, function () {}, this.isEnableAddContacts);
@@ -245,18 +247,18 @@ function CContactsView()
 	this.saveCommand = Utils.createCommand(this, this.executeSave);
 	this.updateSharedToAllCommand = Utils.createCommand(this, this.executeUpdateSharedToAll, this.isExactlyOneContactSelected);
 	this.composeMessageCommand = Utils.createCommand(this, this.composeMessage, this.isCheckedOrSelected);
-
+	
 	this.selector.listCheckedOrSelected.subscribe(function (aList) {
 		this.oGroupModel.newContactsInGroupCount(aList.length);
 	}, this);
-
+	
 	this.isSearch = ko.computed(function () {
 		return this.search() !== '';
 	}, this);
 	this.isEmptyList = ko.computed(function () {
 		return 0 === this.collection().length;
 	}, this);
-
+	
 	this.searchText = ko.computed(function () {
 		return TextUtils.i18n('%MODULENAME%/INFO_SEARCH_RESULT', {
 			'SEARCH': this.search()
@@ -272,7 +274,6 @@ function CContactsView()
 	this.sContactToolbarTemplate = App.isMobile() ? '' : '%ModuleName%_Toolbar_ContactView';
 	this.selectedPanel = ko.observable(Enums.MobilePanel.Items);
 	this.selectedItem.subscribe(function () {
-		
 		var bViewGroup = this.selectedItem() && this.selectedItem() instanceof CGroupModel &&
 				!this.selectedItem().isNew();
 		
@@ -318,7 +319,8 @@ CContactsView.prototype.ViewConstructorName = 'CContactsView';
  * @param {?} mValue
  * @param {Object} oElement
  */
-CContactsView.prototype.groupDropdownToggle = function (mValue, oElement) {
+CContactsView.prototype.groupDropdownToggle = function (mValue, oElement)
+{
 	this.currentGroupDropdown(mValue);
 };
 
@@ -363,7 +365,7 @@ CContactsView.prototype.executeSave = function (oData)
 		oContact = {},
 		aList = []
 	;
-
+	
 	if (oData === this.selectedItem() && this.selectedItem().canBeSave())
 	{
 		if (oData instanceof CContactModel && !oData.readOnly())
@@ -374,19 +376,19 @@ CContactsView.prototype.executeSave = function (oData)
 					aList.push(oItem.UUID());
 				}
 			});
-
+			
 			oData.groups(aList);
-
+			
 			if (oData.edited())
 			{
 				oData.edited(false);
 			}
-
+			
 			if (this.selectedItem())
 			{
 				ContactsCache.clearInfoAboutEmail(this.selectedItem().email());
 			}
-
+			
 			if (oData.isNew())
 			{
 				this.selectedItem(null);
@@ -396,14 +398,14 @@ CContactsView.prototype.executeSave = function (oData)
 			{
 				this.recivedAnimUnshare(true);
 			}
-
+			
 			oContact = oData.toObject();
 			
 			if (oData.isNew())
 			{
 				oContact.Storage = 'personal';
 			}
-
+			
 			Ajax.send(oData.isNew() ? 'CreateContact' : 'UpdateContact', { Contact: oContact }, this.onCreateContactResponse, this);
 		}
 		else if (oData instanceof CGroupModel && !oData.readOnly())
@@ -414,7 +416,7 @@ CContactsView.prototype.executeSave = function (oData)
 			{
 				oData.edited(false);
 			}
-
+			
 			if (oData.isNew() && !App.isMobile())
 			{
 				this.selectedItem(null);
@@ -434,25 +436,23 @@ CContactsView.prototype.executeNewContact = function ()
 {
 	if (this.showPersonalContacts())
 	{
-		var oGr = this.selectedGroupInList();
-		this.oContactModel.switchToNew();
-		this.oContactModel.groups(oGr ? [oGr.UUID()] : []);
-		this.selectedItem(this.oContactModel);
-		this.selector.itemSelected(null);
-		this.gotoViewPane();
+		var
+			sStorage = this.selectedStorage(),
+			sGroupUUID = (sStorage === 'group') ? this.currentGroupUUID() : ''
+		;
+		
+		Routing.setHash(LinksUtils.getContacts(sStorage, sGroupUUID, this.search(), this.oPageSwitcher.currentPage(), '', 'create-contact'));
 	}
 };
 
 CContactsView.prototype.executeNewGroup = function ()
 {
-	this.oGroupModel.switchToNew();
-	this.selectedItem(this.oGroupModel);
-	if (this.selector.itemSelected() instanceof CContactListItemModel)
-	{
-		this.selector.itemSelected().checked(true);
-	}
-	this.selector.itemSelected(null);
-	this.gotoViewPane();
+	var
+		sStorage = this.selectedStorage(),
+		sGroupUUID = (sStorage === 'group') ? this.currentGroupUUID() : ''
+	;
+	
+	Routing.setHash(LinksUtils.getContacts(sStorage, sGroupUUID, this.search(), this.oPageSwitcher.currentPage(), '', 'create-group'));
 };
 
 CContactsView.prototype.deleteContact = function ()
@@ -602,9 +602,7 @@ CContactsView.prototype.executeExport = function (sFormat)
 
 CContactsView.prototype.executeCancel = function ()
 {
-	var
-		oData = this.selectedItem()
-	;
+	var oData = this.selectedItem();
 
 	if (oData)
 	{
@@ -612,7 +610,7 @@ CContactsView.prototype.executeCancel = function ()
 		{
 			if (oData.isNew())
 			{
-				this.selectedItem(null);
+				Routing.setPreviousHash();
 			}
 			else if (oData.edited())
 			{
@@ -623,14 +621,14 @@ CContactsView.prototype.executeCancel = function ()
 		{
 			if (oData.isNew())
 			{
-				this.selectedItem(null);
+				Routing.setPreviousHash();
 			}
 			else if (oData.edited())
 			{
 				this.selectedItem(this.selectedOldItem());
 				oData.edited(false);
+				this.gotoGroupList();
 			}
-			this.gotoGroupList();
 		}
 	}
 
@@ -961,7 +959,7 @@ CContactsView.prototype.onRoute = function (aParams)
 	
 	this.contactUidForRequest('');
 	
-	if (oParams.ContactUUID)		
+	if (oParams.ContactUUID)
 	{
 		if (this.collection().length === 0)
 		{
@@ -978,6 +976,28 @@ CContactsView.prototype.onRoute = function (aParams)
 		this.gotoContactList();
 	}
 
+	switch (oParams.Action)
+	{
+		case 'create-contact':
+			var oGr = this.selectedGroupInList();
+			this.oContactModel.switchToNew();
+			this.oContactModel.groups(oGr ? [oGr.UUID()] : []);
+			this.selectedItem(this.oContactModel);
+			this.selector.itemSelected(null);
+			this.gotoViewPane();
+			break;
+		case 'create-group':
+			this.oGroupModel.switchToNew();
+			this.selectedItem(this.oGroupModel);
+			if (this.selector.itemSelected() instanceof CContactListItemModel)
+			{
+				this.selector.itemSelected().checked(true);
+			}
+			this.selector.itemSelected(null);
+			this.gotoViewPane();
+			break;
+	}
+	
 	if (bRequestContacts)
 	{
 		this.requestContactList();

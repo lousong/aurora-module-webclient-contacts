@@ -36,9 +36,10 @@ function IsContactParam(sTemp)
  * @param {string=} sSearch
  * @param {number=} iPage
  * @param {string=} sContactUUID
+ * @param {string=} sAction
  * @returns {Array}
  */
-LinksUtils.getContacts = function (sStorage, sGroupUUID, sSearch, iPage, sContactUUID)
+LinksUtils.getContacts = function (sStorage, sGroupUUID, sSearch, iPage, sContactUUID, sAction)
 {
 	var aParams = [Settings.HashModuleName];
 	
@@ -67,6 +68,11 @@ LinksUtils.getContacts = function (sStorage, sGroupUUID, sSearch, iPage, sContac
 		aParams.push('cnt' + sContactUUID);
 	}
 	
+	if (sAction && sAction !== '')
+	{
+		aParams.push(sAction);
+	}
+	
 	return aParams;
 };
 
@@ -83,7 +89,8 @@ LinksUtils.parseContacts = function (aParam)
 		sGroupUUID = '',
 		sSearch = '',
 		iPage = 1,
-		sContactUUID = ''
+		sContactUUID = '',
+		sAction = ''
 	;
 
 	if (Types.isNonEmptyArray(aParam))
@@ -124,9 +131,16 @@ LinksUtils.parseContacts = function (aParam)
 			}
 		}
 		
-		if (aParam.length > iIndex && IsContactParam(aParam[iIndex]))
+		if (aParam.length > iIndex)
 		{
-			sContactUUID = Types.pString(aParam[iIndex].substr(3));
+			if (IsContactParam(aParam[iIndex]))
+			{
+				sContactUUID = Types.pString(aParam[iIndex].substr(3));
+			}
+			else
+			{
+				sAction = Types.pString(aParam[iIndex]);
+			}
 			iIndex++;
 		}
 	}
@@ -136,7 +150,8 @@ LinksUtils.parseContacts = function (aParam)
 		'GroupUUID': sGroupUUID,
 		'Search': sSearch,
 		'Page': iPage,
-		'ContactUUID': sContactUUID
+		'ContactUUID': sContactUUID,
+		'Action': sAction
 	};
 };
 
