@@ -47,7 +47,7 @@ CImportView.prototype.onBind = function ()
 		'disableMultiple': true,
 		'hidden': _.extendOwn({
 			'Module': Settings.ServerModuleName,
-			'Method': 'UploadContacts',
+			'Method': 'Import',
 			'Parameters':  _.bind(function () {
 				return JSON.stringify({
 					'GroupUUID': this.oParent.currentGroupUUID(),
@@ -75,40 +75,8 @@ CImportView.prototype.onFileUploadStart = function ()
  */
 CImportView.prototype.onFileUploadComplete = function (sFileUid, bResponseReceived, oResponse)
 {
-	var
-		bError = !bResponseReceived || !oResponse || !oResponse.Result || false,
-		iImportedCount = 0
-	;
-
 	this.importing(false);
-	this.oParent.requestContactList();
-
-	if (!bError)
-	{
-		iImportedCount = Types.pInt(oResponse.Result.ImportedCount);
-
-		if (0 < iImportedCount)
-		{
-			Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_CONTACTS_IMPORTED_PLURAL', {
-				'NUM': iImportedCount
-			}, null, iImportedCount));
-		}
-		else
-		{
-			Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_IMPORT_NO_CONTACT'));
-		}
-	}
-	else
-	{
-		if (oResponse.ErrorCode && oResponse.ErrorCode === Enums.Errors.IncorrectFileExtension)
-		{
-			Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_FILE_NOT_CSV_OR_VCF'));
-		}
-		else
-		{
-			Screens.showError(TextUtils.i18n('CORECLIENT/ERROR_UPLOAD_FILE'));
-		}
-	}
+	this.oParent.onImportComplete(sFileUid, bResponseReceived, oResponse);
 };
 
 module.exports = CImportView;

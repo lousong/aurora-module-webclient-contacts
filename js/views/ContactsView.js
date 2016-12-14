@@ -49,9 +49,9 @@ function CContactsView()
 	
 	this.contactCount = ko.observable(0);
 	this.uploaderArea = ko.observable(null);
-	this.bDragActive = ko.observable(false);
+	this.dragActive = ko.observable(false);
 	this.bDragActiveComp = ko.computed(function () {
-		return this.bDragActive();
+		return this.dragActive();
 	}, this);
 	
 	this.sImportContactsLink = Settings.ImportContactsLink;
@@ -593,7 +593,7 @@ CContactsView.prototype.executeExport = function (sFormat)
 		return oContact.sUUID;
 	});
 	Utils.downloadViaApiRequest(Settings.ServerModuleName, 'Export', {
-		'Type': sFormat,
+		'Format': sFormat,
 		'Storage': this.selectedStorage(),
 		'GroupUUID': this.currentGroupUUID(),
 		'ContactUUIDs': aContactUUIDs
@@ -1542,11 +1542,6 @@ CContactsView.prototype.onGetGroupEventsResponse = function (oResponse, oRequest
 	}
 };
 
-CContactsView.prototype.reload = function ()
-{
-	this.requestContactList();
-};
-
 CContactsView.prototype.initUploader = function ()
 {
 	if (this.uploaderArea())
@@ -1561,7 +1556,7 @@ CContactsView.prototype.initUploader = function ()
 			'disableDragAndDrop': false,
 			'hidden': _.extendOwn({
 				'Module': Settings.ServerModuleName,
-				'Method': 'UploadContacts',
+				'Method': 'Import',
 				'Parameters':  _.bind(function () {
 					return JSON.stringify({
 						'GroupUUID': this.currentGroupUUID(),
@@ -1570,34 +1565,61 @@ CContactsView.prototype.initUploader = function ()
 				}, this)
 			}, App.getCommonRequestParameters())
 		});
-
+		
 		this.oJua
-			.on('onComplete', _.bind(this.onContactUploadComplete, this))
-			.on('onBodyDragEnter', _.bind(this.bDragActive, this, true))
-			.on('onBodyDragLeave', _.bind(this.bDragActive, this, false))
+			.on('onSelect', _.bind(this.onImportSelect, this))
+			.on('onComplete', _.bind(this.onImportComplete, this))
+			.on('onBodyDragEnter', _.bind(this.dragActive, this, true))
+			.on('onBodyDragLeave', _.bind(this.dragActive, this, false))
 		;
 	}
 };
 
-CContactsView.prototype.onContactUploadComplete = function (sFileUid, bResponseReceived, oResponse)
+CContactsView.prototype.onImportSelect = function (sFileUid, oFileData)
 {
-	var bError = !bResponseReceived || !oResponse || oResponse.Error|| oResponse.Result.Error || false;
+//	_.each(Settings.ImportExportFormats, function (sFormat) {
+//		console.log('ext', oFileData.FileName.substr(oFileData.FileName.length - sFormat.length));
+//	});
+//	if (_.indexOf([1, 2, 3], 2))
+//	Settings.ImportExportFormats
+	return this.isNotTeamStorageSelected();
+};
 
+CContactsView.prototype.onImportComplete = function (sFileUid, bResponseReceived, oResponse)
+{
+	var
+		bError = !bResponseReceived || !oResponse || !oResponse.Result || false,
+		iImportedCount = 0
+	;
+	
 	if (!bError)
 	{
-		this.reload();
-	}
-	else
-	{
-		if (oResponse.ErrorCode)
+		iImportedCount = Types.pInt(oResponse.Result.ImportedCount);
+		
+		if (0 < iImportedCount)
 		{
-			Api.showErrorByCode(oResponse, TextUtils.i18n('%MODULENAME%/ERROR_FILE_NOT_CSV_OR_VCF'));
+			Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_CONTACTS_IMPORTED_PLURAL', {
+				'NUM': iImportedCount
+			}, null, iImportedCount));
 		}
 		else
 		{
-			Screens.showError(TextUtils.i18n('COREWEBCLIENT/ERROR_UNKNOWN'));
+			Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_IMPORT_NO_CONTACT'));
 		}
 	}
+	else
+	{
+		if (oResponse.ErrorCode && oResponse.ErrorCode === Enums.Errors.IncorrectFileExtension)
+		{
+			Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_FILE_NOT_CSV_OR_VCF'));
+		}
+		else
+		{
+			Screens.showError(TextUtils.i18n('CORECLIENT/ERROR_UPLOAD_FILE'));
+		}
+	}
+	
+	this.requestContactList();
 };
 
 CContactsView.prototype.createNewContact = function ()
