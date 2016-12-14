@@ -58,6 +58,7 @@ CImportView.prototype.onBind = function ()
 	});
 
 	this.oJua
+		.on('onSelect', _.bind(this.oParent.onImportSelect, this.oParent))
 		.on('onStart', _.bind(this.onFileUploadStart, this))
 		.on('onComplete', _.bind(this.onFileUploadComplete, this))
 	;

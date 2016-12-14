@@ -1577,12 +1577,28 @@ CContactsView.prototype.initUploader = function ()
 
 CContactsView.prototype.onImportSelect = function (sFileUid, oFileData)
 {
-//	_.each(Settings.ImportExportFormats, function (sFormat) {
-//		console.log('ext', oFileData.FileName.substr(oFileData.FileName.length - sFormat.length));
-//	});
-//	if (_.indexOf([1, 2, 3], 2))
-//	Settings.ImportExportFormats
-	return this.isNotTeamStorageSelected();
+	var
+		bAllowImport = this.isNotTeamStorageSelected(),
+		bAllowFormat = false
+	;
+	
+	if (bAllowImport)
+	{
+		_.each(Settings.ImportExportFormats, function (sFormat) {
+			if (sFormat === oFileData.FileName.substr(oFileData.FileName.length - sFormat.length))
+			{
+				bAllowFormat = true;
+			}
+		});
+		
+		if (!bAllowFormat)
+		{
+			Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_FILE_NOT_CSV_OR_VCF'));
+			bAllowImport = false;
+		}
+	}
+	
+	return bAllowImport;
 };
 
 CContactsView.prototype.onImportComplete = function (sFileUid, bResponseReceived, oResponse)
@@ -1609,13 +1625,13 @@ CContactsView.prototype.onImportComplete = function (sFileUid, bResponseReceived
 	}
 	else
 	{
-		if (oResponse.ErrorCode && oResponse.ErrorCode === Enums.Errors.IncorrectFileExtension)
+		if (oResponse && oResponse.ErrorCode === Enums.Errors.IncorrectFileExtension)
 		{
 			Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_FILE_NOT_CSV_OR_VCF'));
 		}
 		else
 		{
-			Screens.showError(TextUtils.i18n('CORECLIENT/ERROR_UPLOAD_FILE'));
+			Screens.showError(TextUtils.i18n('COREWEBCLIENT/ERROR_UPLOAD_FILE'));
 		}
 	}
 	
