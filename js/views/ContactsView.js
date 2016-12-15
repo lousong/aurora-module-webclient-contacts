@@ -307,12 +307,38 @@ function CContactsView()
 		return this.aExportData.length > 0;
 	}, this);
 	App.broadcastEvent('%ModuleName%::ConstructView::after', {'Name': this.ViewConstructorName, 'View': this});
+	
+	this.infoCreateOrImport = this.getCreateOrImportInfo();
 }
 
 _.extendOwn(CContactsView.prototype, CAbstractScreenView.prototype);
 
 CContactsView.prototype.ViewTemplate = '%ModuleName%_ContactsScreenView';
 CContactsView.prototype.ViewConstructorName = 'CContactsView';
+
+CContactsView.prototype.getFormatDependentText = function (sLangConstantName)
+{
+	switch (Settings.ImportExportFormats.length)
+	{
+		case 0:
+			return '';
+		case 1:
+			return TextUtils.i18n('%MODULENAME%/' + sLangConstantName + '_SINGLE_EXT', {
+				'EXTENSION': Settings.ImportExportFormats[0].toUpperCase()
+			});
+		default:
+			return TextUtils.i18n('%MODULENAME%/' + sLangConstantName + '_PLURAL_EXT', {
+				'EXTENSIONS': _.initial(Settings.ImportExportFormats).join(', ').toUpperCase(),
+				'LASTEXTENSION': _.last(Settings.ImportExportFormats).toUpperCase()
+			});
+	}
+};
+
+CContactsView.prototype.getCreateOrImportInfo = function ()
+{
+	var sOrImportInfo = this.getFormatDependentText('INFO_OR_IMPORT');
+	return TextUtils.i18n('%MODULENAME%/INFO_CREATE') + (sOrImportInfo === '' ? '' : ' ' + sOrImportInfo) + '.';
+};
 
 /**
  * 
@@ -1593,7 +1619,7 @@ CContactsView.prototype.onImportSelect = function (sFileUid, oFileData)
 		
 		if (!bAllowFormat)
 		{
-			Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_FILE_NOT_CSV_OR_VCF'));
+			Screens.showError(this.getFormatDependentText('ERROR_FILE_EXTENSION'));
 			bAllowImport = false;
 		}
 	}
@@ -1627,7 +1653,7 @@ CContactsView.prototype.onImportComplete = function (sFileUid, bResponseReceived
 	{
 		if (oResponse && oResponse.ErrorCode === Enums.Errors.IncorrectFileExtension)
 		{
-			Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_FILE_NOT_CSV_OR_VCF'));
+			Screens.showError(this.getFormatDependentText('ERROR_FILE_EXTENSION'));
 		}
 		else
 		{

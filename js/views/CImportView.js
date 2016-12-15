@@ -30,6 +30,8 @@ function CImportView(oParent)
 	this.importButtonDom = ko.observable(null);
 	
 	this.bVisibleCloseButton = App.isMobile();
+	
+	this.extensionInfo = oParent.getFormatDependentText('INFO_IMPORT_CONTACTS');
 }
 
 CImportView.prototype.ViewTemplate = '%ModuleName%_ImportView';
