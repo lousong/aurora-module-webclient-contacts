@@ -1635,6 +1635,7 @@ CContactsView.prototype.onImportComplete = function (sFileUid, bResponseReceived
 		}
 	}
 	
+	this.requestGroupFullList();
 	this.requestContactList();
 };
 
