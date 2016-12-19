@@ -85,7 +85,7 @@ LinksUtils.parseContacts = function (aParam)
 {
 	var
 		iIndex = 0,
-		sStorage = '',
+		sStorage = Settings.DefaultStorage,
 		sGroupUUID = '',
 		sSearch = '',
 		iPage = 1,

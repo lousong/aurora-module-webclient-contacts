@@ -84,24 +84,26 @@ function CContactsView()
 	this.isTeamStorageSelected = ko.observable(false);
 	this.isNotTeamStorageSelected = ko.observable(false);
 	this.allowDropToPersonal = ko.observable(false);
-	this.hiddenSelectedStorage = ko.observable(Settings.DefaultStorage);
+	this.hiddenSelectedStorage = ko.observable('');
 	this.selectedStorage = ko.computed({
 		'read': function () {
 			return this.hiddenSelectedStorage();
 		},
 		'write': function (sValue) {
-			this.hiddenSelectedStorage(($.inArray(sValue, Settings.Storages) !== -1) ? sValue : Settings.DefaultStorage);
-			if (this.hiddenSelectedStorage() !== 'group')
+			if (sValue !== '')
 			{
-				this.selectedGroupInList(null);
-				this.selectedItem(null);
-				this.selector.listCheckedOrSelected(false);
-				this.requestContactList();
-				this.currentGroupUUID('');
+				this.hiddenSelectedStorage(($.inArray(sValue, Settings.Storages) !== -1) ? sValue : Settings.DefaultStorage);
+				if (this.hiddenSelectedStorage() !== 'group')
+				{
+					this.selectedGroupInList(null);
+					this.selectedItem(null);
+					this.selector.listCheckedOrSelected(false);
+					this.currentGroupUUID('');
+				}
+				this.isTeamStorageSelected(this.hiddenSelectedStorage() === 'team');
+				this.isNotTeamStorageSelected(this.hiddenSelectedStorage() !== 'team');
+				this.allowDropToPersonal(this.hiddenSelectedStorage() === 'group' || this.isTeamStorageSelected() || this.hiddenSelectedStorage() === 'all');
 			}
-			this.isTeamStorageSelected(this.hiddenSelectedStorage() === 'team');
-			this.isNotTeamStorageSelected(this.hiddenSelectedStorage() !== 'team');
-			this.allowDropToPersonal(this.hiddenSelectedStorage() === 'group' || this.isTeamStorageSelected() || this.hiddenSelectedStorage() === 'all');
 		},
 		'owner': this
 	});
@@ -964,11 +966,12 @@ CContactsView.prototype.onRoute = function (aParams)
 		bRequestContacts = true;
 	}
 	
-	if (-1 !== $.inArray(oParams.Storage, Settings.Storages) && oParams.Storage !== 'group')
+	if (this.selectedStorage() !== oParams.Storage && -1 !== $.inArray(oParams.Storage, Settings.Storages) && oParams.Storage !== 'group')
 	{
 		this.selectedStorage(oParams.Storage);
+		bRequestContacts = true;
 	}
-	else if (this.currentGroupUUID() !== oParams.GroupUUID || oParams.ContactUUID === '')
+	else if (oParams.Storage === 'group' && (this.currentGroupUUID() !== oParams.GroupUUID || oParams.ContactUUID === ''))
 	{
 		bGroupFound = this.viewGroup(oParams.GroupUUID);
 		if (bGroupFound)
@@ -1064,7 +1067,7 @@ CContactsView.prototype.viewGroup = function (sGroupUUID)
 		this.selector.itemSelected(null);
 		this.selector.listCheckedOrSelected(false);
 		
-		Ajax.send('GetGroupEvents', { 'UUID': sGroupUUID }, this.onGetGroupEventsResponse, this);
+//		Ajax.send('GetGroupEvents', { 'UUID': sGroupUUID }, this.onGetGroupEventsResponse, this);
 	}
 	
 	return !!oGroup;
