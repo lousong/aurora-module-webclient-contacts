@@ -146,13 +146,11 @@ function CContactsView()
 		'write': function (oItem) {
 			if (oItem instanceof CContactModel)
 			{
-				this.oImportView.visibility(false);
 				this.selectedGroup(null);
 				this.selectedContact(oItem);
 			}
 			else if (oItem instanceof CGroupModel)
 			{
-				this.oImportView.visibility(false);
 				this.selectedContact(null);
 				this.selectedGroup(oItem);
 				this.currentGroupUUID(oItem.uuid());
@@ -607,11 +605,7 @@ CContactsView.prototype.executeRemoveFromGroup = function ()
 
 CContactsView.prototype.executeImport = function ()
 {
-	this.selectedItem(null);
-	this.oImportView.visibility(true);
-	this.selector.itemSelected(null);
-	this.selectedStorage('personal');
-	this.gotoViewPane();
+	Routing.setHash(LinksUtils.getContacts('personal', '', '', 1, '', 'import'));
 };
 
 
@@ -658,9 +652,11 @@ CContactsView.prototype.executeCancel = function ()
 				this.gotoGroupList();
 			}
 		}
+		else if (this.oImportView.visibility())
+		{
+			Routing.setPreviousHash();
+		}
 	}
-
-	this.oImportView.visibility(false);
 };
 
 /**
@@ -1017,6 +1013,7 @@ CContactsView.prototype.onRoute = function (aParams)
 			this.oContactModel.groups(oGr ? [oGr.UUID()] : []);
 			this.selectedItem(this.oContactModel);
 			this.selector.itemSelected(null);
+			this.oImportView.visibility(false);
 			this.gotoViewPane();
 			break;
 		case 'create-group':
@@ -1027,7 +1024,17 @@ CContactsView.prototype.onRoute = function (aParams)
 				this.selector.itemSelected().checked(true);
 			}
 			this.selector.itemSelected(null);
+			this.oImportView.visibility(false);
 			this.gotoViewPane();
+			break;
+		case 'import':
+			this.selectedItem(null);
+			this.oImportView.visibility(true);
+			this.selector.itemSelected(null);
+			this.gotoViewPane();
+			break;
+		default:
+			this.oImportView.visibility(false);
 			break;
 	}
 	
