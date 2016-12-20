@@ -295,6 +295,7 @@ function CContactsView()
 		if (Types.isNonEmptyString(sFormat))
 		{
 			this.aExportData.push({
+				'css': sFormat.toLowerCase(),
 				'text': TextUtils.i18n('%MODULENAME%/ACTION_EXPORT_AS', {'FORMAT': sFormat.toUpperCase()}),
 				'command': Utils.createCommand(this, function () { this.executeExport(sFormat); }, this.enableExport)
 			});
