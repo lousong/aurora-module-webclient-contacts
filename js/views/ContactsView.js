@@ -180,7 +180,14 @@ function CContactsView()
 	this.searchInput = ko.observable('');
 	this.search = ko.observable('');
 	
+	this.groupUidForRequest = ko.observable('');
 	this.groupFullCollection = ko.observableArray([]);
+	this.groupFullCollection.subscribe(function () {
+		if (this.groupUidForRequest())
+		{
+			this.onViewGroupClick(this.groupUidForRequest());
+		}
+	}, this);
 	
 	this.selectedContact.subscribe(function (oContact) {
 		if (oContact)
@@ -406,19 +413,9 @@ CContactsView.prototype.executeSave = function (oData)
 			
 			oData.groups(aList);
 			
-			if (oData.edited())
-			{
-				oData.edited(false);
-			}
-			
 			if (this.selectedItem())
 			{
 				ContactsCache.clearInfoAboutEmail(this.selectedItem().email());
-			}
-			
-			if (oData.isNew())
-			{
-				this.selectedItem(null);
 			}
 			
 			if (this.selectedStorage() === 'team' || this.selectedStorage() === 'all')
@@ -430,24 +427,16 @@ CContactsView.prototype.executeSave = function (oData)
 			
 			if (oData.isNew())
 			{
-				oContact.Storage = 'personal';
+				Ajax.send('CreateContact', { Contact: oContact }, this.onCreateContactResponse, this);
 			}
-			
-			Ajax.send(oData.isNew() ? 'CreateContact' : 'UpdateContact', { Contact: oContact }, this.onCreateContactResponse, this);
+			else
+			{
+				Ajax.send('UpdateContact', { Contact: oContact }, this.onUpdateContactResponse, this);
+			}
 		}
 		else if (oData instanceof CGroupModel && !oData.readOnly())
 		{
 			this.gotoGroupList();
-			
-			if (oData.edited())
-			{
-				oData.edited(false);
-			}
-			
-			if (oData.isNew() && !App.isMobile())
-			{
-				this.selectedItem(null);
-			}
 			
 			var aContactUUIDs = _.map(this.selector.listCheckedOrSelected(), function (oItem) { return oItem.UUID(); });
 			Ajax.send(oData.isNew() ? 'CreateGroup' : 'UpdateGroup', {'Group': oData.toObject(aContactUUIDs)}, this.onCreateGroupResponse, this);
@@ -456,6 +445,45 @@ CContactsView.prototype.executeSave = function (oData)
 	else
 	{
 		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_EMAIL_OR_NAME_BLANK'));
+	}
+};
+
+/**
+ * @param {Object} oResponse
+ * @param {Object} oRequest
+ */
+CContactsView.prototype.onCreateContactResponse = function (oResponse, oRequest)
+{
+	if (oResponse.Result)
+	{
+		this.requestContactList();
+		this.viewContact(oResponse.Result);
+		Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_CONTACT_SUCCESSFULLY_ADDED'));
+	}
+	else
+	{
+		Api.showErrorByCode(oResponse, TextUtils.i18n('%MODULENAME%/ERROR_CREATE_CONTACT'));
+	}
+};
+
+/**
+ * @param {Object} oResponse
+ * @param {Object} oRequest
+ */
+CContactsView.prototype.onUpdateContactResponse = function (oResponse, oRequest)
+{
+	if (oResponse.Result)
+	{
+		if (this.selectedContact() && this.selectedContact().edited())
+		{
+			this.selectedContact().edited(false);
+		}
+		this.requestContactList();
+		Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_CONTACT_SUCCESSFULLY_UPDATED'));
+	}
+	else
+	{
+		Api.showErrorByCode(oResponse, TextUtils.i18n('%MODULENAME%/ERROR_UPDATE_CONTACT'));
 	}
 };
 
@@ -638,6 +666,7 @@ CContactsView.prototype.executeCancel = function ()
 			else if (oData.edited())
 			{
 				oData.edited(false);
+				this.requestContact(oData.uuid());
 			}
 		}
 		else if (oData instanceof CGroupModel && !oData.readOnly())
@@ -901,6 +930,8 @@ CContactsView.prototype.requestContact = function (sContactUUID)
 	else
 	{
 		this.contactUidForRequest(sContactUUID);
+		this.selector.itemSelected(null);
+		this.selectedItem(null);
 	}
 };
 
@@ -924,11 +955,12 @@ CContactsView.prototype.changeGroupType = function (sStorage)
 };
 
 /**
- * @param {Object} oData
+ * @param {Object} mData
  */
-CContactsView.prototype.onViewGroupClick = function (oData)
+CContactsView.prototype.onViewGroupClick = function (mData)
 {
-	Routing.setHash(LinksUtils.getContacts('group', oData.UUID()));
+	var sUUID = (typeof mData === 'string') ? mData : mData.UUID();
+	Routing.setHash(LinksUtils.getContacts('group', sUUID));
 };
 
 /**
@@ -1000,9 +1032,10 @@ CContactsView.prototype.onRoute = function (aParams)
 			this.requestContact(oParams.ContactUUID);
 		}
 	}
-	else
+	else if (this.selectedItem() instanceof CContactModel)
 	{
 		this.selector.itemSelected(null);
+		this.selectedItem(null);
 		this.gotoContactList();
 	}
 
@@ -1060,6 +1093,8 @@ CContactsView.prototype.viewGroup = function (sGroupUUID)
 	
 	if (oGroup)
 	{
+		this.groupUidForRequest('');
+		
 		this.oGroupModel.clear();
 		this.oGroupModel
 			.uuid(oGroup.UUID())
@@ -1077,6 +1112,10 @@ CContactsView.prototype.viewGroup = function (sGroupUUID)
 		
 //		Ajax.send('GetGroupEvents', { 'UUID': sGroupUUID }, this.onGetGroupEventsResponse, this);
 	}
+	else
+	{
+		this.groupUidForRequest(sGroupUUID);
+	}
 	
 	return !!oGroup;
 };
@@ -1088,6 +1127,10 @@ CContactsView.prototype.deleteGroup = function (sGroupUUID)
 {
 	if (sGroupUUID)
 	{
+		this.groupFullCollection.remove(function (oItem) {
+			return oItem && oItem.UUID() === sGroupUUID;
+		});
+		
 		Ajax.send('DeleteGroup', { 'UUID': sGroupUUID }, function (oResponse) {
 			if (!oResponse.Result)
 			{
@@ -1096,11 +1139,7 @@ CContactsView.prototype.deleteGroup = function (sGroupUUID)
 			this.requestGroupFullList();
 		}, this);
 
-		this.selectedStorage(Settings.DefaultStorage);
-
-		this.groupFullCollection.remove(function (oItem) {
-			return oItem && oItem.UUID() === sGroupUUID;
-		});
+		this.changeGroupType(Settings.DefaultStorage);
 	}
 };
 
@@ -1218,18 +1257,19 @@ CContactsView.prototype.searchFocus = function ()
 };
 
 /**
- * @param {Object} oContact
+ * @param {mixed} mContact
  */
-CContactsView.prototype.viewContact = function (oContact)
+CContactsView.prototype.viewContact = function (mContact)
 {
-	if (oContact)
+	if (mContact)
 	{
 		var
 			sStorage = this.selectedStorage(),
-			sGroupUUID = (sStorage === 'group') ? this.currentGroupUUID() : ''
+			sGroupUUID = (sStorage === 'group') ? this.currentGroupUUID() : '',
+			sContactUUID = (typeof mContact === 'string') ? mContact : mContact.UUID()
 		;
 		
-		Routing.setHash(LinksUtils.getContacts(sStorage, sGroupUUID, this.search(), this.oPageSwitcher.currentPage(), oContact.UUID()));
+		Routing.setHash(LinksUtils.getContacts(sStorage, sGroupUUID, this.search(), this.oPageSwitcher.currentPage(), sContactUUID));
 	}
 };
 
@@ -1286,6 +1326,10 @@ CContactsView.prototype.onGetContactResponse = function (oResponse, oRequest)
 		
 		if (oSelected && oSelected.UUID() === oObject.uuid())
 		{
+			if (this.selectedContact() instanceof CContactModel && oObject instanceof CContactModel && this.selectedContact().uuid() === oObject.uuid())
+			{
+				oObject.edited(this.selectedContact().edited());
+			}
 			this.selectedItem(oObject);
 		}
 	}
@@ -1293,38 +1337,6 @@ CContactsView.prototype.onGetContactResponse = function (oResponse, oRequest)
 	{
 		Api.showErrorByCode(oResponse);
 	}
-};
-
-/**
- * @param {Object} oResponse
- * @param {Object} oRequest
- */
-CContactsView.prototype.onCreateContactResponse = function (oResponse, oRequest)
-{
-	if (oResponse.Result)
-	{
-		if (oResponse.Method === 'CreateContact')
-		{
-			Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_CONTACT_SUCCESSFULLY_ADDED'));
-		}
-		else
-		{
-			Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_CONTACT_SUCCESSFULLY_UPDATED'));
-		}
-	}
-	else
-	{
-		if (oResponse.Method === 'CreateContact')
-		{
-			Api.showErrorByCode(oResponse, TextUtils.i18n('%MODULENAME%/ERROR_CREATE_CONTACT'));
-		}
-		else
-		{
-			Api.showErrorByCode(oResponse, TextUtils.i18n('%MODULENAME%/ERROR_UPDATE_CONTACT'));
-		}
-	}
-	
-	this.requestContactList();
 };
 
 /**
@@ -1449,21 +1461,24 @@ CContactsView.prototype.onCreateGroupResponse = function (oResponse, oRequest)
 {
 	if (oResponse.Result)
 	{
-		if (!App.isMobile())
+		if (typeof oResponse.Result === 'string' && oResponse.Result !== '')
 		{
-			this.selectedItem(null);
-			this.selector.itemSelected(null);
+			this.onViewGroupClick(oResponse.Result);
 		}
-
+		else
+		{
+			if (this.selectedGroup() && this.selectedGroup().edited())
+			{
+				this.selectedGroup().edited(false);
+			}
+		}
 		Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_GROUP_SUCCESSFULLY_ADDED'));
+		this.requestGroupFullList();
 	}
 	else
 	{
 		Api.showErrorByCode(oResponse, TextUtils.i18n('%MODULENAME%/ERROR_SAVE_GROUP'));
 	}
-	
-	this.requestContactList();
-	this.requestGroupFullList();
 };
 
 CContactsView.prototype.executeShare = function ()
