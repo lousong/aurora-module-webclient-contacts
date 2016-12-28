@@ -780,7 +780,6 @@ CContactsView.prototype.onShow = function ()
 	this.selector.useKeyboardKeys(true);
 	
 	this.oPageSwitcher.show();
-	this.oPageSwitcher.perPage(Settings.ContactsPerPage);
 
 	if (this.oJua)
 	{
@@ -976,9 +975,14 @@ CContactsView.prototype.onRoute = function (aParams)
 	;
 	
 	this.pageSwitcherLocked(true);
+	if (this.oPageSwitcher.perPage() !== Settings.ContactsPerPage)
+	{
+		bRequestContacts = true;
+	}
 	if (bGroupOrSearchChanged)
 	{
 		this.oPageSwitcher.clear();
+		this.oPageSwitcher.perPage(Settings.ContactsPerPage);
 	}
 	else
 	{
