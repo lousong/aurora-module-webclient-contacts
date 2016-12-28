@@ -38,6 +38,9 @@ CImportView.prototype.ViewTemplate = '%ModuleName%_ImportView';
 
 CImportView.prototype.onBind = function ()
 {
+	var aFormats = _.map(Settings.ImportExportFormats, function (sFormat) {
+		return '.' + sFormat;
+	});
 	this.oJua = new CJua({
 		'action': '?/Api/',
 		'name': 'jua-uploader',
@@ -56,7 +59,8 @@ CImportView.prototype.onBind = function ()
 					'Storage': 'personal'
 				});
 			}, this)
-		}, App.getCommonRequestParameters())
+		}, App.getCommonRequestParameters()),
+		accept: aFormats.join(',')
 	});
 
 	this.oJua
