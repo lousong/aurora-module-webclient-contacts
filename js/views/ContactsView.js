@@ -314,9 +314,19 @@ function CContactsView()
 	this.visibleImportExport = ko.computed(function () {
 		return this.aExportData.length > 0;
 	}, this);
-	App.broadcastEvent('%ModuleName%::ConstructView::after', {'Name': this.ViewConstructorName, 'View': this});
 	
 	this.infoCreateOrImport = this.getCreateOrImportInfo();
+	this.listChanged = ko.computed(function () {
+		return [
+			this.selectedStorage(),
+			this.currentGroupUUID(),
+			this.search(),
+			this.oPageSwitcher.currentPage(),
+			this.oPageSwitcher.perPage()
+		];
+	}, this);
+	
+	App.broadcastEvent('%ModuleName%::ConstructView::after', {'Name': this.ViewConstructorName, 'View': this});
 }
 
 _.extendOwn(CContactsView.prototype, CAbstractScreenView.prototype);

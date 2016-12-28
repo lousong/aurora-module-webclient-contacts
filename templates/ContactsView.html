@@ -10,7 +10,7 @@
 		</span>
 	</span>
 </div>
-<div class="panel_center unselectable" data-bind="customScrollbar: {x: false}">
+<div class="panel_center unselectable" data-bind="customScrollbar: {'scrollToTopTrigger': listChanged, x: false}">
 	<div class="contact_list_scroll scroll-inner">
 		<div class="items_list contact_list">
 			<div data-bind="visible: isEmptyList() && !preLoadingList()">
