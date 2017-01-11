@@ -78,8 +78,9 @@ function CContactsView()
 		].join('').length;
 	}, this);
 	
-	this.recivedAnimShare = ko.observable(false).extend({'autoResetToFalse': 500});
-	this.recivedAnimUnshare = ko.observable(false).extend({'autoResetToFalse': 500});
+	this.recivedAnimPersonal = ko.observable(false).extend({'autoResetToFalse': 500});
+	this.recivedAnimShared = ko.observable(false).extend({'autoResetToFalse': 500});
+	this.recivedAnimTeam = ko.observable(false).extend({'autoResetToFalse': 500});
 	
 	this.isTeamStorageSelected = ko.observable(false);
 	this.isNotTeamStorageSelected = ko.observable(false);
@@ -428,12 +429,16 @@ CContactsView.prototype.executeSave = function (oData)
 				ContactsCache.clearInfoAboutEmail(this.selectedItem().email());
 			}
 			
-			if (this.selectedStorage() === 'team' || this.selectedStorage() === 'all')
-			{
-				this.recivedAnimUnshare(true);
-			}
-			
 			oContact = oData.toObject();
+			
+			if (this.selectedStorage() !== 'personal' && oContact.Storage === 'personal')
+			{
+				this.recivedAnimPersonal(true);
+			}
+			if (this.selectedStorage() !== 'team' && oContact.Storage === 'team')
+			{
+				this.recivedAnimTeam(true);
+			}
 			
 			if (oData.isNew())
 			{
@@ -1538,11 +1543,11 @@ CContactsView.prototype.executeShare = function ()
 
 		if ('shared' === this.selectedStorage())
 		{
-			this.recivedAnimUnshare(true);
+			this.recivedAnimPersonal(true);
 		}
 		else
 		{
-			this.recivedAnimShare(true);
+			this.recivedAnimShared(true);
 		}
 	
 		Ajax.send('UpdateSharedContacts', { 'UUIDs': aContactUUIDs });
