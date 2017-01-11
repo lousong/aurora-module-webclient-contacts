@@ -3,7 +3,7 @@
 	"type": "aurora-module",
 	"require":{
 		"afterlogic/aurora-framework": "~0.3",
-		"afterlogic/aurora-module-contacts": "~0.3"
+		"afterlogic/aurora-module-contacts": "~0.3" || "dev-master"
 	},
 	"extra": {
 		"installer-name": "ContactsWebclient"
