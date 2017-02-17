@@ -22,7 +22,7 @@ var
 function CContactModel()
 {
 	this.allowSendEmails = ko.computed(function () {
-		return false;//AppData.App.AllowWebMail && AppData.Accounts.isCurrentAllowsMail();
+		return false;//AppData.App.AllowWebMail;
 	}, this);
 	
 	this.sEmailDefaultType = Enums.ContactsPrimaryEmail.Personal;

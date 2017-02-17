@@ -58,7 +58,7 @@ function CContactsView()
 	
 	this.allowSendEmails = ko.observable(false);
 //	this.allowSendEmails = ko.computed(function () {
-//		return AppData.App.AllowWebMail && AppData.Accounts.isCurrentAllowsMail();
+//		return AppData.App.AllowWebMail;
 //	}, this);
 	this.loadingList = ko.observable(false);
 	this.preLoadingList = ko.observable(false);
