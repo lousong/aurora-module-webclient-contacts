@@ -83,7 +83,7 @@ CCreateContactPopup.prototype.onSaveClick = function ()
 				'PersonalAddress': this.address(),
 				'Skype': this.skype(),
 				'Facebook': this.facebook(),
-				'Storage': 'personale'
+				'Storage': 'personal'
 			}
 		;
 
@@ -116,8 +116,8 @@ CCreateContactPopup.prototype.onCreateContactResponse = function (oResponse, oRe
 	else
 	{
 		Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_CONTACT_SUCCESSFULLY_ADDED'));
-		ContactsCache.clearInfoAboutEmail(oParameters.PersonalEmail);
-		ContactsCache.getContactsByEmails([oParameters.PersonalEmail], this.fCallback);
+		ContactsCache.clearInfoAboutEmail(oParameters.Contact.PersonalEmail);
+		ContactsCache.getContactsByEmails([oParameters.Contact.PersonalEmail], this.fCallback);
 		this.closePopup();
 		
 		if (!HeaderItemView.isCurrent())

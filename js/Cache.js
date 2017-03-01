@@ -39,7 +39,6 @@ CContactsCache.prototype.clearInfoAboutEmail = function (sEmail)
  */
 CContactsCache.prototype.getContactsByEmails = function (aEmails, fResponseHandler)
 {
-	return;
 	var
 		aContacts = [],
 		aEmailsForRequest = [],
@@ -87,19 +86,19 @@ CContactsCache.prototype.onGetContactsByEmailsResponse = function (oResponse, oR
 		oParameters = oRequest.Parameters,
 		fResponseHandler = this.oResponseHandlers[oParameters.HandlerId],
 		oResult = oResponse.Result,
-		aEmails = oParameters.Emails.split(','),
+		aEmails = oParameters.Emails,
 		oContacts = {}
 	;
 	
 	if (oResult)
 	{
-		_.each(oResult, _.bind(function (oRawContact, sEmail) {
+		_.each(oResult, _.bind(function (oRawContact) {
 			var oContact = new CContactModel();
 			
 			if (oContact)
 			{
 				oContact.parse(oRawContact);
-				this.oContacts[sEmail] = oContact;
+				this.oContacts[oContact.email()] = oContact;
 			}
 		}, this));
 	}
