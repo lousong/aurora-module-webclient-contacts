@@ -22,11 +22,12 @@ function Callback(oRequest, fResponse, sExceptEmail, bTeamOnly)
 		sTerm = oRequest.term,
 		oParameters = {
 			'Search': sTerm,
-			'Storage': bTeamOnly ? 'team' : 'all'
+			'Storage': bTeamOnly ? 'team' : 'all',
+			'SortField': Enums.ContactSortField.Frequency
 		}
 	;
 
-	Ajax.send('GetSuggestions', oParameters, function (oResponse) {
+	Ajax.send('GetContacts', oParameters, function (oResponse) {
 		var aList = [];
 		if (oResponse && oResponse.Result && oResponse.Result.List)
 		{
@@ -62,10 +63,13 @@ function ComposeCallback(oRequest, fResponse)
 {
 	var
 		sTerm = oRequest.term,
-		oParameters = { 'Search': sTerm }
+		oParameters = {
+			'Search': sTerm,
+			'SortField': Enums.ContactSortField.Frequency
+		}
 	;
 
-	Ajax.send('GetSuggestions', oParameters, function (oResponse) {
+	Ajax.send('GetContacts', oParameters, function (oResponse) {
 		var aList = [];
 		if (oResponse && oResponse.Result && oResponse.Result.List)
 		{
@@ -122,13 +126,13 @@ function PhoneCallback(oRequest, fResponse)
 		sTerm = $.trim(oRequest.term),
 		oParameters = {
 			'Search': sTerm,
-			'PhoneOnly': true
+			'SortField': Enums.ContactSortField.Frequency
 		}
 	;
 
 	if ('' !== sTerm)
 	{
-		Ajax.send('GetSuggestions', oParameters, function (oResponse) {
+		Ajax.send('GetContacts', oParameters, function (oResponse) {
 			var aList = [];
 
 			if (oResponse && oResponse.Result && oResponse.Result.List)
@@ -163,10 +167,10 @@ function RequestUserByPhone(sNumber, fCallBack, oContext)
 {
 	oParameters = {
 		'Search': sNumber,
-		'PhoneOnly': true
+		'SortField': Enums.ContactSortField.Frequency
 	};
 	
-	Ajax.send('GetSuggestions', oParameters, function (oResponse) {
+	Ajax.send('GetContacts', oParameters, function (oResponse) {
 		var
 			oResult = oResponse.Result,
 			sUser = '',
