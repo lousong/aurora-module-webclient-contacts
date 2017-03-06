@@ -21,10 +21,6 @@ var
  */
 function CContactModel()
 {
-	this.allowSendEmails = ko.computed(function () {
-		return false;//AppData.App.AllowWebMail;
-	}, this);
-	
 	this.sEmailDefaultType = Enums.ContactsPrimaryEmail.Personal;
 	this.sPhoneDefaultType = Enums.ContactsPrimaryPhone.Mobile;
 	this.sAddressDefaultType = Enums.ContactsPrimaryAddress.Personal;

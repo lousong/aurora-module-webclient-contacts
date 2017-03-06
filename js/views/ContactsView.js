@@ -56,10 +56,6 @@ function CContactsView()
 	
 	this.sImportContactsLink = Settings.ImportContactsLink;
 	
-	this.allowSendEmails = ko.observable(false);
-//	this.allowSendEmails = ko.computed(function () {
-//		return AppData.App.AllowWebMail;
-//	}, this);
 	this.loadingList = ko.observable(false);
 	this.preLoadingList = ko.observable(false);
 	this.loadingList.subscribe(function (bLoading) {
