@@ -23,7 +23,8 @@ function Callback(oRequest, fResponse, sExceptEmail, bTeamOnly)
 		oParameters = {
 			'Search': sTerm,
 			'Storage': bTeamOnly ? 'team' : 'all',
-			'SortField': Enums.ContactSortField.Frequency
+			'SortField': Enums.ContactSortField.Frequency,
+			'SortOrder': 1
 		}
 	;
 
@@ -47,7 +48,7 @@ function Callback(oRequest, fResponse, sExceptEmail, bTeamOnly)
 
 			aList = _.sortBy(_.compact(aList), function(oItem){
 				return oItem.frequency;
-			}).reverse();
+			});
 		}
 
 		fResponse(aList);
@@ -65,7 +66,9 @@ function ComposeCallback(oRequest, fResponse)
 		sTerm = oRequest.term,
 		oParameters = {
 			'Search': sTerm,
-			'SortField': Enums.ContactSortField.Frequency
+			'SortField': Enums.ContactSortField.Frequency,
+			'SortOrder': 1,
+			'Storage': 'all'
 		}
 	;
 
@@ -108,7 +111,7 @@ function ComposeCallback(oRequest, fResponse)
 
 			aList = _.sortBy(_.compact(aList), function(oItem) {
 				return oItem.frequency;
-			}).reverse();
+			});
 		}
 
 		fResponse(aList);
@@ -126,7 +129,8 @@ function PhoneCallback(oRequest, fResponse)
 		sTerm = $.trim(oRequest.term),
 		oParameters = {
 			'Search': sTerm,
-			'SortField': Enums.ContactSortField.Frequency
+			'SortField': Enums.ContactSortField.Frequency,
+			'SortOrder': 1
 		}
 	;
 
@@ -160,14 +164,15 @@ function PhoneCallback(oRequest, fResponse)
  */
 function DeleteHandler(oContact)
 {
-	Ajax.send('DeleteSuggestion', { 'ContactUUID': oContact.id });
+	Ajax.send('UpdateContact', { 'Contact': { 'UUID': oContact.id, 'Frequency': -1 } });
 }
 
 function RequestUserByPhone(sNumber, fCallBack, oContext)
 {
 	oParameters = {
 		'Search': sNumber,
-		'SortField': Enums.ContactSortField.Frequency
+		'SortField': Enums.ContactSortField.Frequency,
+		'SortOrder': 1
 	};
 	
 	Ajax.send('GetContacts', oParameters, function (oResponse) {
