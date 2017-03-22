@@ -7,37 +7,37 @@
 				<span class="label">
 					<span data-bind="i18n: {'key': '%MODULENAME%/LABEL_DISPLAY_NAME'}"></span>:
 				</span>
-				<input class="value input" type="text" data-bind="value: displayName, hasfocus: focusDisplayName" />
+				<input class="value input" type="text" data-bind="value: displayName, hasfocus: focusDisplayName, valueUpdate: 'afterkeydown', onEnter: onSaveClick" />
 			</div>
 			<div class="row">
 				<span class="label">
 					<span data-bind="i18n: {'key': 'COREWEBCLIENT/LABEL_EMAIL'}"></span>:
 				</span>
-				<input class="value input" type="text" data-bind="value: email" />
+				<input class="value input" type="text" data-bind="value: email, valueUpdate: 'afterkeydown', onEnter: onSaveClick" />
 			</div>
 			<div class="row">
 				<span class="label">
 					<span data-bind="i18n: {'key': '%MODULENAME%/LABEL_PHONE'}"></span>:
 				</span>
-				<input class="value input" type="text" data-bind="value: phone" />
+				<input class="value input" type="text" data-bind="value: phone, valueUpdate: 'afterkeydown', onEnter: onSaveClick" />
 			</div>
 			<div class="row">
 				<span class="label">
 					<span data-bind="i18n: {'key': '%MODULENAME%/LABEL_ADDRESS'}"></span>:
 				</span>
-				<input class="value input" type="text" data-bind="value: address" />
+				<input class="value input" type="text" data-bind="value: address, valueUpdate: 'afterkeydown', onEnter: onSaveClick" />
 			</div>
 			<div class="row">
 				<span class="label">
 					<span data-bind="i18n: {'key': '%MODULENAME%/LABEL_SKYPE'}"></span>:
 				</span>
-				<input class="value input" type="text" data-bind="value: skype" />
+				<input class="value input" type="text" data-bind="value: skype, valueUpdate: 'afterkeydown', onEnter: onSaveClick" />
 			</div>
 			<div class="row">
 				<span class="label">
 					<span data-bind="i18n: {'key': '%MODULENAME%/LABEL_FACEBOOK'}"></span>:
 				</span>
-				<input class="value input" type="text" data-bind="value: facebook" />
+				<input class="value input" type="text" data-bind="value: facebook, valueUpdate: 'afterkeydown', onEnter: onSaveClick" />
 			</div>
 			<div class="clear"></div>
 		</div>
