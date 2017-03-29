@@ -4,6 +4,7 @@ var
 	_ = require('underscore'),
 	$ = require('jquery'),
 	ko = require('knockout'),
+	FileSaver = require('%PathToCoreWebclientModule%/js/vendors/FileSaver.js'),
 	
 	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
 	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
@@ -648,18 +649,20 @@ CContactsView.prototype.executeImport = function ()
 	Routing.setHash(LinksUtils.getContacts('personal', '', '', 1, '', 'import'));
 };
 
-
 CContactsView.prototype.executeExport = function (sFormat)
 {
 	var aContactUUIDs = _.map(this.selector.listCheckedOrSelected(), function (oContact) {
 		return oContact.sUUID;
 	});
-	Utils.downloadViaApiRequest(Settings.ServerModuleName, 'Export', {
+	Ajax.send('Export', {
 		'Format': sFormat,
 		'Storage': this.selectedStorage(),
 		'GroupUUID': this.currentGroupUUID(),
 		'ContactUUIDs': aContactUUIDs
-	});
+	}, function (oResponse) {
+		var oBlob = new Blob([oResponse.ResponseText], {'type': 'text/plain;charset=utf-8'});
+		FileSaver.saveAs(oBlob, 'export.' + sFormat);
+	}, this, { Format: 'Raw' });
 };
 
 CContactsView.prototype.executeCancel = function ()
