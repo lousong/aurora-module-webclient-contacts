@@ -13,7 +13,9 @@ var
 	
 	App = require('%PathToCoreWebclientModule%/js/App.js'),
 	
-	CDateModel = require('%PathToCoreWebclientModule%/js/models/CDateModel.js')
+	CDateModel = require('%PathToCoreWebclientModule%/js/models/CDateModel.js'),
+	
+	Ajax = require('modules/%ModuleName%/js/Ajax.js')
 ;
 
 /**
@@ -655,7 +657,13 @@ CContactModel.prototype.getEmailsString = function ()
 
 CContactModel.prototype.sendThisContact = function ()
 {
-	App.Api.composeMessageWithVcard(this);
+	var oParameters = {
+		'UUID': this.uuid(),
+		'Storage': this.team() ? 'team' : (this.sharedToAll() ? 'shared' : 'personal'),
+		'FileName': 'contact-' + this.getFullEmail().replace('"', '').replace('<', '').replace('>', '') + '.vcf'
+	};
+
+	Ajax.send('SaveContactAsTempFile', oParameters);
 };
 
 /**
