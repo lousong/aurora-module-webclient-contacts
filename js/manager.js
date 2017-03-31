@@ -30,7 +30,9 @@ module.exports = function (oAppData) {
 		{
 			return _.extend({
 				start: function (ModulesManager) {
-					ModulesManager.run('MailWebclient', 'registerMessagePaneController', [require('modules/%ModuleName%/js/views/VcardAttachmentView.js'), 'BeforeMessageBody']);
+					App.subscribeEvent('MailWebclient::RegisterMessagePaneController', function (fRegisterMessagePaneController) {
+						fRegisterMessagePaneController(require('modules/%ModuleName%/js/views/VcardAttachmentView.js'), 'BeforeMessageBody');
+					});
 				},
 				getScreens: function () {
 					var oScreens = {};
