@@ -11,11 +11,12 @@ var
 	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
 	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
 	
+	Ajax = require('%PathToCoreWebclientModule%/js/Ajax.js'),
 	App = require('%PathToCoreWebclientModule%/js/App.js'),
 	
 	CDateModel = require('%PathToCoreWebclientModule%/js/models/CDateModel.js'),
 	
-	Ajax = require('modules/%ModuleName%/js/Ajax.js')
+	Settings = require('modules/%ModuleName%/js/Settings.js')
 ;
 
 /**
@@ -370,6 +371,10 @@ function CContactModel()
 	this.hasEmails = ko.computed(function () {
 		return 0 < this.emails().length;
 	}, this);
+	
+	this.allowSendThisContact = ko.computed(function () {
+		return Settings.SaveVcfServerModuleName !== '';
+	}, this);
 
 	this.extented.subscribe(function (bValue) {
 		if (bValue)
@@ -663,7 +668,7 @@ CContactModel.prototype.sendThisContact = function ()
 		'FileName': 'contact-' + this.getFullEmail().replace('"', '').replace('<', '').replace('>', '') + '.vcf'
 	};
 
-	Ajax.send('SaveContactAsTempFile', oParameters);
+	Ajax.send(Settings.SaveVcfServerModuleName, 'SaveContactAsTempFile', oParameters);
 };
 
 /**

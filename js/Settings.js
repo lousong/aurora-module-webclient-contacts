@@ -31,6 +31,8 @@ module.exports = {
 			this.EContactsPrimaryAddress = oAppDataSection.EContactsPrimaryAddress;
 			this.EContactSortField = oAppDataSection.EContactSortField;
 			this.ImportExportFormats = oAppDataSection.ImportExportFormats;
+			
+			this.SaveVcfServerModuleName = oAppDataSection.SaveVcfServerModuleName;
 		}
 	},
 	
