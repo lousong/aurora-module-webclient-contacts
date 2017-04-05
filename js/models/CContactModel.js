@@ -662,13 +662,22 @@ CContactModel.prototype.getEmailsString = function ()
 
 CContactModel.prototype.sendThisContact = function ()
 {
-	var oParameters = {
-		'UUID': this.uuid(),
-		'Storage': this.team() ? 'team' : (this.sharedToAll() ? 'shared' : 'personal'),
-		'FileName': 'contact-' + this.getFullEmail().replace('"', '').replace('<', '').replace('>', '') + '.vcf'
-	};
+	var
+		ModulesManager = require('%PathToCoreWebclientModule%/js/ModulesManager.js'),
+		ComposeMessageWithAttachments = ModulesManager.run('MailWebclient', 'getComposeMessageWithAttachments'),
+		oParameters = {
+			'UUID': this.uuid(),
+			'Storage': this.team() ? 'team' : (this.sharedToAll() ? 'shared' : 'personal'),
+			'FileName': 'contact-' + this.getFullEmail().replace('"', '').replace('<', '').replace('>', '') + '.vcf'
+		}
+	;
 
-	Ajax.send(Settings.SaveVcfServerModuleName, 'SaveContactAsTempFile', oParameters);
+	Ajax.send(Settings.SaveVcfServerModuleName, 'SaveContactAsTempFile', oParameters, function (oResponse) {
+		if (_.isFunction(ComposeMessageWithAttachments) && oResponse.Result)
+		{
+			ComposeMessageWithAttachments([oResponse.Result]);
+		}
+	}, this);
 };
 
 /**
