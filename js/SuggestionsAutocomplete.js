@@ -47,7 +47,7 @@ function Callback(oRequest, fResponse, sExceptEmail, bTeamOnly)
 			});
 
 			aList = _.sortBy(_.compact(aList), function(oItem){
-				return oItem.frequency;
+				return -oItem.frequency;
 			});
 		}
 
@@ -110,7 +110,7 @@ function ComposeCallback(oRequest, fResponse)
 			});
 
 			aList = _.sortBy(_.compact(aList), function(oItem) {
-				return oItem.frequency;
+				return -oItem.frequency;
 			});
 		}
 
