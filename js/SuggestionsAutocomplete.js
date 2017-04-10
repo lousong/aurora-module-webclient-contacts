@@ -33,11 +33,11 @@ function Callback(oRequest, fResponse, sExceptEmail, bTeamOnly)
 		if (oResponse && oResponse.Result && oResponse.Result.List)
 		{
 			aList = _.map(oResponse.Result.List, function (oItem) {
-				return oItem && oItem.Email && oItem.Email !== sExceptEmail ?
+				return oItem && oItem.ViewEmail && oItem.ViewEmail !== sExceptEmail ?
 				{
-					value: (oItem.Name && 0 < $.trim(oItem.Name).length) ? (oItem.ForSharedToAll ? oItem.Name : ('"' + oItem.Name + '" <' + oItem.Email + '>')) : oItem.Email,
-					name: oItem.Name,
-					email: oItem.Email,
+					value: (oItem.FullName && 0 < $.trim(oItem.FullName).length) ? (oItem.ForSharedToAll ? oItem.FullName : ('"' + oItem.FullName + '" <' + oItem.ViewEmail + '>')) : oItem.ViewEmail,
+					name: oItem.FullName,
+					email: oItem.ViewEmail,
 					frequency: oItem.Frequency,
 					id: oItem.UUID,
 					team: oItem.Storage === 'team',
@@ -79,23 +79,23 @@ function ComposeCallback(oRequest, fResponse)
 			aList = _.map(oResponse.Result.List, function (oItem) {
 				var
 					sLabel = '',
-					sValue = oItem.Email
+					sValue = oItem.ViewEmail
 				;
 
 				if (oItem.IsGroup)
 				{
-					if (oItem.Name && 0 < $.trim(oItem.Name).length)
+					if (oItem.FullName && 0 < $.trim(oItem.FullName).length)
 					{
-						sLabel = '"' + oItem.Name + '" (' + oItem.Email + ')';
+						sLabel = '"' + oItem.FullName + '" (' + oItem.ViewEmail + ')';
 					}
 					else
 					{
-						sLabel = '(' + oItem.Email + ')';
+						sLabel = '(' + oItem.ViewEmail + ')';
 					}
 				}
 				else
 				{
-					sLabel = AddressUtils.getFullEmail(oItem.Name, oItem.Email);
+					sLabel = AddressUtils.getFullEmail(oItem.FullName, oItem.ViewEmail);
 					sValue = sLabel;
 				}
 
@@ -144,14 +144,14 @@ function PhoneCallback(oRequest, fResponse)
 				_.each(oResponse.Result.List, function (oItem) {
 					_.each(oItem.Phones, function (sPhone, sKey) {
 						aList.push({
-							label: oItem.Name !== '' ? oItem.Name + ' ' + '<' + oItem.Email + '> ' + sPhone : oItem.Email + ' ' + sPhone,
+							label: oItem.FullName !== '' ? oItem.FullName + ' ' + '<' + oItem.ViewEmail + '> ' + sPhone : oItem.ViewEmail + ' ' + sPhone,
 							value: sPhone,
 							frequency: oItem.Frequency
 						});
 					});
 				});
 
-				aList = _.sortBy(_.compact(aList), function(num){ return -(num.frequency); });
+				aList = _.sortBy(_.compact(aList), function (oItem) { return -(oItem.frequency); });
 			}
 			
 			fResponse(aList);
@@ -193,7 +193,7 @@ function RequestUserByPhone(sNumber, fCallBack, oContext)
 
 				if (sCleanedPhone === sCleanedUserPhone)
 				{
-					sUser = oUser.Name === '' ? oUser.Email + ' ' + sUserPhone : oUser.Name + ' ' + sUserPhone;
+					sUser = oUser.FullName === '' ? oUser.ViewEmail + ' ' + sUserPhone : oUser.FullName + ' ' + sUserPhone;
 					return false;
 				}
 			});
