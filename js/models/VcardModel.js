@@ -55,6 +55,7 @@ CVcardModel.prototype.onContactsSaveVcfResponse = function (oResponse, oRequest)
 	if (!oResponse.Result)
 	{
 		Api.showErrorByCode(oResponse, TextUtils.i18n('%MODULENAME%/ERROR_CREATE_CONTACT'));
+		this.exists(false);
 	}
 	else
 	{
