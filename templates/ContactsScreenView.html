@@ -1,8 +1,8 @@
 <div class="screen ContactsLayout" style="display: none;">
-	<div class="panels" data-bind="splitterFlex: {name: 'contact_list', sizes: [20, 20, 60]}, css: {'groups': selectedPanel() === Enums.MobilePanel.Groups,  'list_active': selectedPanel() === Enums.MobilePanel.Items,  'viewer_active': selectedPanel() === Enums.MobilePanel.View}">
+	<div class="panels" data-bind="splitterFlex: {name: 'contact_list', sizes: [20, 20, 60]}">
 		<div class="panel left_panel groups_panel" data-splitter="groups">
 			<div class="panel_content">
-				<!-- ko template: { name: sGroupsToolbarTemplate} --><!-- /ko -->
+				<!-- ko template: { name: '%ModuleName%_Toolbar_GroupsView'} --><!-- /ko -->
 				<div class="middle_bar">
 					<!-- ko template: { name: '%ModuleName%_GroupsView', data: $data} --><!-- /ko -->
 				</div>
@@ -10,7 +10,7 @@
 		</div>
 		<div class="panel center_panel contacts_panel">
 			<div class="panel_content">
-				<!-- ko template: { name: sContactsToolbarTemplate} --><!-- /ko -->
+				<!-- ko template: { name: '%ModuleName%_Toolbar_ContactsView'} --><!-- /ko -->
 				<div class="middle_bar" data-bind="template: {name: '%ModuleName%_ContactsView'}"></div>
 			</div>
 		</div>

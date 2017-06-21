@@ -3,7 +3,6 @@
 module.exports = function (oAppData) {
 	var
 		_ = require('underscore'),
-		$ = require('jquery'),
 		
 		TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
 		
@@ -12,12 +11,37 @@ module.exports = function (oAppData) {
 		Settings = require('modules/%ModuleName%/js/Settings.js'),
 		oSettings = _.extend({}, oAppData[Settings.ServerModuleName] || {}, oAppData['%ModuleName%'] || {}),
 		
-		ManagerSuggestions = require('modules/%ModuleName%/js/manager-suggestions.js'),
-		SuggestionsMethods = ManagerSuggestions(),
+		SuggestionsAutocomplete = require('modules/%ModuleName%/js/SuggestionsAutocomplete.js'),
+		SuggestionsMethods = {
+			getSuggestionsAutocompleteCallback: function () {
+				return SuggestionsAutocomplete.callback;
+			},
+			getSuggestionsAutocompleteComposeCallback: function () {
+				return SuggestionsAutocomplete.composeCallback;
+			},
+			getSuggestionsAutocompletePhoneCallback: function () {
+				return SuggestionsAutocomplete.phoneCallback;
+			},
+			getSuggestionsAutocompleteDeleteHandler: function () {
+				return SuggestionsAutocomplete.deleteHandler;
+			},
+			requestUserByPhone: function (sNumber, fCallBack, oContext) {
+				SuggestionsAutocomplete.requestUserByPhone(sNumber, fCallBack, oContext);
+			}
+		},
+				
+		fRegisterMessagePaneControllerOnStart = function () {
+			App.subscribeEvent('MailWebclient::RegisterMessagePaneController', function (fRegisterMessagePaneController) {
+				fRegisterMessagePaneController(require('modules/%ModuleName%/js/views/VcardAttachmentView.js'), 'BeforeMessageBody');
+			});
+		},
 
-		ManagerComponents = require('modules/%ModuleName%/js/manager-components.js'),
-		ComponentsMethods = ManagerComponents(),
-		fComponentsStart = ComponentsMethods.start
+		ContactsCardsMethods = {
+			applyContactsCards: function ($Addresses) {
+				var ContactCard = require('modules/%ModuleName%/js/ContactCard.js');
+				ContactCard.applyTo($Addresses);
+			}
+		}
 	;
 
 	Settings.init(oSettings);
@@ -29,46 +53,39 @@ module.exports = function (oAppData) {
 		if (App.isMobile())
 		{
 			return _.extend({
-				start: function (ModulesManager) {
-					App.subscribeEvent('MailWebclient::RegisterMessagePaneController', function (fRegisterMessagePaneController) {
-						fRegisterMessagePaneController(require('modules/%ModuleName%/js/views/VcardAttachmentView.js'), 'BeforeMessageBody');
-					});
+				start: fRegisterMessagePaneControllerOnStart,
+				getSettings: function () {
+					return Settings;
 				},
-				getScreens: function () {
-					var oScreens = {};
-					oScreens[Settings.HashModuleName] = function () {
-						return require('modules/%ModuleName%/js/views/ContactsView.js');
-					};
-					return oScreens;
-				},
-				getHeaderItem: function () {
-					return {
-						item: require('modules/%ModuleName%/js/views/HeaderItemView.js'),
-						name: Settings.HashModuleName
-					};
+				getHeaderItemView: function () {
+					return require('modules/%ModuleName%/js/views/HeaderItemView.js');
 				}
 			}, SuggestionsMethods);
 		}
 		else if (App.isNewTab())
 		{
-			return ComponentsMethods;
+			return _.extend({
+				start: fRegisterMessagePaneControllerOnStart
+			}, SuggestionsMethods, ContactsCardsMethods);
 		}
 		else
 		{
 			require('modules/%ModuleName%/js/MainTabExtMethods.js');
 			
-			return _.extend(ComponentsMethods, {
+			return _.extend({
 				start: function (ModulesManager) {
-					ModulesManager.run('SettingsWebclient', 'registerSettingsTab', [function () { return require('modules/%ModuleName%/js/views/ContactsSettingsPaneView.js'); }, Settings.HashModuleName, TextUtils.i18n('%MODULENAME%/LABEL_SETTINGS_TAB')]);
-					if ($.isFunction(fComponentsStart))
-					{
-						fComponentsStart(ModulesManager);
-					}
+					ModulesManager.run('SettingsWebclient', 'registerSettingsTab', [
+						function () { return require('modules/%ModuleName%/js/views/ContactsSettingsPaneView.js'); }, 
+						Settings.HashModuleName, 
+						TextUtils.i18n('%MODULENAME%/LABEL_SETTINGS_TAB')
+					]);
+					fRegisterMessagePaneControllerOnStart();
 				},
 				getScreens: function () {
 					var oScreens = {};
 					oScreens[Settings.HashModuleName] = function () {
-						return require('modules/%ModuleName%/js/views/ContactsView.js');
+						var CContactsView = require('modules/%ModuleName%/js/views/CContactsView.js');
+						return new CContactsView();
 					};
 					return oScreens;
 				},
@@ -84,7 +101,7 @@ module.exports = function (oAppData) {
 				getMobileSyncSettingsView: function () {
 					return require('modules/%ModuleName%/js/views/MobileSyncSettingsView.js');
 				}
-			});
+			}, SuggestionsMethods, ContactsCardsMethods);
 		}
 	}
 	

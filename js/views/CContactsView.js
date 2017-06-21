@@ -202,7 +202,7 @@ function CContactsView()
 	this.oPageSwitcher.currentPage.subscribe(function () {
 		if (!this.pageSwitcherLocked())
 		{
-			Routing.setHash(LinksUtils.getContacts(this.selectedStorage(), this.currentGroupUUID(), this.search(), this.oPageSwitcher.currentPage()));
+			this.changeRouting();
 		}
 	}, this);
 	this.currentPage = ko.observable(1);
@@ -212,7 +212,7 @@ function CContactsView()
 	}, this);
 	
 	this.searchSubmitCommand = Utils.createCommand(this, function () {
-		Routing.setHash(LinksUtils.getContacts(this.selectedStorage(), this.currentGroupUUID(), this.searchInput()));
+		this.changeRouting({ Search: this.searchInput() });
 	});
 	
 	this.searchMessagesInInbox = ModulesManager.run('MailWebclient', 'getSearchMessagesInInbox');
@@ -273,24 +273,9 @@ function CContactsView()
 	this.visibleDragNDropToGroupText = ko.computed(function () {
 		return !App.isMobile() && this.selectedStorage() === 'group';
 	}, this);
-	this.sGroupsToolbarTemplate = App.isMobile() ? '%ModuleName%_Toolbar_GroupsMobileView' : '%ModuleName%_Toolbar_GroupsView';
-	this.sContactsToolbarTemplate = App.isMobile() ? '%ModuleName%_Toolbar_ContactsMobileView' : '%ModuleName%_Toolbar_ContactsView';
-	this.sBeforeContactToolbarTemplate = App.isMobile() ? '%ModuleName%_Toolbar_ContactMobileView' : '';
-	this.sContactToolbarTemplate = App.isMobile() ? '' : '%ModuleName%_Toolbar_ContactView';
+	this.sBeforeContactToolbarTemplate = '';
+	this.sContactToolbarTemplate = '%ModuleName%_Toolbar_ContactView';
 	this.selectedPanel = ko.observable(Enums.MobilePanel.Items);
-	this.selectedItem.subscribe(function () {
-		var bViewGroup = this.selectedItem() && this.selectedItem() instanceof CGroupModel &&
-				!this.selectedItem().isNew();
-		
-		if (this.selectedItem() && !bViewGroup)
-		{
-			this.gotoViewPane();
-		}
-		else
-		{
-			this.gotoContactList();
-		}
-	}, this);
 	
 	this.enableExport = ko.computed(function () {
 		return this.contactCount() > 0;
@@ -357,48 +342,6 @@ CContactsView.prototype.getCreateOrImportInfo = function ()
 };
 
 /**
- * 
- * @param {?} mValue
- * @param {Object} oElement
- */
-CContactsView.prototype.groupDropdownToggle = function (mValue, oElement)
-{
-	this.currentGroupDropdown(mValue);
-};
-
-CContactsView.prototype.gotoGroupList = function ()
-{
-	this.changeSelectedPanel(Enums.MobilePanel.Groups);
-};
-
-CContactsView.prototype.gotoContactList = function ()
-{
-	this.changeSelectedPanel(Enums.MobilePanel.Items);
-	return true;
-};
-
-CContactsView.prototype.gotoViewPane = function ()
-{
-	this.changeSelectedPanel(Enums.MobilePanel.View);
-};
-
-CContactsView.prototype.backToContactList = function ()
-{
-	Routing.setHash(LinksUtils.getContacts(this.selectedStorage(), this.currentGroupUUID(), this.search(), this.oPageSwitcher.currentPage()));
-};
-
-/**
- * @param {number} iPanel
- */
-CContactsView.prototype.changeSelectedPanel = function (iPanel)
-{
-	if (App.isMobile())
-	{
-		this.selectedPanel(iPanel);
-	}
-};
-
-/**
  * @param {Object} oData
  */
 CContactsView.prototype.executeSave = function (oData)
@@ -448,8 +391,6 @@ CContactsView.prototype.executeSave = function (oData)
 		}
 		else if (oData instanceof CGroupModel && !oData.readOnly())
 		{
-			this.gotoGroupList();
-			
 			var aContactUUIDs = _.map(this.selector.listCheckedOrSelected(), function (oItem) { return oItem.UUID(); });
 			Ajax.send(oData.isNew() ? 'CreateGroup' : 'UpdateGroup', {'Group': oData.toObject(aContactUUIDs)}, this.onCreateGroupResponse, this);
 		}
@@ -499,27 +440,33 @@ CContactsView.prototype.onUpdateContactResponse = function (oResponse, oRequest)
 	}
 };
 
+CContactsView.prototype.changeRouting = function (oParams)
+{
+	oParams = oParams || {};
+	var
+		sStorage = oParams.Storage === undefined ? this.selectedStorage() : oParams.Storage,
+		sGroupUUID = oParams.GroupUUID === undefined ? this.currentGroupUUID() : oParams.GroupUUID,
+		sSearch = oParams.Search === undefined ? this.search() : oParams.Search,
+		iPage = oParams.Page === undefined ? this.oPageSwitcher.currentPage() : oParams.Page,
+		sContactUUID = oParams.ContactUUID === undefined ? '' : oParams.ContactUUID,
+		sAction = oParams.Action === undefined ? '' : oParams.Action
+	;
+	Routing.setHash(LinksUtils.getContacts(sStorage, sGroupUUID, sSearch, iPage, sContactUUID, sAction));
+};
+
 CContactsView.prototype.executeNewContact = function ()
 {
 	if (this.showPersonalContacts())
 	{
-		var
-			sStorage = this.selectedStorage(),
-			sGroupUUID = (sStorage === 'group') ? this.currentGroupUUID() : ''
-		;
-		
-		Routing.setHash(LinksUtils.getContacts(sStorage, sGroupUUID, this.search(), this.oPageSwitcher.currentPage(), '', 'create-contact'));
+		var sGroupUUID = (this.selectedStorage() === 'group') ? this.currentGroupUUID() : '';
+		this.changeRouting({ GroupUUID: sGroupUUID, Action: 'create-contact' });
 	}
 };
 
 CContactsView.prototype.executeNewGroup = function ()
 {
-	var
-		sStorage = this.selectedStorage(),
-		sGroupUUID = (sStorage === 'group') ? this.currentGroupUUID() : ''
-	;
-	
-	Routing.setHash(LinksUtils.getContacts(sStorage, sGroupUUID, this.search(), this.oPageSwitcher.currentPage(), '', 'create-group'));
+	var sGroupUUID = (this.selectedStorage() === 'group') ? this.currentGroupUUID() : '';
+	this.changeRouting({GroupUUID: sGroupUUID, Action: 'create-group' });
 };
 
 CContactsView.prototype.deleteContact = function ()
@@ -646,7 +593,7 @@ CContactsView.prototype.executeRemoveFromGroup = function ()
 
 CContactsView.prototype.executeImport = function ()
 {
-	Routing.setHash(LinksUtils.getContacts('personal', '', '', 1, '', 'import'));
+	this.changeRouting({Storage: 'personal', GroupUUID: '', Search: '', Page: 1, Action: 'import'});
 };
 
 CContactsView.prototype.executeExport = function (sFormat)
@@ -693,7 +640,6 @@ CContactsView.prototype.executeCancel = function ()
 			{
 				this.selectedItem(this.selectedOldItem());
 				oData.edited(false);
-				this.gotoGroupList();
 			}
 		}
 		else if (this.oImportView.visibility())
@@ -964,7 +910,7 @@ CContactsView.prototype.editGroup = function (oData)
  */
 CContactsView.prototype.changeGroupType = function (sStorage)
 {
-	Routing.setHash(LinksUtils.getContacts(sStorage));
+	this.changeRouting({ Storage: sStorage, GroupUUID: '' });
 };
 
 /**
@@ -973,7 +919,7 @@ CContactsView.prototype.changeGroupType = function (sStorage)
 CContactsView.prototype.onViewGroupClick = function (mData)
 {
 	var sUUID = (typeof mData === 'string') ? mData : mData.UUID();
-	Routing.setHash(LinksUtils.getContacts('group', sUUID));
+	this.changeRouting({ Storage: 'group', GroupUUID: sUUID });
 };
 
 /**
@@ -1054,7 +1000,6 @@ CContactsView.prototype.onRoute = function (aParams)
 	{
 		this.selector.itemSelected(null);
 		this.selectedItem(null);
-		this.gotoContactList();
 	}
 
 	switch (oParams.Action)
@@ -1066,7 +1011,6 @@ CContactsView.prototype.onRoute = function (aParams)
 			this.selectedItem(this.oContactModel);
 			this.selector.itemSelected(null);
 			this.oImportView.visibility(false);
-			this.gotoViewPane();
 			break;
 		case 'create-group':
 			this.oGroupModel.switchToNew();
@@ -1077,13 +1021,11 @@ CContactsView.prototype.onRoute = function (aParams)
 			}
 			this.selector.itemSelected(null);
 			this.oImportView.visibility(false);
-			this.gotoViewPane();
 			break;
 		case 'import':
 			this.selectedItem(null);
 			this.oImportView.visibility(true);
 			this.selector.itemSelected(null);
-			this.gotoViewPane();
 			break;
 		default:
 			this.oImportView.visibility(false);
@@ -1282,12 +1224,10 @@ CContactsView.prototype.viewContact = function (mContact)
 	if (mContact)
 	{
 		var
-			sStorage = this.selectedStorage(),
-			sGroupUUID = (sStorage === 'group') ? this.currentGroupUUID() : '',
+			sGroupUUID = (this.selectedStorage() === 'group') ? this.currentGroupUUID() : '',
 			sContactUUID = (typeof mContact === 'string') ? mContact : mContact.UUID()
 		;
-		
-		Routing.setHash(LinksUtils.getContacts(sStorage, sGroupUUID, this.search(), this.oPageSwitcher.currentPage(), sContactUUID));
+		this.changeRouting({ GroupUUID: sGroupUUID, ContactUUID: sContactUUID });
 	}
 };
 
@@ -1725,4 +1665,4 @@ CContactsView.prototype.createNewContact = function ()
 	}
 };
 
-module.exports = new CContactsView();
+module.exports = CContactsView;
