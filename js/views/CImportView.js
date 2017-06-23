@@ -4,13 +4,9 @@ var
 	_ = require('underscore'),
 	ko = require('knockout'),
 	
-	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
-	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
-	
 	App = require('%PathToCoreWebclientModule%/js/App.js'),
 	CJua = require('%PathToCoreWebclientModule%/js/CJua.js'),
 	UserSettings = require('%PathToCoreWebclientModule%/js/Settings.js'),
-	Screens = require('%PathToCoreWebclientModule%/js/Screens.js'),
 	
 	Settings = require('modules/%ModuleName%/js/Settings.js')
 ;
