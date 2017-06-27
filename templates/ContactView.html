@@ -1,6 +1,5 @@
-<!-- ko template: { name: $root.sBeforeContactToolbarTemplate} --><!-- /ko -->
 <div class="panel_top">
-	<!-- ko template: { name: $root.sContactToolbarTemplate} --><!-- /ko -->
+	<!-- ko template: { name: '%ModuleName%_Toolbar_ContactView'} --><!-- /ko -->
 	<h2 class="contacts_heading" data-bind="visibility: '' !== displayName(), text: displayName()"></h2>
 	<span class="mailto_link" data-bind="text: email(), visible: !$root.bAllowComposeMessageToAddresses"></span>
 	<span class="mailto_link" data-bind="makeLinkComposeMailTo: getFullEmail(), 

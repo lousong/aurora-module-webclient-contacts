@@ -273,8 +273,6 @@ function CContactsView()
 	this.visibleDragNDropToGroupText = ko.computed(function () {
 		return !App.isMobile() && this.selectedStorage() === 'group';
 	}, this);
-	this.sBeforeContactToolbarTemplate = '';
-	this.sContactToolbarTemplate = '%ModuleName%_Toolbar_ContactView';
 	this.selectedPanel = ko.observable(Enums.MobilePanel.Items);
 	
 	this.enableExport = ko.computed(function () {
