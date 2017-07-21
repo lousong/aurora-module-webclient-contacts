@@ -12,6 +12,7 @@ var
 	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
 	
 	Ajax = require('%PathToCoreWebclientModule%/js/Ajax.js'),
+	Api = require('%PathToCoreWebclientModule%/js/Api.js'),
 	App = require('%PathToCoreWebclientModule%/js/App.js'),
 	
 	CDateModel = require('%PathToCoreWebclientModule%/js/models/CDateModel.js'),
@@ -673,9 +674,16 @@ CContactModel.prototype.sendThisContact = function ()
 	;
 
 	Ajax.send(Settings.SaveVcfServerModuleName, 'SaveContactAsTempFile', oParameters, function (oResponse) {
-		if (_.isFunction(ComposeMessageWithAttachments) && oResponse.Result)
+		if (oResponse.Result)
 		{
-			ComposeMessageWithAttachments([oResponse.Result]);
+			if (_.isFunction(ComposeMessageWithAttachments))
+			{
+				ComposeMessageWithAttachments([oResponse.Result]);
+			}
+		}
+		else
+		{
+			Api.showErrorByCode(oResponse, TextUtils.i18n('%MODULENAME%/ERROR_CONTACT_AS_TEMPFAILE'));
 		}
 	}, this);
 };
