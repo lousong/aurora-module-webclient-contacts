@@ -613,7 +613,7 @@ CContactsView.prototype.executeExport = function (sFormat)
 CContactsView.prototype.executeCancel = function ()
 {
 	var oData = this.selectedItem();
-
+	
 	if (oData)
 	{
 		if (oData instanceof CContactModel && !oData.readOnly())
@@ -627,6 +627,10 @@ CContactsView.prototype.executeCancel = function ()
 				oData.edited(false);
 				this.requestContact(oData.uuid());
 			}
+			else
+			{
+				this.changeRouting();
+			}
 		}
 		else if (oData instanceof CGroupModel && !oData.readOnly())
 		{
@@ -638,6 +642,10 @@ CContactsView.prototype.executeCancel = function ()
 			{
 				this.selectedItem(this.selectedOldItem());
 				oData.edited(false);
+			}
+			else
+			{
+				this.changeRouting();
 			}
 		}
 		else if (this.oImportView.visibility())
@@ -1026,6 +1034,11 @@ CContactsView.prototype.onRoute = function (aParams)
 			this.selector.itemSelected(null);
 			break;
 		default:
+			if (!oParams.ContactUUID && !oParams.GroupUUID)
+			{
+				this.selectedItem(null);
+				this.selector.itemSelected(null);
+			}
 			this.oImportView.visibility(false);
 			break;
 	}
