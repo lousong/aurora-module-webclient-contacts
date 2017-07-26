@@ -800,7 +800,10 @@ CContactsView.prototype.onBind = function ()
 	this.oImportView.onBind();
 	this.requestGroupFullList();
 
-	this.hotKeysBind();
+	if (!App.isMobile())
+	{
+		this.hotKeysBind();
+	}
 
 	this.initUploader();
 };
