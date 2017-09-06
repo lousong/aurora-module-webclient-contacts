@@ -34,7 +34,7 @@ function CVcardModel()
  */
 CVcardModel.prototype.parse = function (oData)
 {
-	if (oData && oData['@Object'] === 'Object/CApiMailVcard')
+	if (oData && oData['@Object'] === 'Object/Aurora\\Modules\\Mail\\Classes\\Vcard')
 	{
 		this.uid(Types.pString(oData.Uid));
 		this.file(Types.pString(oData.File));

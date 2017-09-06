@@ -30,7 +30,7 @@ CVcardAttachmentView.prototype.doAfterPopulatingMessage = function (oMessageProp
 	var
 		aExtend = (oMessageProps && Types.isNonEmptyArray(oMessageProps.aExtend)) ? oMessageProps.aExtend : [],
 		oFoundRawVcard = _.find(aExtend, function (oRawVcard) {
-			return oRawVcard['@Object'] === 'Object/CApiMailVcard';
+			return oRawVcard['@Object'] === 'Object/Aurora\\Modules\\Mail\\Classes\\Vcard';
 		})
 	;
 	if (oFoundRawVcard)
