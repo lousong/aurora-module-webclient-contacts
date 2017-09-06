@@ -26,10 +26,10 @@ module.exports = {
 			this.Storages.push('all');
 			this.Storages.push('group');
 			
-			this.EContactsPrimaryEmail = oAppDataSection.EContactsPrimaryEmail;
-			this.EContactsPrimaryPhone = oAppDataSection.EContactsPrimaryPhone;
-			this.EContactsPrimaryAddress = oAppDataSection.EContactsPrimaryAddress;
-			this.EContactSortField = oAppDataSection.EContactSortField;
+			this.EContactsPrimaryEmail = oAppDataSection.PrimaryEmail;
+			this.EContactsPrimaryPhone = oAppDataSection.PrimaryPhone;
+			this.EContactsPrimaryAddress = oAppDataSection.PrimaryAddress;
+			this.EContactSortField = oAppDataSection.SortField;
 			this.ImportExportFormats = oAppDataSection.ImportExportFormats;
 			
 			this.SaveVcfServerModuleName = oAppDataSection.SaveVcfServerModuleName;
