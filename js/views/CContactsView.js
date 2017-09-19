@@ -806,6 +806,8 @@ CContactsView.prototype.onBind = function ()
 	}
 
 	this.initUploader();
+	
+	this.onBindCallback();
 };
 
 CContactsView.prototype.hotKeysBind = function ()
