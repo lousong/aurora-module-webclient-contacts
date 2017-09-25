@@ -51,7 +51,7 @@ CCreateContactPopup.prototype.PopupTemplate = '%ModuleName%_CreateContactPopup';
  * @param {string} sEmail
  * @param {Function} fCallback
  */
-CCreateContactPopup.prototype.onShow = function (sName, sEmail, fCallback)
+CCreateContactPopup.prototype.onOpen = function (sName, sEmail, fCallback)
 {
 	if (this.displayName() !== sName || this.email() !== sEmail)
 	{
