@@ -15,7 +15,7 @@ var
 /**
  * @constructor
  */
-function CContactsSettingsPaneView()
+function CContactsSettingsFormView()
 {
 	CAbstractSettingsFormView.call(this, Settings.ServerModuleName);
 	
@@ -24,32 +24,32 @@ function CContactsSettingsPaneView()
 	this.contactsPerPage = ko.observable(Settings.ContactsPerPage);
 }
 
-_.extendOwn(CContactsSettingsPaneView.prototype, CAbstractSettingsFormView.prototype);
+_.extendOwn(CContactsSettingsFormView.prototype, CAbstractSettingsFormView.prototype);
 
-CContactsSettingsPaneView.prototype.ViewTemplate = '%ModuleName%_ContactsSettingsPaneView';
+CContactsSettingsFormView.prototype.ViewTemplate = '%ModuleName%_ContactsSettingsFormView';
 
-CContactsSettingsPaneView.prototype.getCurrentValues = function ()
+CContactsSettingsFormView.prototype.getCurrentValues = function ()
 {
 	return [
 		this.contactsPerPage()
 	];
 };
 
-CContactsSettingsPaneView.prototype.revertTeamValues = function ()
+CContactsSettingsFormView.prototype.revertTeamValues = function ()
 {
 	this.contactsPerPage(Settings.ContactsPerPage);
 };
 
-CContactsSettingsPaneView.prototype.getParametersForSave = function ()
+CContactsSettingsFormView.prototype.getParametersForSave = function ()
 {
 	return {
 		'ContactsPerPage': this.contactsPerPage()
 	};
 };
 
-CContactsSettingsPaneView.prototype.applySavedValues = function (oParameters)
+CContactsSettingsFormView.prototype.applySavedValues = function (oParameters)
 {
 	Settings.update(oParameters.ContactsPerPage);
 };
 
-module.exports = new CContactsSettingsPaneView();
+module.exports = new CContactsSettingsFormView();
