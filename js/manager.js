@@ -9,7 +9,6 @@ module.exports = function (oAppData) {
 		App = require('%PathToCoreWebclientModule%/js/App.js'),
 		
 		Settings = require('modules/%ModuleName%/js/Settings.js'),
-		oSettings = _.extend({}, oAppData[Settings.ServerModuleName] || {}, oAppData['%ModuleName%'] || {}),
 		
 		SuggestionsAutocomplete = require('modules/%ModuleName%/js/SuggestionsAutocomplete.js'),
 		SuggestionsMethods = {
@@ -44,7 +43,7 @@ module.exports = function (oAppData) {
 		}
 	;
 
-	Settings.init(oSettings);
+	Settings.init(oAppData);
 	
 	require('modules/%ModuleName%/js/enums.js');
 	
