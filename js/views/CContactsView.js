@@ -246,6 +246,13 @@ function CContactsView()
 	this.newGroupCommand = Utils.createCommand(this, this.executeNewGroup);
 	this.addContactsCommand = Utils.createCommand(this, function () {}, this.isEnableAddContacts);
 	this.deleteCommand = Utils.createCommand(this, this.deleteContact, this.isEnableDeleting);
+	this.selectedCount = ko.computed(function () {
+		var
+			aChecked = _.filter(this.selector.listCheckedOrSelected(), function (oItem) {
+				return !oItem.ReadOnly();
+			});
+		return aChecked.length;
+	}, this);
 	this.shareCommand = Utils.createCommand(this, this.executeShare, this.isEnableSharing);
 	this.removeFromGroupCommand = Utils.createCommand(this, this.executeRemoveFromGroup, this.isEnableRemoveContactsFromGroup);
 	this.importCommand = Utils.createCommand(this, this.executeImport);
