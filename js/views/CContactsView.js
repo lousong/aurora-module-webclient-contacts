@@ -486,7 +486,7 @@ CContactsView.prototype.deleteContact = function ()
 			}, this)
 			;
 
-		Popups.showPopup(ConfirmPopup, [sConfirmText, fDeleteContacts]);
+		Popups.showPopup(ConfirmPopup, [sConfirmText, fDeleteContacts, '', TextUtils.i18n('COREWEBCLIENT/ACTION_DELETE')]);
 	}
 	else if (sStorage === 'group')
 	{
