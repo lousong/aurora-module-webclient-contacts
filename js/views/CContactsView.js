@@ -216,9 +216,9 @@ function CContactsView()
 	});
 	
 	this.searchMessagesInInbox = ModulesManager.run('MailWebclient', 'getSearchMessagesInInbox');
-	this.bAllowSearchMessagesInInbox = $.isFunction(this.searchMessagesInInbox);
+	this.bAllowSearchMessagesInInbox = _.isFunction(this.searchMessagesInInbox);
 	this.composeMessageToAddresses = ModulesManager.run('MailWebclient', 'getComposeMessageToAddresses');
-	this.bAllowComposeMessageToAddresses = $.isFunction(this.composeMessageToAddresses);
+	this.bAllowComposeMessageToAddresses = _.isFunction(this.composeMessageToAddresses);
 	this.selector = new CSelector(this.collection, _.bind(this.viewContact, this), _.bind(this.deleteContact, this), this.bAllowComposeMessageToAddresses ? _.bind(this.composeMessageToContact, this) : null);
 	
 	this.checkAll = this.selector.koCheckAll();

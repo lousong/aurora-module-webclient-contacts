@@ -20,9 +20,9 @@ var
 	oContactCardsView = {
 		contacts: ko.observableArray([]),
 		ViewTemplate: '%ModuleName%_ContactCardsView',
-		bAllowComposeMessageToAddresses: $.isFunction(ComposeMessageToAddressesFunc),
-		searchMessagesInCurrentFolder: SearchMessagesInCurrentFolderFunc,
-		bAllowSearchMessagesInCurrentFolder: $.isFunction(SearchMessagesInCurrentFolderFunc),
+		bAllowComposeMessageToAddresses: _.isFunction(ComposeMessageToAddressesFunc),
+		searchMessagesInCurrentFolder: SearchMessagesInCurrentFolderFunc || function () {},
+		bAllowSearchMessagesInCurrentFolder: _.isFunction(SearchMessagesInCurrentFolderFunc),
 		add: function (aContacts) {
 			var aDiffContacts = _.filter(this.contacts(), function (oContact) {
 				return -1 === $.inArray(oContact.email(), _.keys(aContacts));
