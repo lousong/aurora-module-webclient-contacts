@@ -143,7 +143,7 @@ CCreateContactPopup.prototype.goToContacts = function ()
 		facebook: this.facebook()
 	});
 	this.closePopup();
-	Routing.replaceHash(LinksUtils.getContacts());
+	Routing.replaceHash(LinksUtils.getContacts('personal', '', '', 1, '', 'create-contact'));
 };
 
 module.exports = new CCreateContactPopup();

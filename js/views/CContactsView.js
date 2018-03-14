@@ -1021,9 +1021,25 @@ CContactsView.prototype.onRoute = function (aParams)
 	switch (oParams.Action)
 	{
 		case 'create-contact':
-			var oGr = this.selectedGroupInList();
+			var
+				oGr = this.selectedGroupInList(),
+				oNewContactParams = ContactsCache.getNewContactParams()
+			;
+			
 			this.oContactModel.switchToNew();
 			this.oContactModel.groups(oGr ? [oGr.UUID()] : []);
+			
+			if (oNewContactParams)
+			{
+				_.each(oNewContactParams, function (sValue, sKey) {
+					if (_.isFunction(this.oContactModel[sKey]))
+					{
+						this.oContactModel[sKey](sValue);
+					}
+				}, this);
+				this.oContactModel.extented(true);
+			}
+			
 			this.selectedItem(this.oContactModel);
 			this.selector.itemSelected(null);
 			this.oImportView.visibility(false);
@@ -1057,8 +1073,6 @@ CContactsView.prototype.onRoute = function (aParams)
 	{
 		this.requestContactList();
 	}
-
-	this.createNewContact();
 };
 
 /**
@@ -1668,22 +1682,6 @@ CContactsView.prototype.onImportComplete = function (sFileUid, bResponseReceived
 	
 	this.requestGroupFullList();
 	this.requestContactList();
-};
-
-CContactsView.prototype.createNewContact = function ()
-{
-	var oNewContactParams = ContactsCache.getNewContactParams();
-	if (oNewContactParams)
-	{
-		this.newContactCommand();
-		this.selectedItem().extented(true);
-		_.each(oNewContactParams, function (sValue, sKey) {
-			if(this.oContactModel[sKey])
-			{
-				this.oContactModel[sKey](sValue);
-			}
-		}, this);
-	}
 };
 
 module.exports = CContactsView;
