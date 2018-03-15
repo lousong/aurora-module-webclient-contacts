@@ -11,7 +11,8 @@ var
 	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
 	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
 	
-	Ajax = require('%PathToCoreWebclientModule%/js/Ajax.js'),
+	Ajax = require('modules/%ModuleName%/js/Ajax.js'),
+	
 	Api = require('%PathToCoreWebclientModule%/js/Api.js'),
 	App = require('%PathToCoreWebclientModule%/js/App.js'),
 	
@@ -668,12 +669,11 @@ CContactModel.prototype.sendThisContact = function ()
 		fComposeMessageWithAttachments = ModulesManager.run('MailWebclient', 'getComposeMessageWithAttachments'),
 		oParameters = {
 			'UUID': this.uuid(),
-			'Storage': this.team() ? 'team' : (this.sharedToAll() ? 'shared' : 'personal'),
 			'FileName': 'contact-' + this.getFullEmail().replace('"', '').replace('<', '').replace('>', '') + '.vcf'
 		}
 	;
 
-	Ajax.send(Settings.SaveVcfServerModuleName, 'SaveContactAsTempFile', oParameters, function (oResponse) {
+	Ajax.send('SaveContactAsTempFile', oParameters, function (oResponse) {
 		if (oResponse.Result)
 		{
 			if (_.isFunction(fComposeMessageWithAttachments))
