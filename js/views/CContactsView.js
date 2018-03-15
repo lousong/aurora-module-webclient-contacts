@@ -1147,8 +1147,8 @@ CContactsView.prototype.mailGroup = function (oGroup)
 	{
 		Ajax.send('GetContacts', {
 			'Offset': 0,
-			'Limit': 99,
-			'SortField': Enums.ContactSortField.Email,
+			'Limit': 200,
+			'SortField': Enums.ContactSortField.Name,
 			'GroupUUID': oGroup.uuid()
 		}, function (oResponse) {
 			var
