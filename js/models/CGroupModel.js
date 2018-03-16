@@ -2,7 +2,8 @@
 
 var
 	ko = require('knockout'),
-			
+	
+	AddressUtils = require('%PathToCoreWebclientModule%/js/utils/Address.js'),
 	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
 	App = require('%PathToCoreWebclientModule%/js/App.js')
 ;
@@ -50,8 +51,12 @@ function CGroupModel()
 	}, this);
 	
 	this.events = ko.observableArray([]);
-
 }
+
+CGroupModel.prototype.getFullEmail = function ()
+{
+	return AddressUtils.getFullEmail(this.name(), this.email());
+};
 
 CGroupModel.prototype.clear = function ()
 {

@@ -25,7 +25,11 @@
 						<span class="label">
 							<span data-bind="i18n: {'key': 'COREWEBCLIENT/LABEL_EMAIL'}"></span>:
 						</span>
-						<span class="value" data-bind="text: email"></span>
+						<span class="mailto_link" data-bind="text: email(), visible: !$root.bAllowComposeMessageToAddresses"></span>
+						<span class="mailto_link" data-bind="makeLinkComposeMailTo: getFullEmail(), 
+								customTooltip: $root.bAllowComposeMessageToAddresses ? '%MODULENAME%/ACTION_EMAIL_TO_CONTACT' : '',
+								text: email(), visible: $root.bAllowComposeMessageToAddresses">
+						</span>
 					</div>
 					<div class="row" data-bind="visible: '' !== company()">
 						<span class="label">
