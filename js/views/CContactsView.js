@@ -1156,7 +1156,7 @@ CContactsView.prototype.mailGroup = function (oGroup)
 				aEmails = Types.isNonEmptyArray(aList) ? _.compact(_.map(aList, function (oRawContactItem) {
 					var oContactItem = new CContactListItemModel();
 					oContactItem.parse(oRawContactItem);
-					return oContactItem.getFullEmail();
+					return oContactItem.Email() !== '' ? oContactItem.getFullEmail() : '';
 				})) : [],
 				sEmails = aEmails.join(', ')
 			;
@@ -1283,7 +1283,7 @@ CContactsView.prototype.composeMessage = function () {
 	var
 		aList = this.selector.listCheckedOrSelected(),
 		aEmails = Types.isNonEmptyArray(aList) ? _.compact(_.map(aList, function (oItem) {
-			return oItem.getFullEmail();
+			return oItem.Email() !== '' ? oItem.getFullEmail() : '';
 		})) : [],
 		sEmails = aEmails.join(', ')
 	;
