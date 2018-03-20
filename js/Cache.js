@@ -68,6 +68,7 @@ CContactsCache.prototype.getContactsByEmails = function (aEmails, fResponseHandl
 		this.aRequestedEmails = _.union(this.aRequestedEmails, aEmailsForRequest);
 		
 		Ajax.send('GetContactsByEmails', {
+			'Storage': 'all',
 			'Emails': aEmailsForRequest,
 			'HandlerId': sHandlerId
 		}, this.onGetContactsByEmailsResponse, this);
