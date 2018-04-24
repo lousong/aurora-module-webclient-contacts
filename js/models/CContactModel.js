@@ -34,6 +34,7 @@ function CContactModel()
 	this.idUser = ko.observable('');
 	this.team = ko.observable(false);
 	this.itsMe = ko.observable(false);
+	this.storage = ko.observable('personal');
 
 	this.isNew = ko.observable(false);
 	this.readOnly = ko.observable(false);
@@ -444,6 +445,7 @@ CContactModel.prototype.clear = function ()
 	this.uuid('');
 	this.idUser('');
 	this.team(false);
+	this.storage('');
 	this.itsMe(false);
 
 	this.edited(false);
@@ -535,7 +537,7 @@ CContactModel.prototype.toObject = function ()
 		'LastName': this.lastName(),
 		'NickName': this.nickName(),
 
-		'Storage': !!this.team() ? 'team' : 'personal',
+		'Storage': this.storage(),
 		'ItsMe': !!this.itsMe(),
 
 		'Skype': this.skype(),
@@ -588,6 +590,7 @@ CContactModel.prototype.parse = function (oData)
 	this.idUser(Types.pString(oData.IdUser));
 
 	this.team(oData.Storage === 'team');
+	this.storage(Types.pString(oData.Storage));
 	this.itsMe(!!oData.ItsMe);
 	this.readOnly(!!oData.ReadOnly);
 

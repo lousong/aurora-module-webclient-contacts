@@ -374,6 +374,7 @@ CContactsView.prototype.executeSave = function (oData)
 				ContactsCache.clearInfoAboutEmail(this.selectedItem().email());
 			}
 			
+			oData.storage(this.selectedStorage());
 			oContact = oData.toObject();
 			
 			if (this.selectedStorage() !== 'personal' && oContact.Storage === 'personal')
