@@ -355,7 +355,7 @@ CContactsView.prototype.executeSave = function (oData)
 		oContact = {},
 		aList = []
 	;
-	
+
 	if (oData === this.selectedItem() && this.selectedItem().canBeSave())
 	{
 		if (oData instanceof CContactModel && !oData.readOnly())
@@ -373,10 +373,9 @@ CContactsView.prototype.executeSave = function (oData)
 			{
 				ContactsCache.clearInfoAboutEmail(this.selectedItem().email());
 			}
-			
-			oData.storage(this.selectedStorage());
+
 			oContact = oData.toObject();
-			
+
 			if (this.selectedStorage() !== 'personal' && oContact.Storage === 'personal')
 			{
 				this.recivedAnimPersonal(true);
@@ -388,10 +387,7 @@ CContactsView.prototype.executeSave = function (oData)
 			
 			if (oData.isNew())
 			{
-				if (oContact.Storage === 'all')
-				{
-					oContact.Storage = 'personal';
-				}
+				oContact.Storage = 'personal';
 				Ajax.send('CreateContact', { Contact: oContact }, this.onCreateContactResponse, this);
 			}
 			else
