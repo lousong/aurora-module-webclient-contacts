@@ -1,6 +1,6 @@
 <div class="toolbar">
 	<span class="content">
-		<span class="item checkstate command" data-bind="click: requestContactList, checkstate: {'activeClass': 'process', 'state': preLoadingList(), 'duration': 800}">
+		<span class="item checkstate command" data-bind="click: refreshContactsAndGroups, checkstate: {'activeClass': 'process', 'state': preLoadingList(), 'duration': 800}">
 			<span class="icon"></span>
 		</span>
 		<span class="item new_group" data-bind="visible: showPersonalContacts() && isNotTeamStorageSelected() && selectedStorage() !== 'shared',

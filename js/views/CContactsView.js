@@ -872,6 +872,12 @@ CContactsView.prototype.hotKeysBind = function ()
 	}, this));
 };
 
+CContactsView.prototype.refreshContactsAndGroups = function ()
+{
+	this.requestContactList();
+	this.requestGroupFullList();
+};
+
 CContactsView.prototype.requestContactList = function ()
 {
 	var
