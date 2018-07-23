@@ -446,7 +446,7 @@ CContactsView.prototype.onUpdateContactResponse = function (oResponse, oRequest)
 	}
 };
 
-CContactsView.prototype.changeRouting = function (oParams)
+CContactsView.prototype.changeRouting = function (oParams, bReplace)
 {
 	oParams = oParams || {};
 	var
@@ -457,7 +457,15 @@ CContactsView.prototype.changeRouting = function (oParams)
 		sContactUUID = oParams.ContactUUID === undefined ? '' : oParams.ContactUUID,
 		sAction = oParams.Action === undefined ? '' : oParams.Action
 	;
-	Routing.setHash(LinksUtils.getContacts(sStorage, sGroupUUID, sSearch, iPage, sContactUUID, sAction));
+	
+	if (bReplace)
+	{
+		Routing.replaceHash(LinksUtils.getContacts(sStorage, sGroupUUID, sSearch, iPage, sContactUUID, sAction));
+	}
+	else
+	{
+		Routing.setHash(LinksUtils.getContacts(sStorage, sGroupUUID, sSearch, iPage, sContactUUID, sAction));
+	}
 };
 
 CContactsView.prototype.executeNewContact = function ()
@@ -1375,6 +1383,10 @@ CContactsView.prototype.onGetContactsResponse = function (oResponse, oRequest)
 		{
 			this.selector.itemSelected(oNewSelected);
 			this.requestContact(oNewSelected.UUID());
+		}
+		else
+		{
+			this.changeRouting({}, true);
 		}
 
 		this.selectedGroupEmails(this.selectedGroup() ? _.uniq(_.flatten(_.map(this.collection(), function (oContactItem) {
