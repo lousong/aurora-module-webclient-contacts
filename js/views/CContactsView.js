@@ -480,6 +480,10 @@ CContactsView.prototype.executeNewContact = function ()
 CContactsView.prototype.executeNewGroup = function ()
 {
 	var sGroupUUID = (this.selectedStorage() === 'group') ? this.currentGroupUUID() : '';
+	if (this.selector.itemSelected() instanceof CContactListItemModel)
+	{
+		this.selector.itemSelected().checked(true);
+	}
 	this.changeRouting({GroupUUID: sGroupUUID, Action: 'create-group' });
 };
 
@@ -1062,10 +1066,6 @@ CContactsView.prototype.onRoute = function (aParams)
 		case 'create-group':
 			this.oGroupModel.switchToNew();
 			this.selectedItem(this.oGroupModel);
-			if (this.selector.itemSelected() instanceof CContactListItemModel)
-			{
-				this.selector.itemSelected().checked(true);
-			}
 			this.selector.itemSelected(null);
 			this.oImportView.visibility(false);
 			break;
