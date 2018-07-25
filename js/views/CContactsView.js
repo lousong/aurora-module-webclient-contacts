@@ -1390,7 +1390,7 @@ CContactsView.prototype.onGetContactsResponse = function (oResponse, oRequest)
 			this.selector.itemSelected(oNewSelected);
 			this.requestContact(oNewSelected.UUID());
 		}
-		else
+		else if (oSelected)
 		{
 			this.changeRouting({}, true);
 		}
