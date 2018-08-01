@@ -314,6 +314,8 @@ function CContactsView()
 		];
 	}, this);
 	
+	this.bRefreshContactList = false;
+	
 	App.broadcastEvent('%ModuleName%::ConstructView::after', {'Name': this.ViewConstructorName, 'View': this});
 }
 
@@ -771,6 +773,8 @@ CContactsView.prototype.onShow = function ()
 	{
 		this.oJua.setDragAndDropEnabledStatus(true);
 	}
+	
+	this.bRefreshContactList = true;
 };
 
 CContactsView.prototype.onHide = function ()
@@ -966,8 +970,10 @@ CContactsView.prototype.onRoute = function (aParams)
 		oParams = LinksUtils.parseContacts(aParams),
 		bGroupOrSearchChanged = this.selectedStorage() !== oParams.Storage || this.currentGroupUUID() !== oParams.GroupUUID || this.search() !== oParams.Search,
 		bGroupFound = true,
-		bRequestContacts = false
+		bRequestContacts = this.bRefreshContactList
 	;
+	
+	this.bRefreshContactList = false;
 	
 	this.pageSwitcherLocked(true);
 	if (this.oPageSwitcher.perPage() !== Settings.ContactsPerPage)
