@@ -1167,6 +1167,7 @@ CContactsView.prototype.mailGroup = function (oGroup)
 	if (this.bAllowComposeMessageToAddresses && oGroup)
 	{
 		Ajax.send('GetContacts', {
+			'Storage': 'all',
 			'Offset': 0,
 			'Limit': 200,
 			'SortField': Enums.ContactSortField.Name,
