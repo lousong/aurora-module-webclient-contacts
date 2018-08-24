@@ -389,7 +389,7 @@ CContactsView.prototype.executeSave = function (oData)
 			
 			if (oData.isNew())
 			{
-				oContact.Storage = 'personal';
+				oContact.Storage = this.selectedStorage();
 				Ajax.send('CreateContact', { Contact: oContact }, this.onCreateContactResponse, this);
 			}
 			else
