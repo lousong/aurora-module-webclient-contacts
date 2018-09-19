@@ -389,7 +389,16 @@ CContactsView.prototype.executeSave = function (oData)
 			
 			if (oData.isNew())
 			{
-				oContact.Storage = this.selectedStorage();
+				if (this.selectedStorage() === 'all' || this.selectedStorage() === 'group')
+				{
+					// there are no real storages with name 'all' or 'group' on server side
+					oContact.Storage = 'personal';
+				}
+				else
+				{
+					// server subscribers need to know if contact should be in 'personal' or 'shared' storage
+					oContact.Storage = this.selectedStorage(); 
+				}
 				Ajax.send('CreateContact', { Contact: oContact }, this.onCreateContactResponse, this);
 			}
 			else
