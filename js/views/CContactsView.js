@@ -1005,7 +1005,7 @@ CContactsView.prototype.onRoute = function (aParams)
 		this.selectedStorage(oParams.Storage);
 		bRequestContacts = true;
 	}
-	else if (oParams.Storage === 'group' && (this.currentGroupUUID() !== oParams.GroupUUID || oParams.ContactUUID === ''))
+	else if (oParams.Storage === 'group' && oParams.Action !== 'create-group' && (this.currentGroupUUID() !== oParams.GroupUUID || oParams.ContactUUID === ''))
 	{
 		bGroupFound = this.viewGroup(oParams.GroupUUID);
 		if (bGroupFound)
