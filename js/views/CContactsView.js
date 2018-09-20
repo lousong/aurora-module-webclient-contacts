@@ -242,6 +242,8 @@ function CContactsView()
 		return 1 === this.selector.listCheckedOrSelected().length;
 	}, this);
 	
+	this.isSaving = ko.observable(false);
+	
 	this.newContactCommand = Utils.createCommand(this, this.executeNewContact, this.isNotTeamStorageSelected);
 	this.newGroupCommand = Utils.createCommand(this, this.executeNewGroup);
 	this.addContactsCommand = Utils.createCommand(this, function () {}, this.isEnableAddContacts);
@@ -399,16 +401,19 @@ CContactsView.prototype.executeSave = function (oData)
 					// server subscribers need to know if contact should be in 'personal' or 'shared' storage
 					oContact.Storage = this.selectedStorage(); 
 				}
+				this.isSaving(true);
 				Ajax.send('CreateContact', { Contact: oContact }, this.onCreateContactResponse, this);
 			}
 			else
 			{
+				this.isSaving(true);
 				Ajax.send('UpdateContact', { Contact: oContact }, this.onUpdateContactResponse, this);
 			}
 		}
 		else if (oData instanceof CGroupModel && !oData.readOnly())
 		{
 			var aContactUUIDs = _.map(this.selector.listCheckedOrSelected(), function (oItem) { return oItem.UUID(); });
+			this.isSaving(true);
 			Ajax.send(oData.isNew() ? 'CreateGroup' : 'UpdateGroup', {'Group': oData.toObject(aContactUUIDs)}, this.onCreateGroupResponse, this);
 		}
 	}
@@ -424,6 +429,7 @@ CContactsView.prototype.executeSave = function (oData)
  */
 CContactsView.prototype.onCreateContactResponse = function (oResponse, oRequest)
 {
+	this.isSaving(false);
 	if (oResponse.Result)
 	{
 		this.requestContactList();
@@ -442,6 +448,7 @@ CContactsView.prototype.onCreateContactResponse = function (oResponse, oRequest)
  */
 CContactsView.prototype.onUpdateContactResponse = function (oResponse, oRequest)
 {
+	this.isSaving(false);
 	if (oResponse.Result)
 	{
 		if (this.selectedContact() && this.selectedContact().edited())
@@ -1103,6 +1110,8 @@ CContactsView.prototype.onRoute = function (aParams)
 	{
 		this.requestContactList();
 	}
+	
+	this.isSaving(false);
 };
 
 /**
@@ -1487,6 +1496,7 @@ CContactsView.prototype.onGetGroupsResponse = function (oResponse, oRequest)
  */
 CContactsView.prototype.onCreateGroupResponse = function (oResponse, oRequest)
 {
+	this.isSaving(false);
 	if (oResponse.Result)
 	{
 		if (typeof oResponse.Result === 'string' && oResponse.Result !== '')
