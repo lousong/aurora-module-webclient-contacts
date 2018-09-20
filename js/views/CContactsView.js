@@ -644,7 +644,7 @@ CContactsView.prototype.executeExport = function (sFormat)
 		'ContactUUIDs': aContactUUIDs
 	}, function (oResponse) {
 		var oBlob = new Blob([oResponse.ResponseText], {'type': 'text/plain;charset=utf-8'});
-		FileSaver.saveAs(oBlob, 'export.' + sFormat);
+		FileSaver.saveAs(oBlob, 'export.' + sFormat, true);
 	}, this, { Format: 'Raw' });
 };
 
