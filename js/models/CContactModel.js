@@ -538,7 +538,6 @@ CContactModel.prototype.toObject = function ()
 		'NickName': this.nickName(),
 
 		'Storage': this.storage(),
-		'ItsMe': !!this.itsMe(),
 
 		'Skype': this.skype(),
 		'Facebook': this.facebook(),
