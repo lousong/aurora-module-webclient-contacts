@@ -1675,7 +1675,7 @@ CContactsView.prototype.onImportSelect = function (sFileUid, oFileData)
 	if (bAllowImport)
 	{
 		_.each(Settings.ImportExportFormats, function (sFormat) {
-			if (sFormat === oFileData.FileName.substr(oFileData.FileName.length - sFormat.length))
+			if (sFormat.toLowerCase() === oFileData.FileName.substr(oFileData.FileName.length - sFormat.length).toLowerCase())
 			{
 				bAllowFormat = true;
 			}
