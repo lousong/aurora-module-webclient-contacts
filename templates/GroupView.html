@@ -4,7 +4,7 @@
 				click: function() { $root.deleteGroup(uuid()); }"></span>
 		<span class="button clear_button" data-bind="i18n: {'key': '%MODULENAME%/ACTION_EDIT_GROUP'}, click: function (oItem) { $root.editGroup(oItem); }"></span>
 		<span class="button" data-bind="visible: $root.bAllowComposeMessageToAddresses, i18n: {'key': '%MODULENAME%/ACTION_EMAIL_TO_GROUP'}, 
-				click: function() { $root.mailGroup($data); }"></span>
+				click: function() { $root.mailGroup($data); }, css: {'disabled': $root.isEmptyList}"></span>
 	</div>
 	<h2 class="contacts_heading" data-bind="i18n: {'key': '%MODULENAME%/HEADING_VIEW_GROUP'}, visible: !isNew()"></h2>
 </div>
