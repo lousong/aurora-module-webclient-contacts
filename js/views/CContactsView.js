@@ -634,12 +634,19 @@ CContactsView.prototype.executeImport = function ()
 
 CContactsView.prototype.executeExport = function (sFormat)
 {
-	var aContactUUIDs = _.map(this.selector.listCheckedOrSelected(), function (oContact) {
-		return oContact.sUUID;
-	});
+	var
+		aContactUUIDs = _.map(this.selector.listCheckedOrSelected(), function (oContact) {
+			return oContact.sUUID;
+		}),
+		sStorage = this.selectedStorage()
+	;
+	if (sStorage === 'group')
+	{
+		sStorage = 'all';
+	}
 	Ajax.send('Export', {
 		'Format': sFormat,
-		'Storage': this.selectedStorage(),
+		'Storage': sStorage,
 		'GroupUUID': this.currentGroupUUID(),
 		'ContactUUIDs': aContactUUIDs
 	}, function (oResponse) {
