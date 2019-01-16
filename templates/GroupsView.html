@@ -17,7 +17,7 @@
 					click: $parent.gotoContactList">
 				<a href="javascript: void(0);" class="title" id="selenium_contacts_personal_button" data-bind="
 						css: {'recivedAnim': recivedAnimPersonal()},
-						droppable: {valueFunc: showSharedToAllContacts () ? function (oEvent, oUi) { $root.contactsDropToGroupType(0, oEvent, oUi); } : false, switchObserv: allowDropToPersonal},
+						droppable: {valueFunc: function (oEvent, oUi) { $root.contactsDropToGroupType('personal', oEvent, oUi); }, switchObserv: disableDropToPersonal},
 						click: function () { changeGroupType('personal'); }">
 					<span class="name fadeout">
 						<span class="icon type1"></span>
@@ -31,7 +31,7 @@
 					click: $parent.gotoContactList">
 				<a href="javascript: void(0);" class="title" data-bind="
 						css: {'recivedAnim': recivedAnimShared()},
-						droppable: {valueFunc: function (oEvent, oUi) { $root.contactsDropToGroupType(3, oEvent, oUi); }, switchObserv: isNotTeamStorageSelected},
+						droppable: {valueFunc: function (oEvent, oUi) { $root.contactsDropToGroupType('shared', oEvent, oUi); }, switchObserv: isTeamStorageSelected},
 						click: function () { changeGroupType('shared'); }">
 					<span class="name fadeout">
 						<span class="icon type3"></span>

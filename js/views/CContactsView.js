@@ -81,26 +81,26 @@ function CContactsView()
 	
 	this.isTeamStorageSelected = ko.observable(false);
 	this.isNotTeamStorageSelected = ko.observable(false);
-	this.allowDropToPersonal = ko.observable(false);
-	this.hiddenSelectedStorage = ko.observable('');
+	this.disableDropToPersonal = ko.observable(false);
+	this.selectedStorageValue = ko.observable('');
 	this.selectedStorage = ko.computed({
 		'read': function () {
-			return this.hiddenSelectedStorage();
+			return this.selectedStorageValue();
 		},
 		'write': function (sValue) {
 			if (sValue !== '')
 			{
-				this.hiddenSelectedStorage(($.inArray(sValue, Settings.Storages) !== -1) ? sValue : Settings.DefaultStorage);
-				if (this.hiddenSelectedStorage() !== 'group')
+				this.selectedStorageValue(($.inArray(sValue, Settings.Storages) !== -1) ? sValue : Settings.DefaultStorage);
+				if (this.selectedStorageValue() !== 'group')
 				{
 					this.selectedGroupInList(null);
 					this.selectedItem(null);
 					this.selector.listCheckedOrSelected(false);
 					this.currentGroupUUID('');
 				}
-				this.isTeamStorageSelected(this.hiddenSelectedStorage() === 'team');
-				this.isNotTeamStorageSelected(this.hiddenSelectedStorage() !== 'team');
-				this.allowDropToPersonal(this.hiddenSelectedStorage() === 'group' || this.isTeamStorageSelected() || this.hiddenSelectedStorage() === 'all');
+				this.isTeamStorageSelected(this.selectedStorageValue() === 'team');
+				this.isNotTeamStorageSelected(this.selectedStorageValue() !== 'team');
+				this.disableDropToPersonal(this.selectedStorageValue() !== 'shared');
 			}
 		},
 		'owner': this
@@ -1240,8 +1240,8 @@ CContactsView.prototype.dragAndDropHelper = function (oContact)
 		oSelected.checked(true);
 	}
 
-	oHelper.data('p7-contatcs-type', this.selectedStorage());
-	oHelper.data('p7-contatcs-uids', aUids);
+	oHelper.data('drag-contatcs-storage', this.selectedStorage());
+	oHelper.data('drag-contatcs-uids', aUids);
 	
 	$('.count-text', oHelper).text(TextUtils.i18n('%MODULENAME%/LABEL_DRAG_CONTACTS_PLURAL', {
 		'COUNT': nCount
@@ -1261,7 +1261,7 @@ CContactsView.prototype.contactsDrop = function (oToGroup, oEvent, oUi)
 	{
 		var
 			oHelper = oUi && oUi.helper ? oUi.helper : null,
-			aUids = oHelper ? oHelper.data('p7-contatcs-uids') : null
+			aUids = oHelper ? oHelper.data('drag-contatcs-uids') : null
 		;
 
 		if (null !== aUids)
@@ -1272,21 +1272,18 @@ CContactsView.prototype.contactsDrop = function (oToGroup, oEvent, oUi)
 	}
 };
 
-CContactsView.prototype.contactsDropToGroupType = function (iGroupType, oEvent, oUi)
+CContactsView.prototype.contactsDropToGroupType = function (sDropStorage, oEvent, oUi)
 {
 	var
-		oHelper = oUi && oUi.helper ? oUi.helper : null,
-		iType = oHelper ? oHelper.data('p7-contatcs-type') : null,
-		aUids = oHelper ? oHelper.data('p7-contatcs-uids') : null
+		oHelper = oUi && oUi.helper,
+		sDragStorage = oHelper && oHelper.data('drag-contatcs-storage') || null,
+		aUids = oHelper && oHelper.data('drag-contatcs-uids') || null
 	;
-
-	if (iGroupType !== iType)
+	
+	if (null !== aUids && null !== sDragStorage && sDropStorage !== sDragStorage)
 	{
-		if (null !== iType && null !== aUids)
-		{
-			Utils.uiDropHelperAnim(oEvent, oUi);
-			this.executeShare();
-		}
+		Utils.uiDropHelperAnim(oEvent, oUi);
+		this.executeShare();
 	}
 };
 
@@ -1529,43 +1526,46 @@ CContactsView.prototype.onCreateGroupResponse = function (oResponse, oRequest)
 CContactsView.prototype.executeShare = function ()
 {
 	var
-		self = this,
-		aChecked = this.selector.listCheckedOrSelected(),
-		oMainContact = this.selectedContact(),
-		aContactUUIDs = _.map(aChecked, function (oItem) {
-			return oItem.ReadOnly() ? '' : oItem.UUID();
+		bSelectedStorageAll = this.selectedStorage() === 'all',
+		aChecked = _.filter(this.selector.listCheckedOrSelected(), function (oItem) {
+			return oItem.sStorage !== 'team';
+		}),
+		aCheckedUUIDs = _.map(aChecked, function (oItem) {
+			return oItem.UUID();
 		})
 	;
-
-	aContactUUIDs = _.compact(aContactUUIDs);
-
-	if (0 < aContactUUIDs.length)
+	
+	aCheckedUUIDs = _.compact(aCheckedUUIDs);
+	
+	if (0 < aCheckedUUIDs.length)
 	{
 		_.each(aChecked, function (oContact) {
 			if (oContact)
 			{
 				ContactsCache.clearInfoAboutEmail(oContact.Email());
-
-				if (oMainContact && !oContact.IsGroup() && !oContact.ReadOnly() && !oMainContact.readOnly() && oMainContact.uuid() === oContact.UUID())
-				{
-					oMainContact = null;
-					this.selectedContact(null);
-				}
 			}
 		}, this);
-
-		_.each(this.collection(), function (oContact) {
-			if (-1 < $.inArray(oContact, aChecked))
+		
+		if (!bSelectedStorageAll)
+		{
+			if (-1 < $.inArray(this.selectedContact(), aChecked))
 			{
-				oContact.deleted(true);
+				this.selectedContact(null);
 			}
-		});
-
-		_.delay(function () {
-			self.collection.remove(function (oItem) {
-				return oItem.deleted();
+				
+			_.each(this.collection(), function (oContact) {
+				if (-1 < $.inArray(oContact, aChecked))
+				{
+					oContact.deleted(true);
+				}
 			});
-		}, 500);
+
+			_.delay(function () {
+				this.collection.remove(function (oItem) {
+					return oItem.deleted();
+				});
+			}.bind(this), 500);
+		}
 
 		if ('shared' === this.selectedStorage())
 		{
@@ -1576,7 +1576,13 @@ CContactsView.prototype.executeShare = function ()
 			this.recivedAnimShared(true);
 		}
 	
-		Ajax.send('UpdateSharedContacts', { 'UUIDs': aContactUUIDs });
+		Ajax.send('UpdateSharedContacts', { 'UUIDs': aCheckedUUIDs }, function () {
+			if (bSelectedStorageAll)
+			{
+				this.selector.listCheckedOrSelected(false);
+				this.requestContactList();
+			}
+		}, this);
 	}
 };
 
