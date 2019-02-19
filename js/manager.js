@@ -13,11 +13,14 @@ module.exports = function (oAppData) {
 		
 		SuggestionsAutocomplete = require('modules/%ModuleName%/js/SuggestionsAutocomplete.js'),
 		SuggestionsMethods = {
-			getSuggestionsAutocompleteCallback: function () {
+			getSuggestionsWithExceptionAutocompleteCallback: function () {
 				return SuggestionsAutocomplete.callback;
 			},
-			getSuggestionsAutocompleteComposeCallback: function () {
-				return SuggestionsAutocomplete.composeCallback;
+			getAllSuggestionsAutocompleteCallback: function () {
+				return SuggestionsAutocomplete.allCallback;
+			},
+			getTeamSuggestionsAutocompleteCallback: function () {
+				return SuggestionsAutocomplete.teamCallback;
 			},
 			getSuggestionsAutocompletePhoneCallback: function () {
 				return SuggestionsAutocomplete.phoneCallback;

@@ -56,11 +56,22 @@ function Callback(oRequest, fResponse, sExceptEmail, bTeamOnly)
 	});
 }
 
+function AllCallback(oRequest, fResponse)
+{
+	StorageCallback('all', oRequest, fResponse);
+}
+
+function TeamCallback(oRequest, fResponse)
+{
+	StorageCallback('team', oRequest, fResponse);
+}
+
 /**
+ * @param {string} sStorage
  * @param {object} oRequest
  * @param {function} fResponse
  */
-function ComposeCallback(oRequest, fResponse)
+function StorageCallback(sStorage, oRequest, fResponse)
 {
 	var
 		sTerm = oRequest.term,
@@ -68,7 +79,7 @@ function ComposeCallback(oRequest, fResponse)
 			'Search': sTerm,
 			'SortField': Enums.ContactSortField.Frequency,
 			'SortOrder': 1,
-			'Storage': 'all'
+			'Storage': sStorage
 		}
 	;
 
@@ -205,7 +216,8 @@ function RequestUserByPhone(sNumber, fCallBack, oContext)
 
 module.exports = {
 	callback: Callback,
-	composeCallback: ComposeCallback,
+	allCallback: AllCallback,
+	teamCallback: TeamCallback,
 	phoneCallback: PhoneCallback,
 	deleteHandler: DeleteHandler,
 	requestUserByPhone: RequestUserByPhone
