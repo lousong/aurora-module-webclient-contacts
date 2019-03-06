@@ -27,11 +27,6 @@
 		}
 	}
 	
-	//.middle_bar {
-/*		.resize-compensation-top(39px);
-		.resize-compensation-bottom(47px);*/
-	//}
-	
 	.item {
 		.me {
 			background: #f1f1f1;
@@ -42,7 +37,7 @@
 		}
 		
 		&.selected .me {
-			color: #519ce2;
+			color: @theme-contacts-panel-item-selected-me-color;
 		}
 		
 		.data {
@@ -82,7 +77,7 @@
 			}
 			
 			.email {
-				color: #519ce2;
+				color: @theme-contacts-panel-item-data-email-color;
 			}
 		}
 		
@@ -167,7 +162,7 @@
 	}
 	
 	.mailto_link {
-		color: #3983c8;
+		color: @theme-contact-viewer-mailto-link-color;
 		font-size: 10.5pt;
 		font-weight: bold;
 		text-decoration: none;
