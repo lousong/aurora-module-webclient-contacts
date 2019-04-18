@@ -13,9 +13,9 @@ module.exports = function (oAppData) {
 		
 		SuggestionsAutocomplete = require('modules/%ModuleName%/js/SuggestionsAutocomplete.js'),
 		SuggestionsMethods = {
-			getSuggestionsAutocompleteCallback: function (sStorage, sExceptEmail) {
+			getSuggestionsAutocompleteCallback: function (sStorage, sExceptEmail, bWithGroups) {
 				return function (oRequest, fResponse) {
-					SuggestionsAutocomplete.callback(oRequest, fResponse, sExceptEmail, sStorage);
+					SuggestionsAutocomplete.callback(oRequest, fResponse, sExceptEmail, sStorage, bWithGroups);
 				};
 			},
 			getSuggestionsAutocompletePhoneCallback: function () {
