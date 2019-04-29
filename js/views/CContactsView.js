@@ -433,7 +433,7 @@ CContactsView.prototype.onCreateContactResponse = function (oResponse, oRequest)
 	if (oResponse.Result)
 	{
 		this.requestContactList();
-		this.viewContact(oResponse.Result);
+		this.viewContact(oResponse.Result.UUID);
 		Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_CONTACT_SUCCESSFULLY_ADDED'));
 	}
 	else
@@ -572,7 +572,7 @@ CContactsView.prototype.deleteContacts = function (aChecked)
 			});
 		}, 500);
 
-		Ajax.send('DeleteContacts', { 'UUIDs': aContactUUIDs }, function (oResponse) {
+		Ajax.send('DeleteContacts', { 'Storage': this.selectedStorage(), 'UUIDs': aContactUUIDs }, function (oResponse) {
 			if (!oResponse.Result)
 			{
 				Api.showErrorByCode(oResponse, TextUtils.i18n('%MODULENAME%/ERROR_DELETE_CONTACTS'));
