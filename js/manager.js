@@ -52,7 +52,7 @@ module.exports = function (oAppData) {
 	
 	require('modules/%ModuleName%/js/enums.js');
 	
-	if (App.getUserRole() === Enums.UserRole.NormalUser)
+	if (App.isUserNormalOrTenant())
 	{
 		if (App.isMobile())
 		{
