@@ -1466,6 +1466,7 @@ CContactsView.prototype.onGetGroupsResponse = function (oResponse, oRequest)
 
 		this.groupFullCollection(aList);
 		
+		this.selectedGroupInList(null);
 		for (iLen = oResult.length; iIndex < iLen; iIndex++)
 		{
 			if (oResult[iIndex])
@@ -1484,6 +1485,10 @@ CContactsView.prototype.onGetGroupsResponse = function (oResponse, oRequest)
 					aList.push(oObject);
 				}
 			}
+		}
+		if (this.selectedGroupInList() === null)
+		{
+			Routing.replaceHash(LinksUtils.getContacts());
 		}
 		
 		this.groupFullCollection(aList);
