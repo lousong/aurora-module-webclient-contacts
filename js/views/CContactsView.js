@@ -357,7 +357,8 @@ CContactsView.prototype.executeSave = function (oData)
 {
 	var
 		oContact = {},
-		aList = []
+		aList = [],
+		oGroup
 	;
 
 	if (oData === this.selectedItem() && this.selectedItem().canBeSave())
@@ -414,7 +415,13 @@ CContactsView.prototype.executeSave = function (oData)
 		{
 			var aContactUUIDs = _.map(this.selector.listCheckedOrSelected(), function (oItem) { return oItem.UUID(); });
 			this.isSaving(true);
-			Ajax.send(oData.isNew() ? 'CreateGroup' : 'UpdateGroup', {'Group': oData.toObject(aContactUUIDs)}, this.onCreateGroupResponse, this);
+
+			oGroup =  oData.toObject(aContactUUIDs);
+			if (!oData.isNew())
+			{
+				oGroup.Contacts = null;
+			}
+			Ajax.send(oData.isNew() ? 'CreateGroup' : 'UpdateGroup', {'Group': oGroup}, this.onCreateGroupResponse, this);
 		}
 	}
 	else
