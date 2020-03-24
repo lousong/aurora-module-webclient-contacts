@@ -1158,7 +1158,7 @@ CContactsView.prototype.viewGroup = function (sGroupUUID)
 		this.selector.itemSelected(null);
 		this.selector.listCheckedOrSelected(false);
 		
-//		Ajax.send('GetGroupEvents', { 'UUID': sGroupUUID }, this.onGetGroupEventsResponse, this);
+		Ajax.send('GetGroupEvents', { 'UUID': sGroupUUID }, this.onGetGroupEventsResponse, this);
 	}
 	else
 	{
@@ -1449,6 +1449,11 @@ CContactsView.prototype.viewAllMails = function ()
 	{
 		this.searchMessagesInInbox('email:' + this.selectedGroupEmails().join(','));
 	}
+};
+
+CContactsView.prototype.viewCalendar = function ()
+{
+	Routing.goDirectly(['calendar']);
 };
 
 /**
