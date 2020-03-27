@@ -1451,9 +1451,9 @@ CContactsView.prototype.viewAllMails = function ()
 	}
 };
 
-CContactsView.prototype.viewCalendar = function ()
+CContactsView.prototype.viewEvent = function (calendarId, eventId, start)
 {
-	Routing.goDirectly(['calendar']);
+	Routing.goDirectly(['calendar', calendarId, eventId, start]);
 };
 
 /**
