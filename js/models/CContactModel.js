@@ -135,6 +135,7 @@ function CContactModel()
 	this.otherBirthYear = ko.observable(0);
 	this.otherNotes = ko.observable('');
 	this.etag = ko.observable('');
+	this.publicPgpKey = ko.observable('');
 	
 	this.sharedToAll = ko.observable(false);
 
@@ -573,6 +574,8 @@ CContactModel.prototype.toObject = function ()
 		'BirthDay': this.otherBirthDay(),
 		'BirthMonth': this.otherBirthMonth(),
 		'BirthYear': this.otherBirthYear(),
+		
+		'PublicPgpKey': this.publicPgpKey(),
 
 		'GroupUUIDs': this.groups()
 	};
@@ -637,6 +640,8 @@ CContactModel.prototype.parse = function (oData)
 	this.otherNotes(Types.pString(oData.Notes));
 
 	this.etag(Types.pString(oData.ETag));
+
+	this.publicPgpKey(Types.pString(oData.PublicPgpKey));
 
 	this.sharedToAll(oData.Storage === 'shared');
 
