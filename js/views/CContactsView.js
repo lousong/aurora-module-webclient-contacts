@@ -442,6 +442,7 @@ CContactsView.prototype.onCreateContactResponse = function (oResponse, oRequest)
 		this.requestContactList();
 		this.viewContact(oResponse.Result.UUID);
 		Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_CONTACT_SUCCESSFULLY_ADDED'));
+		App.broadcastEvent('%ModuleName%::createContactResponse', [oResponse.Result]);		
 	}
 	else
 	{
@@ -464,6 +465,7 @@ CContactsView.prototype.onUpdateContactResponse = function (oResponse, oRequest)
 		}
 		this.requestContactList();
 		Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_CONTACT_SUCCESSFULLY_UPDATED'));
+		App.broadcastEvent('%ModuleName%::updateContactResponse', [oResponse.Result]);			
 	}
 	else
 	{
@@ -584,6 +586,7 @@ CContactsView.prototype.deleteContacts = function (aChecked)
 			{
 				Api.showErrorByCode(oResponse, TextUtils.i18n('%MODULENAME%/ERROR_DELETE_CONTACTS'));
 			}
+			App.broadcastEvent('%ModuleName%::deleteContactsResponse', [oResponse.Result]);			
 			this.requestContactList();
 		}, this);
 		

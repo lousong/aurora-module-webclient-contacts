@@ -18,7 +18,9 @@ var
 	
 	CDateModel = require('%PathToCoreWebclientModule%/js/models/CDateModel.js'),
 	
-	Settings = require('modules/%ModuleName%/js/Settings.js')
+	Settings = require('modules/%ModuleName%/js/Settings.js'),
+
+	OpenPgp = require('modules/OpenPgpWebclient/js/OpenPgp.js')	
 ;
 
 /**
@@ -135,8 +137,30 @@ function CContactModel()
 	this.otherBirthYear = ko.observable(0);
 	this.otherNotes = ko.observable('');
 	this.etag = ko.observable('');
-	this.publicPgpKey = ko.observable('');
 	
+	this.publicPgpKeyView = ko.observable('');
+	this.publicPgpKey = ko.observable('');
+
+	this.publicPgpKey.subscribe(async function (Value) {
+		if (Value != '')
+		{
+			var
+				openpgp = require('%PathToCoreWebclientModule%/js/vendors/openpgp.js'),
+				COpenPgpKey = require('modules/OpenPgpWebclient/js/COpenPgpKey.js'),
+				oPublicKey = null,
+				oKey = null,
+				oResult = null
+			;
+
+			oPublicKey = await openpgp.key.readArmored(Value);
+			if (oPublicKey && !oPublicKey.err && oPublicKey.keys && oPublicKey.keys[0])
+			{
+				oKey = new COpenPgpKey(oPublicKey.keys[0]);	
+				this.publicPgpKeyView(oKey.getUser() + ' (' + oKey.getBitSize() + '-bit)');
+			}	
+		}
+	}, this);	
+
 	this.sharedToAll = ko.observable(false);
 
 	this.birthdayIsEmpty = ko.computed(function () {
@@ -249,7 +273,7 @@ function CContactModel()
 
 	this.otherIsEmpty = ko.computed(function () {
 		var sOtherEmail = (this.otherEmail() !== this.email()) ? this.otherEmail() : '';
-		return ('' === ('' + sOtherEmail + this.otherNotes())) && this.birthdayIsEmpty();
+		return ('' === ('' + sOtherEmail + this.otherNotes() + this.publicPgpKey())) && this.birthdayIsEmpty();
 	}, this);
 	
 	this.phone = ko.computed({

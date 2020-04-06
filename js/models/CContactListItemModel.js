@@ -30,6 +30,7 @@ function CContactListItemModel()
 	this.selected = ko.observable(false);
 	this.recivedAnim = ko.observable(false).extend({'autoResetToFalse': 500});
 	this.sStorage = Settings.DefaultStorage;
+	this.HasPgpPublicKey = ko.observable(false);
 }
 
 /**
@@ -54,6 +55,8 @@ CContactListItemModel.prototype.parse = function (oData)
 	this.bTeam = oData.Storage === 'team';
 	this.bSharedToAll =  oData.Storage === 'shared';
 	this.sStorage = oData.Storage;
+
+	this.HasPgpPublicKey(!!oData.HasPgpPublicKey);
 };
 
 /**

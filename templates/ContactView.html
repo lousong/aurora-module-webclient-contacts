@@ -236,6 +236,12 @@
 							</span>
 							<span class="value" data-bind="text: otherNotes"></span>
 						</div>
+						<div class="row key" data-bind="visible: '' !== publicPgpKey()">
+							<span class="label">
+								<span class="text" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PUBLIC_PGP_KEY'}"></span>:
+							</span>
+							<span class="value" data-bind="text: publicPgpKeyView()"></span>
+						</div>
 					</div>
 				</div>
 
