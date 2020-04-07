@@ -6,7 +6,9 @@ var
 	AddressUtils = require('%PathToCoreWebclientModule%/js/utils/Address.js'),
 	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
 	
-	Settings = require('modules/%ModuleName%/js/Settings.js')
+	Settings = require('modules/%ModuleName%/js/Settings.js'),
+
+	ModulesManager = require('%PathToCoreWebclientModule%/js/ModulesManager.js')	
 ;
 
 /**
@@ -30,6 +32,8 @@ function CContactListItemModel()
 	this.selected = ko.observable(false);
 	this.recivedAnim = ko.observable(false).extend({'autoResetToFalse': 500});
 	this.sStorage = Settings.DefaultStorage;
+
+	this.isOpenPgpEnabled = ModulesManager.run('OpenPgpWebclient', 'isOpenPgpEnabled') || ko.observable(false);	
 	this.HasPgpPublicKey = ko.observable(false);
 }
 
@@ -58,6 +62,7 @@ CContactListItemModel.prototype.parse = function (oData)
 
 	this.HasPgpPublicKey(!!oData.HasPgpPublicKey);
 };
+
 
 /**
  * @return {boolean}

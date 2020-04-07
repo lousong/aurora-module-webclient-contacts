@@ -20,7 +20,7 @@ var
 	
 	Settings = require('modules/%ModuleName%/js/Settings.js'),
 
-	OpenPgp = require('modules/OpenPgpWebclient/js/OpenPgp.js')	
+	ModulesManager = require('%PathToCoreWebclientModule%/js/ModulesManager.js')
 ;
 
 /**
@@ -138,6 +138,8 @@ function CContactModel()
 	this.otherNotes = ko.observable('');
 	this.etag = ko.observable('');
 	
+	this.isOpenPgpEnabled = ModulesManager.run('OpenPgpWebclient', 'isOpenPgpEnabled') || ko.observable(false);
+
 	this.publicPgpKeyView = ko.observable('');
 	this.publicPgpKey = ko.observable('');
 
@@ -145,19 +147,12 @@ function CContactModel()
 		if (Value != '')
 		{
 			var
-				openpgp = require('%PathToCoreWebclientModule%/js/vendors/openpgp.js'),
-				COpenPgpKey = require('modules/OpenPgpWebclient/js/COpenPgpKey.js'),
-				oPublicKey = null,
-				oKey = null,
-				oResult = null
+				oKey = await ModulesManager.run('OpenPgpWebclient', 'getKeyInfo', [Value]) || null;
 			;
-
-			oPublicKey = await openpgp.key.readArmored(Value);
-			if (oPublicKey && !oPublicKey.err && oPublicKey.keys && oPublicKey.keys[0])
+			if (oKey)
 			{
-				oKey = new COpenPgpKey(oPublicKey.keys[0]);	
 				this.publicPgpKeyView(oKey.getUser() + ' (' + oKey.getBitSize() + '-bit)');
-			}	
+			}
 		}
 	}, this);	
 
