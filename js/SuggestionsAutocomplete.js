@@ -64,7 +64,8 @@ function Callback(oRequest, fResponse, sExceptEmail, sStorage, bWithGroups)
 					frequency: oItem.Frequency,
 					id: oItem.UUID,
 					team: oItem.Storage === 'team',
-					sharedToAll: oItem.Storage === 'shared'
+					sharedToAll: oItem.Storage === 'shared',
+					hasKey: oItem.HasPgpPublicKey
 				} :
 				null;
 			});
