@@ -389,7 +389,7 @@ CContactsView.prototype.executeSave = function (oData)
 			{
 				this.recivedAnimTeam(true);
 			}
-			
+
 			if (oData.isNew())
 			{
 				if (this.selectedStorage() === 'all' || this.selectedStorage() === 'group')
@@ -400,15 +400,57 @@ CContactsView.prototype.executeSave = function (oData)
 				else
 				{
 					// server subscribers need to know if contact should be in 'personal' or 'shared' storage
-					oContact.Storage = this.selectedStorage(); 
+					oContact.Storage = this.selectedStorage();
 				}
 				this.isSaving(true);
-				Ajax.send('CreateContact', { Contact: oContact }, this.onCreateContactResponse, this);
+
+				oContact.ViewEmail = oData.email();
+				var
+					oParams = {
+						Contact: oContact,
+						Callback: function (result) {
+							if (result.Error)
+							{
+								Screens.showError(result.ErrorMessage);
+								this.isSaving(false);
+							}
+							else
+							{
+								Ajax.send('CreateContact', { Contact: oContact }, this.onCreateContactResponse, this);
+							}
+						}.bind(this)
+					}
+				;
+				if (!App.broadcastEvent('%ModuleName%::beforeCreateContactRequest', oParams))
+				{
+					Ajax.send('CreateContact', { Contact: oContact }, this.onCreateContactResponse, this);
+				}
 			}
 			else
 			{
 				this.isSaving(true);
-				Ajax.send('UpdateContact', { Contact: oContact }, this.onUpdateContactResponse, this);
+
+				oContact.ViewEmail = oData.email();
+				var
+					oParams = {
+						Contact: oContact,
+						Callback: function (result) {
+							if (result.Error)
+							{
+								Screens.showError(result.ErrorMessage);
+								this.isSaving(false);
+							}
+							else
+							{
+								Ajax.send('UpdateContact', { Contact: oContact }, this.onUpdateContactResponse, this);
+							}
+						}.bind(this)
+					}
+				;
+				if (!App.broadcastEvent('%ModuleName%::beforeUpdateContactRequest', oParams))
+				{
+					Ajax.send('UpdateContact', { Contact: oContact }, this.onUpdateContactResponse, this);
+				}
 			}
 		}
 		else if (oData instanceof CGroupModel && !oData.readOnly())
@@ -442,7 +484,7 @@ CContactsView.prototype.onCreateContactResponse = function (oResponse, oRequest)
 		this.requestContactList();
 		this.viewContact(oResponse.Result.UUID);
 		Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_CONTACT_SUCCESSFULLY_ADDED'));
-		App.broadcastEvent('%ModuleName%::createContactResponse', [oResponse.Result]);		
+		App.broadcastEvent('%ModuleName%::createContactResponse', [oResponse.Result]);
 	}
 	else
 	{
@@ -465,7 +507,7 @@ CContactsView.prototype.onUpdateContactResponse = function (oResponse, oRequest)
 		}
 		this.requestContactList();
 		Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_CONTACT_SUCCESSFULLY_UPDATED'));
-		App.broadcastEvent('%ModuleName%::updateContactResponse', [oResponse.Result]);			
+		App.broadcastEvent('%ModuleName%::updateContactResponse', [oResponse.Result]);
 	}
 	else
 	{
