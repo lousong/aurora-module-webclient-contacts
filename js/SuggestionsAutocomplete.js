@@ -63,6 +63,7 @@ function Callback(oRequest, fResponse, sExceptEmail, sStorage, bWithGroups)
 					email: oItem.ViewEmail,
 					frequency: oItem.Frequency,
 					id: oItem.UUID,
+					storage: oItem.Storage,
 					team: oItem.Storage === 'team',
 					sharedToAll: oItem.Storage === 'shared',
 					hasKey: oItem.HasPgpPublicKey
@@ -189,7 +190,7 @@ function PhoneCallback(oRequest, fResponse)
  */
 function DeleteHandler(oContact)
 {
-	Ajax.send('UpdateContact', { 'Contact': { 'UUID': oContact.id, 'Frequency': -1 } });
+	Ajax.send('UpdateContact', { 'Contact': { 'UUID': oContact.id, 'Frequency': -1, 'Storage': oContact.storage } });
 }
 
 function RequestUserByPhone(sNumber, fCallBack, oContext)
