@@ -1517,33 +1517,33 @@ CContactsView.prototype.onGetGroupsResponse = function (oResponse, oRequest)
 			aList = [],
 			oSelected  = _.find(this.groupFullCollection(), function (oItem) {
 				return oItem.selected();
-			}),
-			oObject = null
+			}) || null,
+			oNewSelected = null
 		;
 
 		this.groupFullCollection(aList);
-		
-		this.selectedGroupInList(null);
 		for (iLen = oResult.length; iIndex < iLen; iIndex++)
 		{
 			if (oResult[iIndex])
 			{
 				oResult[iIndex].IsGroup = true;
-				oObject = new CContactListItemModel();
+				var oObject = new CContactListItemModel();
 				oObject.parse(oResult[iIndex]);
 				
 				if (oObject.IsGroup())
 				{
 					if (oSelected && oSelected.UUID() === oObject.UUID())
 					{
-						this.selectedGroupInList(oObject);
+						oNewSelected = oObject;
 					}
 
 					aList.push(oObject);
 				}
 			}
 		}
-		if (this.selectedGroupInList() === null)
+		
+		this.selectedGroupInList(oNewSelected);
+		if (oSelected !== null && oNewSelected === null)
 		{
 			Routing.replaceHash(LinksUtils.getContacts());
 		}
