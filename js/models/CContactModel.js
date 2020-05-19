@@ -143,16 +143,15 @@ function CContactModel()
 	this.publicPgpKeyView = ko.observable('');
 	this.publicPgpKey = ko.observable('');
 
-	this.publicPgpKey.subscribe(async function (Value) {
-		if (Value != '')
+	this.publicPgpKey.subscribe(function (sValue) {
+		if (sValue != '')
 		{
-			var
-				oKey = await ModulesManager.run('OpenPgpWebclient', 'getKeyInfo', [Value]) || null;
-			;
-			if (oKey)
-			{
-				this.publicPgpKeyView(oKey.getUser() + ' (' + oKey.getBitSize() + '-bit)');
-			}
+			ModulesManager.run('OpenPgpWebclient', 'getKeyInfo', [sValue, function (oKey) {
+				if (oKey)
+				{
+					this.publicPgpKeyView(oKey.getUser() + ' (' + oKey.getBitSize() + '-bit)');
+				}
+			}.bind(this)]);
 		}
 	}, this);	
 
