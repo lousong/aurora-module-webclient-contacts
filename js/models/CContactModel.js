@@ -142,6 +142,8 @@ function CContactModel()
 
 	this.publicPgpKeyView = ko.observable('');
 	this.publicPgpKey = ko.observable('');
+	this.pgpEncryptMessages = ko.observable(false);
+	this.pgpSignMessages = ko.observable(false);
 
 	this.publicPgpKey.subscribe(function (sValue) {
 		if (sValue != '')
@@ -151,9 +153,17 @@ function CContactModel()
 				{
 					this.publicPgpKeyView(oKey.getUser() + ' (' + oKey.getBitSize() + '-bit)');
 				}
+				else
+				{
+					this.publicPgpKeyView('');
+				}
 			}.bind(this)]);
 		}
-	}, this);	
+		else
+		{
+			this.publicPgpKeyView('');
+		}
+	}, this);
 
 	this.sharedToAll = ko.observable(false);
 
@@ -594,7 +604,9 @@ CContactModel.prototype.toObject = function ()
 		'BirthYear': this.otherBirthYear(),
 		
 		'PublicPgpKey': this.publicPgpKey(),
-
+		'PgpEncryptMessages': this.pgpEncryptMessages(),
+		'PgpSignMessages': this.pgpSignMessages(),
+	
 		'GroupUUIDs': this.groups()
 	};
 
@@ -660,6 +672,8 @@ CContactModel.prototype.parse = function (oData)
 	this.etag(Types.pString(oData.ETag));
 
 	this.publicPgpKey(Types.pString(oData.PublicPgpKey));
+	this.pgpEncryptMessages(Types.pBool(oData.PgpEncryptMessages));
+	this.pgpSignMessages(Types.pBool(oData.PgpSignMessages));
 
 	this.sharedToAll(oData.Storage === 'shared');
 
