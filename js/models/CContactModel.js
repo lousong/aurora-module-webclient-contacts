@@ -278,11 +278,11 @@ function CContactModel()
 
 	this.otherIsEmpty = ko.computed(function () {
 		var sOtherEmail = (this.otherEmail() !== this.email()) ? this.otherEmail() : '';
-		return ('' === ('' + sOtherEmail + this.otherNotes() + this.publicPgpKey())) && this.birthdayIsEmpty();
+		return ('' === ('' + sOtherEmail + this.otherNotes())) && this.birthdayIsEmpty();
 	}, this);
 	
 	this.pgpSettingsEmpty = ko.computed(function () {
-		return typeof this.publicPgpKey() === 'string' && this.publicPgpKey() !== '';
+		return typeof this.publicPgpKey() !== 'string' || this.publicPgpKey() === '';
 	}, this);
 	
 	this.phone = ko.computed({
