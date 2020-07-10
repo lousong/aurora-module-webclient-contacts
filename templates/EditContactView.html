@@ -325,7 +325,7 @@
 						</span>
 						<textarea class="value input" data-bind="value: publicPgpKey, valueUpdate: 'afterkeydown', onEnter: function () { $root.saveCommand($data); }"></textarea>
 					</div>
-					<!-- <div class="row hint" data-bind="visible: publicPgpKeyView">
+					<div class="row hint" data-bind="visible: publicPgpKeyView">
 						<span data-bind="text: publicPgpKeyView"></span>
 					</div>
 					<div class="row" data-bind="visible: publicPgpKeyView">
@@ -348,7 +348,7 @@
 							</label>
 							<label for="pgpSignMessages" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SIGN_MESSAGES'}"></label>
 						</span>
-					</div> -->
+					</div>
 				</div>
 
 				<div class="fieldset" data-bind="visible: !team() && $root.groupFullCollection().length, css: {'collapsed': groupsCollapsed}">

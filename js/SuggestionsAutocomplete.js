@@ -66,7 +66,9 @@ function Callback(oRequest, fResponse, sExceptEmail, sStorage, bWithGroups)
 					storage: oItem.Storage,
 					team: oItem.Storage === 'team',
 					sharedToAll: oItem.Storage === 'shared',
-					hasKey: oItem.HasPgpPublicKey
+					hasKey: oItem.HasPgpPublicKey,
+					encryptMessage: oItem.PgpEncryptMessages,
+					signMessage: oItem.PgpSignMessages
 				} :
 				null;
 			});
