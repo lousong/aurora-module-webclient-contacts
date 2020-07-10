@@ -45,6 +45,7 @@ function CContactModel()
 	this.personalCollapsed = ko.observable(false);
 	this.businessCollapsed = ko.observable(false);
 	this.otherCollapsed = ko.observable(false);
+	this.pgpSettingsCollapsed = ko.observable(false);
 	this.groupsCollapsed = ko.observable(false);
 
 	this.displayName = ko.observable('');
@@ -146,7 +147,7 @@ function CContactModel()
 	this.pgpSignMessages = ko.observable(false);
 
 	this.publicPgpKey.subscribe(function (sValue) {
-		if (sValue != '')
+		if (sValue !== '')
 		{
 			ModulesManager.run('OpenPgpWebclient', 'getKeyInfo', [sValue, function (oKey) {
 				if (oKey)
@@ -278,6 +279,10 @@ function CContactModel()
 	this.otherIsEmpty = ko.computed(function () {
 		var sOtherEmail = (this.otherEmail() !== this.email()) ? this.otherEmail() : '';
 		return ('' === ('' + sOtherEmail + this.otherNotes() + this.publicPgpKey())) && this.birthdayIsEmpty();
+	}, this);
+	
+	this.pgpSettingsEmpty = ko.computed(function () {
+		return typeof this.publicPgpKey() === 'string' && this.publicPgpKey() !== '';
 	}, this);
 	
 	this.phone = ko.computed({
@@ -414,6 +419,7 @@ function CContactModel()
 			this.personalCollapsed(!this.personalIsEmpty());
 			this.businessCollapsed(!this.businessIsEmpty());
 			this.otherCollapsed(!this.otherIsEmpty());
+			this.pgpSettingsCollapsed(!this.pgpSettingsEmpty());
 			this.groupsCollapsed(!this.groupsIsEmpty());
 		}
 	}, this);
@@ -482,6 +488,7 @@ CContactModel.prototype.clear = function ()
 	this.personalCollapsed(false);
 	this.businessCollapsed(false);
 	this.otherCollapsed(false);
+	this.pgpSettingsCollapsed(false);
 	this.groupsCollapsed(false);
 
 	this.displayName('');
