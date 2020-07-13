@@ -9,6 +9,7 @@ module.exports = function (oAppData) {
 		App = require('%PathToCoreWebclientModule%/js/App.js'),
 		ModulesManager = require('%PathToCoreWebclientModule%/js/ModulesManager.js'),
 		
+		ContactsCache = require('modules/%ModuleName%/js/Cache.js'),
 		Settings = require('modules/%ModuleName%/js/Settings.js'),
 		
 		SuggestionsAutocomplete = require('modules/%ModuleName%/js/SuggestionsAutocomplete.js'),
@@ -26,6 +27,9 @@ module.exports = function (oAppData) {
 			},
 			requestUserByPhone: function (sNumber, fCallBack, oContext) {
 				SuggestionsAutocomplete.requestUserByPhone(sNumber, fCallBack, oContext);
+			},
+			getContactsByEmails: function (aEmails, fCallBack) {
+				ContactsCache.getContactsByEmails(aEmails, fCallBack);
 			}
 		},
 				

@@ -99,7 +99,14 @@ CContactsCache.prototype.onGetContactsByEmailsResponse = function (oResponse, oR
 			if (oContact)
 			{
 				oContact.parse(oRawContact);
-				this.oContacts[oContact.email()] = oContact;
+				if (!this.oContacts[oContact.email()])
+				{
+					this.oContacts[oContact.email()] = oContact;
+				}
+				else if (!oContact.pgpSettingsEmpty())
+				{
+					this.oContacts[oContact.email()] = oContact;
+				}
 			}
 		}, this));
 	}
