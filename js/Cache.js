@@ -161,6 +161,21 @@ CContactsCache.prototype.markVcardsExistentByFile = function (sFile)
 };
 
 /**
+ * @param {string} sFile
+ * @param {string} sUid
+ */
+CContactsCache.prototype.updateVcardUid = function (sFile, sUid)
+{
+	var oVcard = _.find(this.aVcardAttachments, function (oVcard) {
+		return oVcard.file() === sFile;
+	});
+	if (oVcard)
+	{
+		oVcard.uid(sUid);
+	}
+};
+
+/**
  * @param {Array} aUids
  */
 CContactsCache.prototype.markVcardsNonexistentByUid = function (aUids)
