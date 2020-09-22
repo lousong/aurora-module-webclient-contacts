@@ -678,9 +678,9 @@ CContactModel.prototype.parse = function (oData)
 
 	this.etag(Types.pString(oData.ETag));
 
-	this.publicPgpKey(Types.pString(oData.PublicPgpKey));
-	this.pgpEncryptMessages(Types.pBool(oData.PgpEncryptMessages));
-	this.pgpSignMessages(Types.pBool(oData.PgpSignMessages));
+	this.publicPgpKey(Types.pString(oData['OpenPgpWebclient::PgpKey']));
+	this.pgpEncryptMessages(Types.pBool(oData['OpenPgpWebclient::PgpEncryptMessages']));
+	this.pgpSignMessages(Types.pBool(oData['OpenPgpWebclient::PgpSignMessages']));
 
 	this.sharedToAll(oData.Storage === 'shared');
 
