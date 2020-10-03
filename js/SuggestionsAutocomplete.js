@@ -30,7 +30,7 @@ function Callback(oRequest, fResponse, sExceptEmail, sStorage, bWithGroups)
 		}
 	;
 
-	Ajax.send('GetContacts', oParameters, function (oResponse) {
+	Ajax.send('GetContactSuggestions', oParameters, function (oResponse) {
 		var aList = [];
 		if (oResponse && oResponse.Result && oResponse.Result.List)
 		{
