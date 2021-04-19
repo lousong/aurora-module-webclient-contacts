@@ -28,6 +28,8 @@ var
  */
 function CContactModel()
 {
+	// Important: if new fields are added they should be added to clear method as well. Otherwise create contact functionality might work incorrectly.
+
 	this.sEmailDefaultType = Enums.ContactsPrimaryEmail.Personal;
 	this.sPhoneDefaultType = Enums.ContactsPrimaryPhone.Mobile;
 	this.sAddressDefaultType = Enums.ContactsPrimaryAddress.Personal;
@@ -474,15 +476,14 @@ CContactModel.birthMonthSelect = [
 
 CContactModel.prototype.clear = function ()
 {
-	this.isNew(false);
-	this.readOnly(false);
-
 	this.uuid('');
 	this.idUser('');
 	this.team(false);
-	this.storage('');
 	this.itsMe(false);
+	this.storage('');
 
+	this.isNew(false);
+	this.readOnly(false);
 	this.edited(false);
 	this.extented(false);
 	this.personalCollapsed(false);
@@ -498,6 +499,8 @@ CContactModel.prototype.clear = function ()
 
 	this.skype('');
 	this.facebook('');
+
+	this.displayNameFocused(false);
 
 	this.primaryEmail(this.sEmailDefaultType);
 	this.primaryPhone(this.sPhoneDefaultType);
@@ -533,8 +536,13 @@ CContactModel.prototype.clear = function ()
 	this.otherBirthDay(0);
 	this.otherBirthYear(0);
 	this.otherNotes('');
-
 	this.etag('');
+
+	this.publicPgpKeyView('');
+	this.publicPgpKey('');
+	this.pgpEncryptMessages(false);
+	this.pgpSignMessages(false);
+
 	this.sharedToAll(false);
 
 	this.groups([]);
