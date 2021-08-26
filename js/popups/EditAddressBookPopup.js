@@ -56,7 +56,7 @@ CEditAddressBookPopup.prototype.save = function ()
 		sMethod = this.createMode() ? 'CreateAddressBook' : 'UpdateAddressBook',
 		oParameters = { 'AddressBookName': this.addressBookName() }
 	;
-	if (this.createMode()) {
+	if (!this.createMode()) {
 		oParameters.EntityId = this.iEntityId;
 	}
 	this.addressBookNameFocus(false);

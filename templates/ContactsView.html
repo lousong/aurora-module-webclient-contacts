@@ -34,8 +34,10 @@
 				<span class="description" data-bind="text: searchText"></span>
 			</span>
 
-			<div class="items_sub_list contact_sub_list" data-bind="foreach: collection, draggablePlace: dragAndDropHelper">
-				<div class="item dragHandle nosubject" data-bind="css: {'checked': checked, 'selected': selected, 'deleted': deleted, 'noname': !Name(), 'noemail': !Email()}">
+			<div class="items_sub_list contact_sub_list" data-bind="foreach: collection, 
+				 draggablePlace: allowDrag() ? dragAndDropHelper : false">
+				<div class="item nosubject" data-bind="css: {'checked': checked, 'selected': selected, 
+							'deleted': deleted, 'noname': !Name(), 'noemail': !Email(), 'dragHandle': $parent.allowDrag}">
 					<div class="item_content">
 						<span class="controls">
 							<!--<label class="custom_checkbox" data-bind="css: {'checked': checked}">

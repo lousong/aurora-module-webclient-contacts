@@ -99,7 +99,7 @@ function CContactsView()
 					this.selector.listCheckedOrSelected(false);
 					this.currentGroupUUID('');
 				}
-				this.isAddressBookSelected(!!_.find(this.aAddressBooks, function (oAddressBook) {
+				this.isAddressBookSelected(!!_.find(this.addressBooks(), function (oAddressBook) {
 					return oAddressBook.Id === this.selectedStorageValue();
 				}, this));
 				this.isTeamStorageSelected(this.selectedStorageValue() === 'team');
@@ -110,7 +110,19 @@ function CContactsView()
 		'owner': this
 	});
 	
-	this.aAddressBooks = Settings.AddressBooks;
+	this.allowDrag = ko.computed(function () {
+		return !this.isAddressBookSelected();
+	}, this);
+	
+	this.addressBooks = ko.observable(Settings.AddressBooks);
+	App.subscribeEvent('ReceiveAjaxResponse::after', function (oParams) {
+		if (oParams.Request.Module === 'Contacts'
+			&& oParams.Request.Method === 'GetAddressBooks'
+			&& _.isArray(oParams.Response && oParams.Response.Result))
+		{
+			this.addressBooks(oParams.Response.Result);
+		}
+	}.bind(this));
 	this.manageAddressBooksHash = ko.computed(function () {
 		if (ModulesManager.isModuleEnabled('SettingsWebclient'))
 		{
@@ -1182,6 +1194,7 @@ CContactsView.prototype.onRoute = function (aParams)
 	{
 		if (bGroupOrSearchChanged) {
 			this.collection([]);
+			this.contactCount(0);
 		}
 		this.requestContactList();
 	}
