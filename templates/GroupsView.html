@@ -51,6 +51,18 @@
 				</a>
 			</div>
 			
+			<!-- ko foreach: aAddressBooks -->
+				<div class="item canSelect" data-bind="visible: Display, 
+						css: {'selected': $parent.selectedStorageValue() === Id},
+						click: $parents[0].gotoContactList">
+					<a href="javascript: void(0);" class="title" data-bind="click: function () { $parent.changeGroupType(Id); }, css: {'recivedAnim': $parent.recivedAnimTeam()}">
+						<span class="name fadeout">
+							<span class="icon type1"></span>
+							<span class="text animGoal" data-bind="text: DisplayName"></span>
+						</span>
+					</a>
+				</div>
+			<!-- /ko -->
 
 			<div data-bind="visible: showPersonalContacts() && 0 < groupFullCollection().length">
 				<div class="section_title fadeout" data-bind="i18n: {'key': '%MODULENAME%/HEADING_GROUPS'}"></div>

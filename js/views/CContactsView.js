@@ -106,6 +106,8 @@ function CContactsView()
 		'owner': this
 	});
 	
+	this.aAddressBooks = Settings.AddressBooks;
+	
 	this.selectedGroupInList = ko.observable(null);
 	
 	this.selectedGroupInList.subscribe(function () {
@@ -1167,6 +1169,9 @@ CContactsView.prototype.onRoute = function (aParams)
 	
 	if (bRequestContacts)
 	{
+		if (bGroupOrSearchChanged) {
+			this.collection([]);
+		}
 		this.requestContactList();
 	}
 	
