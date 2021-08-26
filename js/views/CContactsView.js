@@ -79,6 +79,7 @@ function CContactsView()
 	this.recivedAnimShared = ko.observable(false).extend({'autoResetToFalse': 500});
 	this.recivedAnimTeam = ko.observable(false).extend({'autoResetToFalse': 500});
 	
+	this.isAddressBookSelected = ko.observable(false);
 	this.isTeamStorageSelected = ko.observable(false);
 	this.isNotTeamStorageSelected = ko.observable(false);
 	this.disableDropToPersonal = ko.observable(false);
@@ -98,6 +99,9 @@ function CContactsView()
 					this.selector.listCheckedOrSelected(false);
 					this.currentGroupUUID('');
 				}
+				this.isAddressBookSelected(!!_.find(this.aAddressBooks, function (oAddressBook) {
+					return oAddressBook.Id === this.selectedStorageValue();
+				}, this));
 				this.isTeamStorageSelected(this.selectedStorageValue() === 'team');
 				this.isNotTeamStorageSelected(this.selectedStorageValue() !== 'team');
 				this.disableDropToPersonal(this.selectedStorageValue() !== 'shared');
@@ -107,7 +111,14 @@ function CContactsView()
 	});
 	
 	this.aAddressBooks = Settings.AddressBooks;
-	
+	this.manageAddressBooksHash = ko.computed(function () {
+		if (ModulesManager.isModuleEnabled('SettingsWebclient'))
+		{
+			return Routing.buildHashFromArray(['settings', 'manage-addressbooks']);
+		}
+		return '#';
+	}, this);
+
 	this.selectedGroupInList = ko.observable(null);
 	
 	this.selectedGroupInList.subscribe(function () {
@@ -561,7 +572,7 @@ CContactsView.prototype.executeNewGroup = function ()
 CContactsView.prototype.deleteContact = function ()
 {
 	var sStorage = this.selectedStorage();
-	if (sStorage === 'personal' || sStorage === 'shared')
+	if (sStorage === 'personal' || sStorage === 'shared' || this.isAddressBookSelected())
 	{
 		var
 			aChecked = _.filter(this.selector.listCheckedOrSelected(), function (oItem) {
