@@ -12,7 +12,9 @@ var
 	Popups = require('%PathToCoreWebclientModule%/js/Popups.js'),
 	ModulesManager = require('%PathToCoreWebclientModule%/js/ModulesManager.js'),
 
-	CAbstractSettingsFormView = ModulesManager.run('SettingsWebclient', 'getAbstractSettingsFormViewClass')
+	CAbstractSettingsFormView = ModulesManager.run('SettingsWebclient', 'getAbstractSettingsFormViewClass'),
+
+	EditAddressBookPopup = require('modules/%ModuleName%/js/popups/EditAddressBookPopup.js')
 ;
 
 /**
@@ -50,17 +52,22 @@ CAddressBooksSettingsFormView.prototype.populate = function ()
 
 CAddressBooksSettingsFormView.prototype.addAddressBook = function ()
 {
-	console.log('addAddressBook');
+	Popups.showPopup(EditAddressBookPopup, [this.populate.bind(this)]);
 };
 
-CAddressBooksSettingsFormView.prototype.deleteAddressBook = function (sEntityId, sDisplayName)
+CAddressBooksSettingsFormView.prototype.editAddressBook = function (iEntityId, sDisplayName)
+{
+	Popups.showPopup(EditAddressBookPopup, [this.populate.bind(this), iEntityId, sDisplayName]);
+};
+
+CAddressBooksSettingsFormView.prototype.deleteAddressBook = function (iEntityId, sDisplayName)
 {
 	var
 		sConfirm = TextUtils.i18n('%MODULENAME%/CONFIRM_DELETE_ADDRESSBOOK', { 'NAME': sDisplayName }),
 		fOnConfirm = _.bind(function (bOk) {
 			if (bOk)
 			{
-				Ajax.send('Contacts', 'DeleteAddressBook', {'EntityId': sEntityId}, function (oResponse) {
+				Ajax.send('Contacts', 'DeleteAddressBook', {'EntityId': iEntityId}, function (oResponse) {
 					if (!oResponse || !oResponse.Result) {
 						Api.showErrorByCode(oResponse);
 					}
