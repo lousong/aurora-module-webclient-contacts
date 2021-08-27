@@ -120,7 +120,15 @@ function CContactsView()
 			&& oParams.Request.Method === 'GetAddressBooks'
 			&& _.isArray(oParams.Response && oParams.Response.Result))
 		{
+			var aOldAddressBookStorages = _.map(this.addressBooks(), function (oAddressBook) {
+				return oAddressBook.Id;
+			});
 			this.addressBooks(oParams.Response.Result);
+			var aNewAddressBookStorages = _.map(this.addressBooks(), function (oAddressBook) {
+				return oAddressBook.Id;
+			});
+			var aBaseStorages = _.difference(Settings.Storages, aOldAddressBookStorages);
+			Settings.Storages = aBaseStorages.concat(aNewAddressBookStorages);
 		}
 	}.bind(this));
 	this.manageAddressBooksHash = ko.computed(function () {
