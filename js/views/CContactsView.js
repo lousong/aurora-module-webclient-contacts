@@ -197,7 +197,23 @@ function CContactsView()
 			this.requestContact(this.contactUidForRequest());
 			this.contactUidForRequest('');
 		}
+	
+		var
+			oContactListDom = $('.contact_list', this.$viewDom),
+			oContactListScrollDom = $('.contact_list_scroll', this.$viewDom)
+		;
+
+		if (this.offset() > this.prevOffset()) {
+			// Move to bottom
+			oContactListScrollDom.scrollTop(oContactListScrollDom.scrollTop() - (oContactListDom.height() / 2));
+		} else if (oContactListScrollDom.scrollTop() === 0) {
+			oContactListScrollDom.scrollTop(oContactListScrollDom.scrollTop() + (oContactListDom.height() / 2));
+		}
 	}, this);
+	this.isLoadingOnTop = ko.observable(false);
+	this.prevOffset = ko.observable(0);
+	this.offset = ko.observable(0);
+	this.iLimit = 60;
 	
 	this.isSearchFocused = ko.observable(false);
 	this.searchInput = ko.observable('');
@@ -222,15 +238,15 @@ function CContactsView()
 		}
 	}, this);
 	
-	this.pageSwitcherLocked = ko.observable(false);
-	this.oPageSwitcher = new CPageSwitcherView(0, Settings.ContactsPerPage);
-	this.oPageSwitcher.currentPage.subscribe(function () {
-		if (!this.pageSwitcherLocked())
-		{
-			this.changeRouting();
-		}
-	}, this);
-	this.currentPage = ko.observable(1);
+//	this.pageSwitcherLocked = ko.observable(false);
+//	this.oPageSwitcher = new CPageSwitcherView(0, Settings.ContactsPerPage);
+//	this.oPageSwitcher.currentPage.subscribe(function () {
+//		if (!this.pageSwitcherLocked())
+//		{
+//			this.changeRouting();
+//		}
+//	}, this);
+//	this.currentPage = ko.observable(1);
 	
 	this.search.subscribe(function (sValue) {
 		this.searchInput(sValue);
@@ -335,10 +351,13 @@ function CContactsView()
 		return [
 			this.selectedStorage(),
 			this.currentGroupUUID(),
-			this.search(),
-			this.oPageSwitcher.currentPage(),
-			this.oPageSwitcher.perPage()
+			this.search()
+//			this.oPageSwitcher.currentPage(),
+//			this.oPageSwitcher.perPage()
 		];
+	}, this);
+	this.listChanged.subscribe(function () {
+		this.offset(0);
 	}, this);
 	
 	this.bRefreshContactList = false;
@@ -547,18 +566,18 @@ CContactsView.prototype.changeRouting = function (oParams, bReplace)
 		sStorage = oParams.Storage === undefined ? this.selectedStorage() : oParams.Storage,
 		sGroupUUID = oParams.GroupUUID === undefined ? this.currentGroupUUID() : oParams.GroupUUID,
 		sSearch = oParams.Search === undefined ? this.search() : oParams.Search,
-		iPage = oParams.Page === undefined ? this.oPageSwitcher.currentPage() : oParams.Page,
+//		iPage = oParams.Page === undefined ? this.oPageSwitcher.currentPage() : oParams.Page,
 		sContactUUID = oParams.ContactUUID === undefined ? '' : oParams.ContactUUID,
 		sAction = oParams.Action === undefined ? '' : oParams.Action
 	;
 	
 	if (bReplace)
 	{
-		Routing.replaceHash(LinksUtils.getContacts(sStorage, sGroupUUID, sSearch, iPage, sContactUUID, sAction));
+		Routing.replaceHash(LinksUtils.getContacts(sStorage, sGroupUUID, sSearch, 1, sContactUUID, sAction));
 	}
 	else
 	{
-		Routing.setHash(LinksUtils.getContacts(sStorage, sGroupUUID, sSearch, iPage, sContactUUID, sAction));
+		Routing.setHash(LinksUtils.getContacts(sStorage, sGroupUUID, sSearch, 1, sContactUUID, sAction));
 	}
 };
 
@@ -867,7 +886,7 @@ CContactsView.prototype.onShow = function ()
 {
 	this.selector.useKeyboardKeys(true);
 	
-	this.oPageSwitcher.show();
+//	this.oPageSwitcher.show();
 
 	if (this.oJua)
 	{
@@ -883,7 +902,7 @@ CContactsView.prototype.onHide = function ()
 	this.selector.useKeyboardKeys(false);
 	this.selectedItem(null);
 	
-	this.oPageSwitcher.hide();
+//	this.oPageSwitcher.hide();
 
 	if (this.oJua)
 	{
@@ -930,6 +949,35 @@ CContactsView.prototype.onBind = function ()
 	}
 
 	this.initUploader();
+	
+	var
+		oContactListDom = $('.contact_list', this.$viewDom),
+		oContactListScrollDom = $('.contact_list_scroll', this.$viewDom)
+	;
+	oContactListScrollDom
+		.on('scroll', function () {
+			var
+				iScrollTop = oContactListScrollDom.scrollTop(),
+				bScrollAtTop = iScrollTop < 300,
+				bScrollAtBottom = (oContactListDom.height() - (iScrollTop + oContactListScrollDom.height())) < 300
+			;
+			this.isLoadingOnTop(bScrollAtTop && !bScrollAtBottom);
+			if (bScrollAtTop && !bScrollAtBottom) {
+				if (this.offset() > 0 && !this.loadingList()) {
+					// load prev page
+					this.prevOffset(this.offset());
+					this.offset(this.offset() - (this.iLimit / 2));
+					this.requestContactList();
+				}
+			} else if (bScrollAtBottom && !bScrollAtTop) {
+				if ((this.offset() + this.iLimit) < this.contactCount() && !this.loadingList()) {
+					// load next page
+					this.prevOffset(this.offset());
+					this.offset(this.offset() + (this.iLimit / 2));
+					this.requestContactList();
+				}
+			}
+		}.bind(this));
 };
 
 CContactsView.prototype.hotKeysBind = function ()
@@ -995,8 +1043,8 @@ CContactsView.prototype.requestContactList = function ()
 	
 	this.loadingList(true);
 	Ajax.send('GetContacts', {
-		'Offset': (this.currentPage() - 1) * Settings.ContactsPerPage,
-		'Limit': Settings.ContactsPerPage,
+		'Offset': this.offset(),
+		'Limit': this.iLimit,
 		'SortField': Enums.ContactSortField.Name,
 		'Search': this.search(),
 		'GroupUUID': sGroupUUID,
@@ -1075,30 +1123,30 @@ CContactsView.prototype.onRoute = function (aParams)
 	
 	this.bRefreshContactList = false;
 	
-	this.pageSwitcherLocked(true);
-	if (this.oPageSwitcher.perPage() !== Settings.ContactsPerPage)
-	{
-		bRequestContacts = true;
-	}
-	if (bGroupOrSearchChanged)
-	{
-		this.oPageSwitcher.clear();
-		this.oPageSwitcher.perPage(Settings.ContactsPerPage);
-	}
-	else
-	{
-		this.oPageSwitcher.setPage(oParams.Page, Settings.ContactsPerPage);
-	}
-	this.pageSwitcherLocked(false);
-	if (oParams.Page !== this.oPageSwitcher.currentPage())
-	{
-		Routing.replaceHash(LinksUtils.getContacts(oParams.Storage, oParams.GroupUUID, oParams.Search, this.oPageSwitcher.currentPage()));
-	}
-	if (this.currentPage() !== oParams.Page)
-	{
-		this.currentPage(oParams.Page);
-		bRequestContacts = true;
-	}
+//	this.pageSwitcherLocked(true);
+//	if (this.oPageSwitcher.perPage() !== Settings.ContactsPerPage)
+//	{
+//		bRequestContacts = true;
+//	}
+//	if (bGroupOrSearchChanged)
+//	{
+//		this.oPageSwitcher.clear();
+//		this.oPageSwitcher.perPage(Settings.ContactsPerPage);
+//	}
+//	else
+//	{
+//		this.oPageSwitcher.setPage(oParams.Page, Settings.ContactsPerPage);
+//	}
+//	this.pageSwitcherLocked(false);
+//	if (oParams.Page !== this.oPageSwitcher.currentPage())
+//	{
+//		Routing.replaceHash(LinksUtils.getContacts(oParams.Storage, oParams.GroupUUID, oParams.Search, this.oPageSwitcher.currentPage()));
+//	}
+//	if (this.currentPage() !== oParams.Page)
+//	{
+//		this.currentPage(oParams.Page);
+//		bRequestContacts = true;
+//	}
 	
 	if (this.selectedStorage() !== oParams.Storage && -1 !== $.inArray(oParams.Storage, Settings.Storages) && oParams.Storage !== 'group')
 	{
@@ -1492,7 +1540,7 @@ CContactsView.prototype.onGetContactsResponse = function (oResponse, oRequest)
 		}
 
 		this.collection(aNewCollection);
-		this.oPageSwitcher.setCount(iContactCount);
+//		this.oPageSwitcher.setCount(iContactCount);
 		this.contactCount(iContactCount);
 
 		if (oNewSelected)

@@ -25,7 +25,8 @@
 				</span>
 			</div>
 
-			<span class="list_notification" data-bind="visible: isEmptyList() && preLoadingList()" id="selenium_contacts_loading_info">
+			<span class="list_notification" data-bind="visible: preLoadingList() && isLoadingOnTop()"
+				  style="border-bottom: 1px solid #e8e8e8; background: white; position: absolute; z-index: 1; right: 1px; left: 0;">
 				<span class="description" data-bind="i18n: {'key': '%MODULENAME%/INFO_LOADING_CONTACT_LIST'}"></span>
 			</span>
 
@@ -61,10 +62,16 @@
 					</div>
 				</div>
 			</div>
+
+			<span class="list_notification" data-bind="visible: preLoadingList() && !isLoadingOnTop()"
+				  style="border-top: 1px solid #e8e8e8; background: white; position: absolute; z-index: 1; right: 1px; left: 0; margin-top: -73px;">
+				<span class="description" data-bind="i18n: {'key': '%MODULENAME%/INFO_LOADING_CONTACT_LIST'}"></span>
+			</span>
+
 			<div class="uploader_mask" data-bind="initDom: uploaderArea, css: {'active': dragActive}, visible: isNotTeamStorageSelected">
 				<div class="inner"></div>
 			</div>
 		</div>
 	</div>
 </div>
-<div class="panel_bottom unselectable" data-bind="visible: oPageSwitcher.pages().length > 0, template: {name: oPageSwitcher.ViewTemplate, data: oPageSwitcher}"></div>
+<!--<div class="panel_bottom unselectable" data-bind="visible: oPageSwitcher.pages().length > 0, template: {name: oPageSwitcher.ViewTemplate, data: oPageSwitcher}"></div>-->
