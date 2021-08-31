@@ -192,7 +192,7 @@ function PhoneCallback(oRequest, fResponse)
  */
 function DeleteHandler(oContact)
 {
-	Ajax.send('UpdateContact', { 'Contact': { 'UUID': oContact.id, 'Frequency': -1, 'Storage': oContact.storage } });
+	Ajax.send('UpdateContact', { 'Contact': { 'UUID': oContact.id, 'Frequency': 0, 'Storage': oContact.storage } });
 }
 
 function RequestUserByPhone(sNumber, fCallBack, oContext)
