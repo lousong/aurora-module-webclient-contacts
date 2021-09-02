@@ -733,7 +733,14 @@ CContactsView.prototype.executeRemoveFromGroup = function ()
 
 CContactsView.prototype.executeImport = function ()
 {
-	this.changeRouting({Storage: 'personal', GroupUUID: '', Search: '', Page: 1, Action: 'import'});
+	if (this.isAddressBookSelected())
+	{
+		this.changeRouting({Storage: this.selectedStorage(), GroupUUID: '', Search: '', Page: 1, Action: 'import'});
+	}
+	else
+	{
+		this.changeRouting({Storage: 'personal', GroupUUID: '', Search: '', Page: 1, Action: 'import'});
+	}
 };
 
 CContactsView.prototype.executeExport = function (sFormat)
