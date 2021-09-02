@@ -15,6 +15,7 @@ var
 	
 	Api = require('%PathToCoreWebclientModule%/js/Api.js'),
 	App = require('%PathToCoreWebclientModule%/js/App.js'),
+	Utils = require('%PathToCoreWebclientModule%/js/utils/Common.js'),
 	
 	CDateModel = require('%PathToCoreWebclientModule%/js/models/CDateModel.js'),
 	
@@ -454,6 +455,18 @@ function CContactModel()
 	this.canBeSave = ko.computed(function () {
 		return this.displayName() !== '' || !!this.emails().length;
 	}, this);
+
+	this.customCommands = ko.observableArray([]);
+	App.broadcastEvent('%ModuleName%::AddCustomCommand', {'Callback' : _.bind(function (oCommand) {
+		var oNewCommand = _.extend({
+			'Text': '',
+			'CssClass': '',
+			'Handler': function () {},
+			'Visible': true
+		}, oCommand);
+		oNewCommand.Command = Utils.createCommand(this, oNewCommand.Handler, true);
+		this.customCommands.push(oNewCommand);
+	}, this), 'Contact': this});
 }
 
 CContactModel.aBirthdayMonths = DateUtils.getMonthNamesArray();
