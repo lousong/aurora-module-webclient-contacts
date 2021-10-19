@@ -49,6 +49,7 @@ module.exports = {
 				this.Storages.push('all');
 				this.Storages.push('group');
 			}
+			console.log('this.Storages', this.Storages);
 
 			this.ImportExportFormats = Types.pArray(oAppDataSection.ImportExportFormats, this.ImportExportFormats);
 			this.SaveVcfServerModuleName = Types.pString(oAppDataSection.SaveVcfServerModuleName, this.SaveVcfServerModuleName);

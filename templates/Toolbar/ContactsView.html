@@ -3,8 +3,8 @@
 		<span class="item checkstate command" data-bind="click: refreshContactsAndGroups, checkstate: {'activeClass': 'process', 'state': preLoadingList(), 'duration': 800}">
 			<span class="icon"></span>
 		</span>
-		<span class="item new_group" data-bind="visible: showPersonalContacts() && isNotTeamStorageSelected() && selectedStorage() !== 'shared' && !isAddressBookSelected(),
-			command: newGroupCommand, customTooltip: '%MODULENAME%/ACTION_NEW_GROUP'" id="selenium_contacts_new_group_button">
+		<span class="item new_group" data-bind="visible: isNewGroupVisible,
+			command: newGroupCommand, customTooltip: '%MODULENAME%/ACTION_NEW_GROUP'">
 			<span class="icon"></span>
 			<span class="text" data-bind="i18n: {'key': '%MODULENAME%/ACTION_NEW_GROUP'}"></span>
 		</span>
@@ -21,7 +21,7 @@
 		</span>
 
 		
-		<span class="item control" data-bind="visible: visibleImportExport() && isNotTeamStorageSelected(), dropdown: {control: false}">
+		<span class="item control" data-bind="visible: visibleImportExport() && isNotTeamStorageSelected() && !isCollectedStorageSelected(), dropdown: {control: false}">
 			<span class="icon arrow"></span>
 			<span class="dropdown">
 				<span class="dropdown_helper">

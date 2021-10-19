@@ -81,6 +81,7 @@ function CContactsView()
 	
 	this.isAddressBookSelected = ko.observable(false);
 	this.isTeamStorageSelected = ko.observable(false);
+	this.isCollectedStorageSelected = ko.observable(false);
 	this.isNotTeamStorageSelected = ko.observable(false);
 	this.disableDropToPersonal = ko.observable(false);
 	this.selectedStorageValue = ko.observable('');
@@ -103,6 +104,7 @@ function CContactsView()
 					return oAddressBook.Id === this.selectedStorageValue();
 				}, this));
 				this.isTeamStorageSelected(this.selectedStorageValue() === 'team');
+				this.isCollectedStorageSelected(this.selectedStorageValue() === 'collected');
 				this.isNotTeamStorageSelected(this.selectedStorageValue() !== 'team');
 				this.disableDropToPersonal(this.selectedStorageValue() !== 'shared');
 			}
@@ -292,6 +294,25 @@ function CContactsView()
 	}, this);
 	
 	this.isSaving = ko.observable(false);
+	
+	this.isDeleteVisible = ko.computed(function () {
+		return	this.showPersonalContacts() && this.selectedStorage() === 'personal' ||
+				this.showSharedToAllContacts() && this.selectedStorage() === 'shared' ||
+				this.isAddressBookSelected() ||
+				this.isCollectedStorageSelected();
+	}, this);
+	this.isNewGroupVisible = ko.computed(function () {
+		return	this.showPersonalContacts() &&
+				this.isNotTeamStorageSelected() &&
+				this.selectedStorage() !== 'shared' &&
+				!this.isAddressBookSelected() &&
+				!this.isCollectedStorageSelected();
+	}, this);
+	this.isAddContactsVisible = ko.computed(function () {
+		return	this.showPersonalContacts() &&
+				!this.isAddressBookSelected() &&
+				!this.isCollectedStorageSelected();
+	}, this);
 	
 	this.newContactCommand = Utils.createCommand(this, this.executeNewContact, this.isNotTeamStorageSelected);
 	this.newGroupCommand = Utils.createCommand(this, this.executeNewGroup);
@@ -610,8 +631,7 @@ CContactsView.prototype.executeNewGroup = function ()
 
 CContactsView.prototype.deleteContact = function ()
 {
-	var sStorage = this.selectedStorage();
-	if (sStorage === 'personal' || sStorage === 'shared' || this.isAddressBookSelected())
+	if (this.isDeleteVisible() && this.isEnableDeleting())
 	{
 		var
 			aChecked = _.filter(this.selector.listCheckedOrSelected(), function (oItem) {
@@ -628,10 +648,6 @@ CContactsView.prototype.deleteContact = function ()
 			;
 
 		Popups.showPopup(ConfirmPopup, [sConfirmText, fDeleteContacts, '', TextUtils.i18n('COREWEBCLIENT/ACTION_DELETE')]);
-	}
-	else if (sStorage === 'group')
-	{
-		this.removeFromGroupCommand();
 	}
 };
 

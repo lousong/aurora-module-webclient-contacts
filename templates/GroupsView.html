@@ -15,7 +15,7 @@
 			<div class="item canSelect" data-bind="visible: showPersonalContacts, 
 					css: {'selected': 'personal' === selectedStorage()},
 					click: $parent.gotoContactList">
-				<a href="javascript: void(0);" class="title" id="selenium_contacts_personal_button" data-bind="
+				<a href="javascript: void(0);" class="title" data-bind="
 						css: {'recivedAnim': recivedAnimPersonal()},
 						droppable: {valueFunc: function (oEvent, oUi) { $root.contactsDropToGroupType('personal', oEvent, oUi); }, switchObserv: disableDropToPersonal},
 						click: function () { changeGroupType('personal'); }">
@@ -47,6 +47,17 @@
 					<span class="name fadeout">
 						<span class="icon type2"></span>
 						<span class="text animGoal" data-bind="i18n: {'key': '%MODULENAME%/LABEL_STORAGE_TEAM'}"></span>
+					</span>
+				</a>
+			</div>
+			
+			<div class="item canSelect" data-bind="
+					css: {'selected': isCollectedStorageSelected},
+					click: $parent.gotoContactList">
+				<a href="javascript: void(0);" class="title" data-bind="click: function () { changeGroupType('collected'); }, css: {'recivedAnim': recivedAnimTeam()}">
+					<span class="name fadeout">
+						<span class="icon type1"></span>
+						<span class="text animGoal" data-bind="i18n: {'key': '%MODULENAME%/LABEL_STORAGE_COLLECTED'}"></span>
 					</span>
 				</a>
 			</div>
