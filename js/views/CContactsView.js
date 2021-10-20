@@ -78,6 +78,7 @@ function CContactsView()
 	this.recivedAnimPersonal = ko.observable(false).extend({'autoResetToFalse': 500});
 	this.recivedAnimShared = ko.observable(false).extend({'autoResetToFalse': 500});
 	this.recivedAnimTeam = ko.observable(false).extend({'autoResetToFalse': 500});
+	this.recivedAnimCollected = ko.observable(false).extend({'autoResetToFalse': 500});
 	
 	this.isAddressBookSelected = ko.observable(false);
 	this.isTeamStorageSelected = ko.observable(false);
@@ -116,7 +117,25 @@ function CContactsView()
 		return !this.isAddressBookSelected();
 	}, this);
 	
-	this.addressBooks = ko.observable(Settings.AddressBooks);
+	this._addressBooks = ko.observableArray([]);
+	this.addressBooks = ko.computed({
+		'read': function () {
+			return this._addressBooks();
+		},
+		'write': function (aAddressBooks) {
+			this._addressBooks(_.map(aAddressBooks, function (oAddressBook) {
+				return {
+					Id: oAddressBook.Id,
+					Display: oAddressBook.Display,
+					DisplayName: oAddressBook.DisplayName,
+					recivedAnim: ko.observable(false).extend({'autoResetToFalse': 500})
+				};
+			}));
+		},
+		'owner': this
+	});
+	this.addressBooks(Settings.AddressBooks);
+
 	App.subscribeEvent('ReceiveAjaxResponse::after', function (oParams) {
 		if (oParams.Request.Module === 'Contacts'
 			&& oParams.Request.Method === 'GetAddressBooks'
@@ -423,6 +442,39 @@ CContactsView.prototype.getCreateOrImportInfo = function ()
 	return TextUtils.i18n('%MODULENAME%/INFO_CREATE') + (sOrImportInfo === '' ? '' : ' ' + sOrImportInfo) + '.';
 };
 
+CContactsView.prototype.highlightStorageDuringSave = function (oContact)
+{
+	var sContactStorage = oContact.Storage;
+	if (sContactStorage === 'personal' && oContact.Auto === true)
+	{
+		sContactStorage = 'collected';
+	}
+	if (this.selectedStorage() !== sContactStorage)
+	{
+		switch (sContactStorage)
+		{
+			case 'personal':
+				this.recivedAnimPersonal(true);
+				break;
+			case 'collected':
+				this.recivedAnimCollected(true);
+				break;
+			case 'team':
+				this.recivedAnimTeam(true);
+				break;
+			default:
+				var oAddressBook = _.find(this.addressBooks(), function (oAddressBook) {
+					return oAddressBook.Id === sContactStorage;
+				});
+				if (oAddressBook)
+				{
+					oAddressBook.recivedAnim(true);
+				}
+				break;
+		}
+	}
+};
+
 /**
  * @param {Object} oData
  */
@@ -453,15 +505,7 @@ CContactsView.prototype.executeSave = function (oData)
 			}
 
 			oContact = oData.toObject();
-
-			if (this.selectedStorage() !== 'personal' && oContact.Storage === 'personal')
-			{
-				this.recivedAnimPersonal(true);
-			}
-			if (this.selectedStorage() !== 'team' && oContact.Storage === 'team')
-			{
-				this.recivedAnimTeam(true);
-			}
+			this.highlightStorageDuringSave(oContact);
 
 			if (oData.isNew())
 			{

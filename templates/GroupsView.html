@@ -54,10 +54,13 @@
 			<div class="item canSelect" data-bind="
 					css: {'selected': isCollectedStorageSelected},
 					click: $parent.gotoContactList">
-				<a href="javascript: void(0);" class="title" data-bind="click: function () { changeGroupType('collected'); }, css: {'recivedAnim': recivedAnimTeam()}">
+				<a href="javascript: void(0);" class="title"
+						data-bind="click: function () { changeGroupType('collected'); },
+						css: {'recivedAnim': recivedAnimCollected()}">
 					<span class="name fadeout">
 						<span class="icon type1"></span>
-						<span class="text animGoal" data-bind="i18n: {'key': '%MODULENAME%/LABEL_STORAGE_COLLECTED'}"></span>
+						<span class="text animGoal"
+							  data-bind="i18n: {'key': '%MODULENAME%/LABEL_STORAGE_COLLECTED'}"></span>
 					</span>
 				</a>
 			</div>
@@ -66,7 +69,9 @@
 				<div class="item canSelect" data-bind="visible: Display, 
 						css: {'selected': $parent.selectedStorageValue() === Id},
 						click: $parents[0].gotoContactList">
-					<a href="javascript: void(0);" class="title" data-bind="click: function () { $parent.changeGroupType(Id); }, css: {'recivedAnim': $parent.recivedAnimTeam()}">
+					<a href="javascript: void(0);" class="title"
+					   data-bind="click: function () { $parent.changeGroupType(Id); },
+					   css: {'recivedAnim': recivedAnim}">
 						<span class="name fadeout">
 							<span class="icon type1"></span>
 							<span class="text animGoal" data-bind="text: DisplayName"></span>
