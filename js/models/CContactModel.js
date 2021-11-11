@@ -15,6 +15,7 @@ var
 	
 	Api = require('%PathToCoreWebclientModule%/js/Api.js'),
 	App = require('%PathToCoreWebclientModule%/js/App.js'),
+	Screens = require('%PathToCoreWebclientModule%/js/Screens.js'),
 	
 	CDateModel = require('%PathToCoreWebclientModule%/js/models/CDateModel.js'),
 	
@@ -753,6 +754,12 @@ CContactModel.prototype.sendThisContact = function ()
 CContactModel.prototype.isStrLink = function (mLink)
 {
 	return (/^http/).test(mLink);
+};
+
+CContactModel.prototype.copyToBuffer = function (sEmail)
+{
+	navigator.clipboard.writeText(sEmail);
+	Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_EMAIL_IN_CLIPBOARD'));
 };
 
 module.exports = CContactModel;

@@ -16,6 +16,7 @@ var
 	CreateContactPopup = require('modules/%ModuleName%/js/popups/CreateContactPopup.js'),
 	
 	ContactsCache = require('modules/%ModuleName%/js/Cache.js'),
+	CContactModel = require('modules/%ModuleName%/js/models/CContactModel.js'),
 	
 	oContactCardsView = {
 		contacts: ko.observableArray([]),
@@ -144,6 +145,7 @@ function OnContactResponse(aElements, aContacts)
 	_.each(aElements, function ($Element) {
 		var
 			sEmail = $Element.attr('data-email'), // $Element.data('email') returns wrong values if data-email was changed by knockoutjs
+			sName = $Element.attr('data-name'),
 			oContact = aContacts[sEmail]
 		;
 		
@@ -170,6 +172,13 @@ function OnContactResponse(aElements, aContacts)
 						});
 					}]);
 				});
+				
+				oContact = new CContactModel();
+				oContact.displayName(sName);
+				oContact.personalEmail(sEmail);
+				aContacts[sEmail] = oContact;
+				oContactCardsView.add(aContacts);
+				BindContactCard($Element, sEmail);
 			}
 			else
 			{

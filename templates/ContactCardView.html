@@ -12,6 +12,7 @@
 				</div>
 				<div class="row" data-bind="visible: email()">
 					<span data-bind="text: email, makeLinkComposeMailTo: getFullEmail()"></span>
+					<span class="icon_copy_to_buffer" data-bind="click: function () { copyToBuffer(email()); }, customTooltip: '%MODULENAME%/ACTION_COPY_TO_CLIPBOARD'"></span>
 				</div>
 				<div class="row" data-bind="visible: firstName() || lastName()">
 					<span class="value">
@@ -58,6 +59,7 @@
 				<div class="row" data-bind="visible: (personalEmail() && personalEmail() !== email())">
 					<span class="value">
 						<span data-bind="text: personalEmail, makeLinkComposeMailTo: getFullEmail(personalEmail())"></span>
+						<span class="icon_copy_to_buffer" data-bind="click: function () { copyToBuffer(personalEmail()); }, customTooltip: '%MODULENAME%/ACTION_COPY_TO_CLIPBOARD'"></span>
 					</span>
 				</div>
 				
@@ -85,6 +87,7 @@
 				<div class="row" data-bind="visible: (businessEmail() && businessEmail() !== email())">
 					<span class="value">
 						<span data-bind="text: businessEmail, makeLinkComposeMailTo: getFullEmail(businessEmail())"></span>
+						<span class="icon_copy_to_buffer" data-bind="click: function () { copyToBuffer(businessEmail()); }, customTooltip: '%MODULENAME%/ACTION_COPY_TO_CLIPBOARD'"></span>
 					</span>
 				</div>
 				<div class="row" data-bind="visible: businessCompany()">
@@ -145,6 +148,7 @@
 				<div class="row" data-bind="visible: (otherEmail() && otherEmail() !== email())">
 					<span class="value">
 						<span data-bind="text: otherEmail, makeLinkComposeMailTo: getFullEmail(otherEmail())"></span>
+						<span class="icon_copy_to_buffer" data-bind="click: function () { copyToBuffer(otherEmail()); }, customTooltip: '%MODULENAME%/ACTION_COPY_TO_CLIPBOARD'"></span>
 					</span>
 				</div>
 				
