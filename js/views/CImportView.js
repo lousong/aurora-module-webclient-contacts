@@ -52,7 +52,7 @@ CImportView.prototype.onBind = function ()
 			'Parameters':  _.bind(function () {
 				return JSON.stringify({
 					'GroupUUID': this.oParent.currentGroupUUID(),
-					'Storage': 'personal'
+					'Storage': this.oParent.isAddressBookSelected() ? this.oParent.selectedStorage() : 'personal'
 				});
 			}, this)
 		}, App.getCommonRequestParameters()),

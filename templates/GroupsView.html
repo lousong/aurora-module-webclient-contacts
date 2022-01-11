@@ -51,6 +51,18 @@
 				</a>
 			</div>
 			
+			<!-- ko foreach: addressBooks -->
+				<div class="item canSelect" data-bind="visible: Display, 
+						css: {'selected': $parent.selectedStorageValue() === Id},
+						click: $parents[0].gotoContactList">
+					<a href="javascript: void(0);" class="title" data-bind="click: function () { $parent.changeGroupType(Id); }, css: {'recivedAnim': $parent.recivedAnimTeam()}">
+						<span class="name fadeout">
+							<span class="icon type1"></span>
+							<span class="text animGoal" data-bind="text: DisplayName"></span>
+						</span>
+					</a>
+				</div>
+			<!-- /ko -->
 
 			<div data-bind="visible: showPersonalContacts() && 0 < groupFullCollection().length">
 				<div class="section_title fadeout" data-bind="i18n: {'key': '%MODULENAME%/HEADING_GROUPS'}"></div>
@@ -70,5 +82,10 @@
 				</div>
 			</div>
 		</div>
+	</div>
+</div>
+<div class="panel_bottom">
+	<div class="manage_folders" data-bind="visible: manageAddressBooksHash() !== '#'">
+		<a href="javascript: void(0)" data-bind="i18n: {'key': '%MODULENAME%/ACTION_MANAGE_ADDRESSBOOKS'}, attr: {href: manageAddressBooksHash}"></a>
 	</div>
 </div>

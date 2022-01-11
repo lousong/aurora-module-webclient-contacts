@@ -99,6 +99,13 @@ module.exports = function (oAppData) {
 						Settings.HashModuleName, 
 						TextUtils.i18n('%MODULENAME%/LABEL_SETTINGS_TAB')
 					]);
+					if (Settings.AllowAddressBooksManagement) {
+						ModulesManager.run('SettingsWebclient', 'registerSettingsTab', [
+							function () { return require('modules/%ModuleName%/js/views/AddressBooksSettingsFormView.js'); }, 
+							'manage-addressbooks', 
+							TextUtils.i18n('%MODULENAME%/LABEL_MANAGE_ADDRESSBOOK_SETTINGS_TAB')
+						]);
+					}
 					fRegisterMessagePaneControllerOnStart();
 				},
 				getScreens: function () {

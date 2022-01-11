@@ -12,8 +12,11 @@ module.exports = {
 	
 	ContactsPerPage: 20,
 	ImportContactsLink: '',
+	AddressBooks: [],
 	Storages: [],
 	DefaultStorage: 'personal',
+	AllowAddressBooksManagement: false,
+
 	ImportExportFormats: [],
 	SaveVcfServerModuleName: '',
 
@@ -35,15 +38,24 @@ module.exports = {
 		{
 			this.ContactsPerPage = Types.pPositiveInt(oAppDataSection.ContactsPerPage, this.ContactsPerPage);
 			this.ImportContactsLink = Types.pString(oAppDataSection.ImportContactsLink, this.ImportContactsLink);
-			this.Storages = Types.pArray(oAppDataSection.Storages, this.Storages);
+
+			var storages = Types.pArray(oAppDataSection.Storages, this.Storages);
+			this.AddressBooks = _.filter(storages, function (storage) {
+				return storage && storage.Id && _.indexOf(['personal', 'collected', 'shared', 'team'], storage.Id) === -1;
+			});
+			this.Storages = _.map(storages, function (storage) {
+				return storage.Id || storage;
+			});
 			if (this.Storages.length > 0)
 			{
 				this.Storages.push('all');
 				this.Storages.push('group');
 			}
+			this.AllowAddressBooksManagement = Types.pBool(oAppDataSection.AllowAddressBooksManagement, this.AllowAddressBooksManagement);
+
 			this.ImportExportFormats = Types.pArray(oAppDataSection.ImportExportFormats, this.ImportExportFormats);
 			this.SaveVcfServerModuleName = Types.pString(oAppDataSection.SaveVcfServerModuleName, this.SaveVcfServerModuleName);
-			
+
 			this.EContactsPrimaryEmail = Types.pObject(oAppDataSection.PrimaryEmail);
 			this.EContactsPrimaryPhone = Types.pObject(oAppDataSection.PrimaryPhone);
 			this.EContactsPrimaryAddress = Types.pObject(oAppDataSection.PrimaryAddress);
