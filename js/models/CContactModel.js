@@ -141,8 +141,9 @@ function CContactModel()
 	this.otherBirthYear = ko.observable(0);
 	this.otherNotes = ko.observable('');
 	this.etag = ko.observable('');
-	
-	this.isOpenPgpEnabled = ModulesManager.run('OpenPgpWebclient', 'isOpenPgpEnabled') || ko.observable(false);
+
+	this.isOpenPgpEnabled = ModulesManager.isModuleIncluded('OpenPgpWebclient');
+	this.isOpenPgpInMailEnabled = ModulesManager.run('OpenPgpWebclient', 'getOpenPgpInMailEnabledObservable') || ko.observable(false);
 
 	this.publicPgpKeyView = ko.observable('');
 	this.publicPgpKey = ko.observable('');

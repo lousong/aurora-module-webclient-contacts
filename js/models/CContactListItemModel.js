@@ -8,7 +8,7 @@ var
 	
 	Settings = require('modules/%ModuleName%/js/Settings.js'),
 
-	ModulesManager = require('%PathToCoreWebclientModule%/js/ModulesManager.js')	
+	ModulesManager = require('%PathToCoreWebclientModule%/js/ModulesManager.js')
 ;
 
 /**
@@ -33,7 +33,7 @@ function CContactListItemModel()
 	this.recivedAnim = ko.observable(false).extend({'autoResetToFalse': 500});
 	this.sStorage = Settings.DefaultStorage;
 
-	this.isOpenPgpEnabled = ModulesManager.run('OpenPgpWebclient', 'isOpenPgpEnabled') || ko.observable(false);	
+	this.isOpenPgpEnabled = ModulesManager.isModuleIncluded('OpenPgpWebclient');
 	this.HasPgpPublicKey = ko.observable(false);
 }
 

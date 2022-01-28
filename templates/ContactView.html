@@ -239,7 +239,7 @@
 					</div>
 				</div>
 
-				<div class="fields groups" data-bind="visible: !pgpSettingsEmpty()">
+				<div class="fields groups" data-bind="visible: isOpenPgpEnabled && !pgpSettingsEmpty()">
 					<h2 class="subheading" data-bind="i18n: {'key': '%MODULENAME%/HEADING_PGP_SETTINGS'}"></h2>
 					<div class="fieldset">
 						<div class="row key" data-bind="visible: '' !== publicPgpKey()">
