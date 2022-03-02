@@ -37,7 +37,7 @@ function Callback(oRequest, fResponse, sExceptEmail, sStorage, bWithGroups)
 			aList = _.map(oResponse.Result.List, function (oItem) {
 				var
 					sValue = oItem.ViewEmail,
-					sLable = ""
+					sLabel = ''
 				;
 				if (oItem.FullName && 0 < $.trim(oItem.FullName).length)
 				{
@@ -47,30 +47,39 @@ function Callback(oRequest, fResponse, sExceptEmail, sStorage, bWithGroups)
 					}
 					else if (oItem.IsGroup)
 					{
-						sLable = ('"' + oItem.FullName + '" (' + oItem.ViewEmail + ')');
+						sLabel = ('"' + oItem.FullName + '" (' + oItem.ViewEmail + ')');
 						sValue = oItem.ViewEmail;
 					}
 					else
 					{
 						sValue = ('"' + oItem.FullName + '" <' + oItem.ViewEmail + '>');
 					}
+				} else if (oItem.IsGroup && oItem.Name) {
+					return {
+						label: oItem.Name,
+						value: oItem.Name,
+						name: oItem.Name,
+						email: oItem.Name,
+						groupId: oItem.Id
+					};
 				}
-				return oItem && oItem.ViewEmail && oItem.ViewEmail !== sExceptEmail ?
-				{
-					label: sLable ? sLable : sValue,
-					value: sValue,
-					name: oItem.FullName,
-					email: oItem.ViewEmail,
-					frequency: oItem.Frequency,
-					id: oItem.UUID,
-					storage: oItem.Storage,
-					team: oItem.Storage === 'team',
-					sharedToAll: oItem.Storage === 'shared',
-					hasKey: oItem.HasPgpPublicKey,
-					encryptMessage: oItem.PgpEncryptMessages,
-					signMessage: oItem.PgpSignMessages
-				} :
-				null;
+				if (oItem && oItem.ViewEmail && oItem.ViewEmail !== sExceptEmail) {
+					return {
+						label: sLabel ? sLabel : sValue,
+						value: sValue,
+						name: oItem.FullName,
+						email: oItem.ViewEmail,
+						frequency: oItem.Frequency,
+						id: oItem.UUID,
+						storage: oItem.Storage,
+						team: oItem.Storage === 'team',
+						sharedToAll: oItem.Storage === 'shared',
+						hasKey: oItem.HasPgpPublicKey,
+						encryptMessage: oItem.PgpEncryptMessages,
+						signMessage: oItem.PgpSignMessages
+					};
+				}
+				return null;
 			});
 
 			aList = _.sortBy(_.compact(aList), function(oItem){
