@@ -330,8 +330,9 @@ function CContactsView()
 			});
 		}
 	}, this);
-	this.isPersonalStorageSelected = ko.computed(function () {
-		return this.selectedStorage() === 'personal';
+	this.visibleCreateOrImportText = ko.computed(function () {
+		return this.selectedStorage() !== 'all' && this.selectedStorage() !== 'shared' &&
+				this.selectedStorage() !== 'team' && this.selectedStorage() !== 'group';
 	}, this);
 	this.visibleImportExport = ko.computed(function () {
 		return this.aExportData.length > 0;

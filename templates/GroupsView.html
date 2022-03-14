@@ -53,7 +53,7 @@
 			
 			<!-- ko foreach: addressBooks -->
 				<div class="item canSelect" data-bind="visible: Display, 
-						css: {'selected': $parent.selectedStorageValue() === Id},
+						css: {'selected': $parent.selectedStorage() === Id},
 						click: $parents[0].gotoContactList">
 					<a href="javascript: void(0);" class="title" data-bind="click: function () { $parent.changeGroupType(Id); }, css: {'recivedAnim': $parent.recivedAnimTeam()}">
 						<span class="name fadeout">
