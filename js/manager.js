@@ -14,10 +14,10 @@ module.exports = function (oAppData) {
 		
 		SuggestionsAutocomplete = require('modules/%ModuleName%/js/SuggestionsAutocomplete.js'),
 		SuggestionsMethods = {
-			getSuggestionsAutocompleteCallback: function (sStorage, sExceptEmail, bWithGroups) {
+			getSuggestionsAutocompleteCallback: function (suggestParameters) {
 				var
 					fSuggestionsAutocompleteCallback = function (oRequest, fResponse) {
-						SuggestionsAutocomplete.callback(oRequest, fResponse, sExceptEmail, sStorage, bWithGroups);
+						SuggestionsAutocomplete.callback(oRequest, fResponse, suggestParameters);
 					},
 					//TODO: Remove this wrapper after adding PGP-keys to team storage
 					fSuggestionsAutocompleteFilteredCallback = ModulesManager.run(
@@ -31,14 +31,8 @@ module.exports = function (oAppData) {
 					:
 					fSuggestionsAutocompleteCallback;
 			},
-			getSuggestionsAutocompletePhoneCallback: function () {
-				return SuggestionsAutocomplete.phoneCallback;
-			},
 			getSuggestionsAutocompleteDeleteHandler: function () {
 				return SuggestionsAutocomplete.deleteHandler;
-			},
-			requestUserByPhone: function (sNumber, fCallBack, oContext) {
-				SuggestionsAutocomplete.requestUserByPhone(sNumber, fCallBack, oContext);
 			},
 			getContactsByEmails: function (aEmails, fCallBack) {
 				ContactsCache.getContactsByEmails(aEmails, fCallBack);
