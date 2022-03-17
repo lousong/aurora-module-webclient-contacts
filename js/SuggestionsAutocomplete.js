@@ -35,7 +35,7 @@ function Callback(oRequest, fResponse, {storage = 'all', addContactGroups = fals
 		}
 	;
 
-	Ajax.send('GetContactSuggestionsWithSystemGroups', oParameters, function (oResponse) {
+	Ajax.send('GetContactSuggestions', oParameters, function (oResponse) {
 		var aList = [];
 		if (oResponse && oResponse.Result && oResponse.Result.List)
 		{
