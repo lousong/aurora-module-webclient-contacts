@@ -40,6 +40,16 @@ function Callback(oRequest, fResponse, {storage = 'all', addContactGroups = fals
 		if (oResponse && oResponse.Result && oResponse.Result.List)
 		{
 			aList = _.map(oResponse.Result.List, function (oItem) {
+				if (oItem.IsGroup && oItem.Name) {
+					return {
+						label: `${oItem.Name} (${oItem.Emails})`,
+						value: oItem.Emails,
+						name: oItem.Name,
+						email: oItem.Emails,
+						groupId: oItem.Id,
+						isUserGroup: true
+					};
+				}
 				var
 					sValue = oItem.ViewEmail,
 					sLabel = ''
@@ -52,21 +62,13 @@ function Callback(oRequest, fResponse, {storage = 'all', addContactGroups = fals
 					}
 					else if (oItem.IsGroup)
 					{
-						sLabel = ('"' + oItem.FullName + '" (' + oItem.ViewEmail + ')');
+						sLabel = `${oItem.FullName} (${oItem.ViewEmail})`;
 						sValue = oItem.ViewEmail;
 					}
 					else
 					{
 						sValue = ('"' + oItem.FullName + '" <' + oItem.ViewEmail + '>');
 					}
-				} else if (oItem.IsGroup && oItem.Name) {
-					return {
-						label: oItem.Name,
-						value: oItem.Name,
-						name: oItem.Name,
-						email: oItem.Name,
-						groupId: oItem.Id
-					};
 				}
 				if (oItem && oItem.ViewEmail && oItem.ViewEmail !== exceptEmail) {
 					return {
@@ -81,12 +83,15 @@ function Callback(oRequest, fResponse, {storage = 'all', addContactGroups = fals
 						sharedToAll: oItem.Storage === 'shared',
 						hasKey: oItem.HasPgpPublicKey,
 						encryptMessage: oItem.PgpEncryptMessages,
-						signMessage: oItem.PgpSignMessages
+						signMessage: oItem.PgpSignMessages,
+						isContactGroup: oItem.IsGroup
 					};
 				}
 				return null;
 			});
 
+			aList = aList.filter(item => item && item.email);
+			console.log('aList', aList);
 			aList = _.sortBy(_.compact(aList), function(oItem){
 				return -oItem.frequency;
 			});
