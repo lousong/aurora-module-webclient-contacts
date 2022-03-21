@@ -47,7 +47,8 @@ function Callback(oRequest, fResponse, {storage = 'all', addContactGroups = fals
 						name: oItem.Name,
 						email: oItem.Emails,
 						groupId: oItem.Id,
-						isUserGroup: true
+						isUserGroup: true,
+						isAllUsersGroup: oItem.IsAll
 					};
 				}
 				var
