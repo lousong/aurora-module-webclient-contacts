@@ -20,7 +20,8 @@ var
  * @param {string} exceptEmail
  * @returns {undefined}
  */
-function Callback(oRequest, fResponse, {storage = 'all', addContactGroups = false, addUserGroups = false, exceptEmail = ''})
+function Callback(oRequest, fResponse, {storage = 'all', addContactGroups = false,
+					addUserGroups = false, exceptEmail = '', addEmailsToGroups = false})
 {
 	var
 		sTerm = oRequest.term,
@@ -42,10 +43,10 @@ function Callback(oRequest, fResponse, {storage = 'all', addContactGroups = fals
 			aList = _.map(oResponse.Result.List, function (oItem) {
 				if (oItem.IsGroup && oItem.Name) {
 					return {
-						label: `${oItem.Name} (${oItem.Emails})`,
-						value: oItem.Emails,
+						label: addEmailsToGroups ? `${oItem.Name} (${oItem.Emails})` : oItem.Name,
+						value: addEmailsToGroups ? oItem.Emails : oItem.Name,
 						name: oItem.Name,
-						email: oItem.Emails,
+						email: addEmailsToGroups ? oItem.Emails : oItem.Name,
 						groupId: oItem.Id,
 						isUserGroup: true,
 						isAllUsersGroup: oItem.IsAll
@@ -92,7 +93,6 @@ function Callback(oRequest, fResponse, {storage = 'all', addContactGroups = fals
 			});
 
 			aList = aList.filter(item => item && item.email);
-			console.log('aList', aList);
 			aList = _.sortBy(_.compact(aList), function(oItem){
 				return -oItem.frequency;
 			});
