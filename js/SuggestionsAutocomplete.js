@@ -42,6 +42,9 @@ function Callback(oRequest, fResponse, {storage = 'all', addContactGroups = fals
 		{
 			aList = _.map(oResponse.Result.List, function (oItem) {
 				if (oItem.IsGroup && oItem.Name) {
+					if (!oItem.Emails) {
+						return null;
+					}
 					return {
 						label: addEmailsToGroups ? `${oItem.Name} (${oItem.Emails})` : oItem.Name,
 						value: addEmailsToGroups ? oItem.Emails : oItem.Name,
