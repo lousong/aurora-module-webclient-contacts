@@ -17,8 +17,11 @@
 					click: $parent.gotoContactList">
 				<a href="javascript: void(0);" class="title" data-bind="
 						css: {'recivedAnim': recivedAnimPersonal()},
-						droppable: {valueFunc: function (oEvent, oUi) { $root.contactsDropToGroupType('personal', oEvent, oUi); }, switchObserv: disableDropToPersonal},
-						click: function () { changeGroupType('personal'); }">
+						droppable: {valueFunc: allowDropToStorage() && 'personal' !== selectedStorage()
+									? function (oEvent, oUi) { $root.contactsDropToGroupType('personal', oEvent, oUi); }
+									: false},
+						click: function () { changeGroupType('personal'); }"
+				>
 					<span class="name fadeout">
 						<span class="icon type1"></span>
 						<span class="text animGoal" data-bind="i18n: {'key': '%MODULENAME%/LABEL_STORAGE_PERSONAL'}"></span>
@@ -31,7 +34,6 @@
 					click: $parent.gotoContactList">
 				<a href="javascript: void(0);" class="title" data-bind="
 						css: {'recivedAnim': recivedAnimShared()},
-						droppable: {valueFunc: function (oEvent, oUi) { $root.contactsDropToGroupType('shared', oEvent, oUi); }, switchObserv: isTeamStorageSelected},
 						click: function () { changeGroupType('shared'); }">
 					<span class="name fadeout">
 						<span class="icon type3"></span>
@@ -56,7 +58,11 @@
 					click: $parent.gotoContactList">
 				<a href="javascript: void(0);" class="title"
 						data-bind="click: function () { changeGroupType('collected'); },
-						css: {'recivedAnim': recivedAnimCollected()}">
+						droppable: {valueFunc: allowDropToStorage() && !isCollectedStorageSelected()
+									? function (oEvent, oUi) { $root.contactsDropToGroupType('collected', oEvent, oUi); }
+									: false},
+						css: {'recivedAnim': recivedAnimCollected()}"
+				>
 					<span class="name fadeout">
 						<span class="icon type1"></span>
 						<span class="text animGoal"
@@ -70,8 +76,12 @@
 						css: {'selected': $parent.selectedStorageValue() === Id},
 						click: $parents[0].gotoContactList">
 					<a href="javascript: void(0);" class="title"
-					   data-bind="click: function () { $parent.changeGroupType(Id); },
-					   css: {'recivedAnim': recivedAnim}">
+							data-bind="click: function () { $parent.changeGroupType(Id); },
+							droppable: {valueFunc: $parent.allowDropToStorage() && $parent.selectedStorageValue() !== Id
+										? function (oEvent, oUi) { $root.contactsDropToGroupType(Id, oEvent, oUi); }
+										: false},
+							css: {'recivedAnim': recivedAnim}"
+					>
 						<span class="name fadeout">
 							<span class="icon type1"></span>
 							<span class="text animGoal" data-bind="text: DisplayName"></span>

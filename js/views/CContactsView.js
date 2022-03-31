@@ -84,7 +84,7 @@ function CContactsView()
 	this.isTeamStorageSelected = ko.observable(false);
 	this.isCollectedStorageSelected = ko.observable(false);
 	this.isNotTeamStorageSelected = ko.observable(false);
-	this.disableDropToPersonal = ko.observable(false);
+	this.allowDropToStorage = ko.observable(false);
 	this.selectedStorageValue = ko.observable('');
 	this.selectedStorage = ko.computed({
 		'read': function () {
@@ -107,14 +107,14 @@ function CContactsView()
 				this.isTeamStorageSelected(this.selectedStorageValue() === 'team');
 				this.isCollectedStorageSelected(this.selectedStorageValue() === 'collected');
 				this.isNotTeamStorageSelected(this.selectedStorageValue() !== 'team');
-				this.disableDropToPersonal(this.selectedStorageValue() !== 'shared');
+				this.allowDropToStorage(this.selectedStorageValue() === 'personal' || this.isCollectedStorageSelected() || this.isAddressBookSelected());
 			}
 		},
 		'owner': this
 	});
 	
 	this.allowDrag = ko.computed(function () {
-		return !this.isAddressBookSelected();
+		return true;
 	}, this);
 	
 	this._addressBooks = ko.observableArray([]);
@@ -1444,9 +1444,9 @@ CContactsView.prototype.dragAndDropHelper = function (oContact)
 		oSelected.checked(true);
 	}
 
-	oHelper.data('drag-contatcs-storage', this.selectedStorage());
-	oHelper.data('drag-contatcs-uids', aUids);
-	
+	oHelper.data('drag-contacts-storage', this.selectedStorage());
+	oHelper.data('drag-contacts-uids', aUids);
+
 	$('.count-text', oHelper).text(TextUtils.i18n('%MODULENAME%/LABEL_DRAG_CONTACTS_PLURAL', {
 		'COUNT': nCount
 	}, null, nCount));
@@ -1465,7 +1465,7 @@ CContactsView.prototype.contactsDrop = function (oToGroup, oEvent, oUi)
 	{
 		var
 			oHelper = oUi && oUi.helper ? oUi.helper : null,
-			aUids = oHelper ? oHelper.data('drag-contatcs-uids') : null
+			aUids = oHelper ? oHelper.data('drag-contacts-uids') : null
 		;
 
 		if (null !== aUids)
@@ -1476,18 +1476,78 @@ CContactsView.prototype.contactsDrop = function (oToGroup, oEvent, oUi)
 	}
 };
 
-CContactsView.prototype.contactsDropToGroupType = function (sDropStorage, oEvent, oUi)
+CContactsView.prototype.contactsDropToGroupType = function (toStorage, event, ui)
+{
+	if (!this.allowDropToStorage()) {
+		return;
+	}
+
+	var
+		helper = ui && ui.helper,
+		fromStorage = Types.pString(helper && helper.data('drag-contacts-storage')),
+		uids = Types.pArray(helper && helper.data('drag-contacts-uids'))
+	;
+
+	if (uids.length > 0 && toStorage !== fromStorage) {
+		Utils.uiDropHelperAnim(event, ui);
+		this.moveContacts(toStorage);
+	}
+};
+
+CContactsView.prototype.moveContacts = function (toStorage)
 {
 	var
-		oHelper = oUi && oUi.helper,
-		sDragStorage = oHelper && oHelper.data('drag-contatcs-storage') || null,
-		aUids = oHelper && oHelper.data('drag-contatcs-uids') || null
+		fromStorage = this.selectedStorage(),
+		checkedContacts = _.filter(this.selector.listCheckedOrSelected(), function (oItem) {
+			return oItem.sStorage !== 'team';
+		}),
+		checkedUUIDs = _.map(checkedContacts, function (oItem) {
+			return oItem.UUID();
+		})
 	;
-	
-	if (null !== aUids && null !== sDragStorage && sDropStorage !== sDragStorage)
+
+	checkedUUIDs = _.compact(checkedUUIDs);
+
+	if (0 < checkedUUIDs.length && toStorage !== fromStorage)
 	{
-		Utils.uiDropHelperAnim(oEvent, oUi);
-		this.executeShare();
+		_.each(checkedContacts, function (contact) {
+			if (contact) {
+				ContactsCache.clearInfoAboutEmail(contact.Email());
+			}
+		}, this);
+
+		if (-1 < $.inArray(this.selectedContact(), checkedContacts)) {
+			this.selectedContact(null);
+		}
+
+		_.each(this.collection(), function (contact) {
+			if (-1 < $.inArray(contact, checkedContacts)) {
+				contact.deleted(true);
+			}
+		});
+
+		_.delay(function () {
+			this.collection.remove(function (contact) {
+				return contact.deleted();
+			});
+		}.bind(this), 500);
+
+		if (toStorage === 'personal') {
+			this.recivedAnimPersonal(true);
+		}
+		const parameters = {
+			'FromStorage': fromStorage,
+			'ToStorage': toStorage,
+			'ContactUUIDs': checkedUUIDs
+		};
+		Ajax.send('MoveContacts', parameters, function (response) {
+			if (response.Result) {
+				this.selector.listCheckedOrSelected(false);
+			} else {
+				Api.showErrorByCode(response);
+			}
+			this.requestContactList();
+		}, this);
 	}
 };
 
