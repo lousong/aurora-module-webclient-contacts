@@ -27,10 +27,8 @@
 				<span class="dropdown_helper">
 					<span class="dropdown_arrow"><span></span></span>
 					<span class="dropdown_content">
-						<!-- ko if: !isCollectedStorageSelected() -->
-							<!-- ko foreach: aExportData -->
-							<span class="item export" data-bind="text: text, command: command"></span>
-							<!-- /ko -->
+						<!-- ko foreach: aExportData -->
+						<span class="item export" data-bind="text: text, command: command"></span>
 						<!-- /ko -->
 						<span class="item import" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_IMPORT'}, command: importCommand, visible: isNotTeamStorageSelected"></span>
 					</span>
