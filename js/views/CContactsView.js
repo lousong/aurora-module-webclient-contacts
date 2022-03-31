@@ -793,7 +793,7 @@ CContactsView.prototype.executeRemoveFromGroup = function ()
 
 CContactsView.prototype.executeImport = function ()
 {
-	if (this.isAddressBookSelected())
+	if (this.isAddressBookSelected() || this.isCollectedStorageSelected())
 	{
 		this.changeRouting({Storage: this.selectedStorage(), GroupUUID: '', Search: '', Page: 1, Action: 'import'});
 	}
@@ -1877,7 +1877,7 @@ CContactsView.prototype.initUploader = function ()
 				'Parameters':  _.bind(function () {
 					return JSON.stringify({
 						'GroupUUID': this.currentGroupUUID(),
-						'Storage': 'personal'
+						'Storage': (this.isAddressBookSelected() || this.isCollectedStorageSelected()) ? this.selectedStorage() : 'personal'
 					});
 				}, this)
 			}, App.getCommonRequestParameters())

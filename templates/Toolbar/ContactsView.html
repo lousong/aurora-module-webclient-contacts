@@ -21,14 +21,16 @@
 		</span>
 
 		
-		<span class="item control" data-bind="visible: visibleImportExport() && isNotTeamStorageSelected() && !isCollectedStorageSelected(), dropdown: {control: false}">
+		<span class="item control" data-bind="visible: visibleImportExport() && isNotTeamStorageSelected(), dropdown: {control: false}">
 			<span class="icon arrow"></span>
 			<span class="dropdown">
 				<span class="dropdown_helper">
 					<span class="dropdown_arrow"><span></span></span>
 					<span class="dropdown_content">
-						<!-- ko foreach: aExportData -->
-						<span class="item export" data-bind="text: text, command: command"></span>
+						<!-- ko if: !isCollectedStorageSelected() -->
+							<!-- ko foreach: aExportData -->
+							<span class="item export" data-bind="text: text, command: command"></span>
+							<!-- /ko -->
 						<!-- /ko -->
 						<span class="item import" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_IMPORT'}, command: importCommand, visible: isNotTeamStorageSelected"></span>
 					</span>
