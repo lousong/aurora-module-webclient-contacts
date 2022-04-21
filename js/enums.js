@@ -13,6 +13,14 @@ Enums.ContactsPrimaryPhone = UserSettings.EContactsPrimaryPhone;
 Enums.ContactsPrimaryAddress = UserSettings.EContactsPrimaryAddress;
 Enums.ContactSortField = UserSettings.EContactSortField;
 
+/**
+ * @enum {number}
+ */
+Enums.SharedAddressbookAccess = {
+	'Write': 1,
+	'Read': 2
+};
+
 if (typeof window.Enums === 'undefined')
 {
 	window.Enums = {};
