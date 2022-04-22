@@ -82,6 +82,7 @@ function CContactsView()
 	this.recivedAnimTeam = ko.observable(false).extend({'autoResetToFalse': 500});
 	
 	this.isAddressBookSelected = ko.observable(false);
+	this.isSelectedAddressbookSharedForReading = ko.observable(false);
 	this.isTeamStorageSelected = ko.observable(false);
 	this.isNotTeamStorageSelected = ko.observable(false);
 	this.disableDropToPersonal = ko.observable(false);
@@ -101,9 +102,12 @@ function CContactsView()
 					this.selector.listCheckedOrSelected(false);
 					this.currentGroupUUID('');
 				}
-				this.isAddressBookSelected(!!_.find(this.addressBooks(), function (oAddressBook) {
-					return oAddressBook.Id === this.selectedStorageValue();
-				}, this));
+				const selectedAddressbook = this.addressBooks().find(addressbook => addressbook.Id === this.selectedStorageValue());
+				this.isAddressBookSelected(!!selectedAddressbook);
+				this.isSelectedAddressbookSharedForReading(
+						selectedAddressbook && selectedAddressbook.Shared
+						&& selectedAddressbook.Access === Enums.SharedAddressbookAccess.Read
+				);
 				this.isTeamStorageSelected(this.selectedStorageValue() === 'team');
 				this.isNotTeamStorageSelected(this.selectedStorageValue() !== 'team');
 				this.disableDropToPersonal(this.selectedStorageValue() !== 'shared');
@@ -264,6 +268,11 @@ function CContactsView()
 	this.isEnableAddContacts = this.isCheckedOrSelected;
 	this.isEnableRemoveContactsFromGroup = this.isCheckedOrSelected;
 	this.isEnableDeleting = this.isCheckedOrSelected;
+	this.isDeleteVisible = ko.computed(function () {
+		return this.showPersonalContacts() && this.selectedStorage() === 'personal'
+				|| this.showSharedToAllContacts() && this.selectedStorage() === 'shared'
+				|| this.isAddressBookSelected() && !this.isSelectedAddressbookSharedForReading();
+	}, this);
 	this.isEnableSharing = this.isCheckedOrSelected;
 	this.visibleShareCommand = ko.computed(function () {
 		return this.showPersonalContacts() && this.showSharedToAllContacts() && this.selectedStorage() === 'personal';
@@ -278,7 +287,10 @@ function CContactsView()
 	
 	this.isSaving = ko.observable(false);
 	
-	this.newContactCommand = Utils.createCommand(this, this.executeNewContact, this.isNotTeamStorageSelected);
+	this.isEnableCreateContact = ko.computed(function () {
+		return this.isNotTeamStorageSelected() && !this.isSelectedAddressbookSharedForReading();
+	}, this);
+	this.newContactCommand = Utils.createCommand(this, this.executeNewContact, this.isEnableCreateContact);
 	this.newGroupCommand = Utils.createCommand(this, this.executeNewGroup);
 	this.addContactsCommand = Utils.createCommand(this, function () {}, this.isEnableAddContacts);
 	this.deleteCommand = Utils.createCommand(this, this.deleteContact, this.isEnableDeleting);
@@ -291,6 +303,9 @@ function CContactsView()
 	}, this);
 	this.shareCommand = Utils.createCommand(this, this.executeShare, this.isEnableSharing);
 	this.removeFromGroupCommand = Utils.createCommand(this, this.executeRemoveFromGroup, this.isEnableRemoveContactsFromGroup);
+	this.isImportAllowed = ko.computed(function () {
+		return this.isNotTeamStorageSelected() &&!this.isSelectedAddressbookSharedForReading();
+	}, this);
 	this.importCommand = Utils.createCommand(this, this.executeImport);
 	this.saveCommand = Utils.createCommand(this, this.executeSave);
 	this.updateSharedToAllCommand = Utils.createCommand(this, this.executeUpdateSharedToAll, this.isExactlyOneContactSelected);
@@ -1789,7 +1804,7 @@ CContactsView.prototype.initUploader = function ()
 CContactsView.prototype.onImportSelect = function (sFileUid, oFileData)
 {
 	var
-		bAllowImport = this.isNotTeamStorageSelected(),
+		bAllowImport = this.isImportAllowed(),
 		bAllowFormat = false
 	;
 	

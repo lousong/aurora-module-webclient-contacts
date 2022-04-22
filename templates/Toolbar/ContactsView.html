@@ -21,7 +21,7 @@
 		</span>
 
 		
-		<span class="item control" data-bind="visible: visibleImportExport() && isNotTeamStorageSelected(), dropdown: {control: false}">
+		<span class="item control" data-bind="visible: visibleImportExport() && isImportAllowed(), dropdown: {control: false}">
 			<span class="icon arrow"></span>
 			<span class="dropdown">
 				<span class="dropdown_helper">
@@ -30,7 +30,7 @@
 						<!-- ko foreach: aExportData -->
 						<span class="item export" data-bind="text: text, command: command"></span>
 						<!-- /ko -->
-						<span class="item import" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_IMPORT'}, command: importCommand, visible: isNotTeamStorageSelected"></span>
+						<span class="item import" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_IMPORT'}, command: importCommand, visible: isImportAllowed"></span>
 					</span>
 				</span>
 			</span>
@@ -38,7 +38,7 @@
 		
 		<!-- ko foreach: aExportData -->
 		<span class="item" data-bind="attr: {'class': 'item export-' + css},
-			  visible: $parent.isTeamStorageSelected(),
+			  visible: $parent.isTeamStorageSelected() || $parent.isSelectedAddressbookSharedForReading(),
 			  command: command, customTooltip: text">
 			<span class="icon"></span>
 			<span class="text" data-bind="text: text"></span>
