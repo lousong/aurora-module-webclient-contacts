@@ -23,7 +23,6 @@ var
 	
 	Popups = require('%PathToCoreWebclientModule%/js/Popups.js'),
 	ConfirmPopup = require('%PathToCoreWebclientModule%/js/popups/ConfirmPopup.js'),
-	AddressbookSharePopup = ModulesManager.run('SharedContacts', 'getAddressbookSharePopup'),
 
 	LinksUtils = require('modules/%ModuleName%/js/utils/Links.js'),
 	
@@ -46,7 +45,9 @@ var
 function CContactsView()
 {
 	CAbstractScreenView.call(this, '%ModuleName%');
-	
+
+	this.shareAddressbookControlView = ModulesManager.run('SharedContacts', 'getShareAddressbookControlView'),
+
 	this.browserTitle = ko.observable(TextUtils.i18n('%MODULENAME%/HEADING_BROWSER_TAB'));
 	
 	this.contactCount = ko.observable(0);
@@ -359,16 +360,6 @@ _.extendOwn(CContactsView.prototype, CAbstractScreenView.prototype);
 
 CContactsView.prototype.ViewTemplate = '%ModuleName%_ContactsScreenView';
 CContactsView.prototype.ViewConstructorName = 'CContactsView';
-
-/**
- * @param {Object} addressbook
- */
-CContactsView.prototype.openAddressbookSharePopup = function (addressbook)
-{
-	if (AddressbookSharePopup && addressbook) {
-		Popups.showPopup(AddressbookSharePopup, [addressbook]);
-	}
-};
 
 CContactsView.prototype.getFormatDependentText = function (sLangConstantName)
 {

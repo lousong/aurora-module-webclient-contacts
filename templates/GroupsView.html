@@ -23,10 +23,11 @@
 						<span class="icon type1"></span>
 						<span class="text animGoal" data-bind="i18n: {'key': '%MODULENAME%/LABEL_STORAGE_PERSONAL'}"></span>
 					</span>
-					<span class="share_control" data-bind="
-						  click: function () { $parent.openAddressbookSharePopup($data); },
-						  customTooltip: '%MODULENAME%/ACTION_SHARE_ADDRESSBOOK'"
-					></span>
+					<!-- ko if: $parent.shareAddressbookControlView -->
+						<!-- ko with: {Id: 'personal', Shared: false} -->
+							<!-- ko template: { name: $parent.shareAddressbookControlView.ViewTemplate, data: $parent.shareAddressbookControlView} --><!-- /ko -->
+						<!-- /ko -->
+					<!-- /ko -->
 				</a>
 			</div>
 
@@ -64,16 +65,9 @@
 							<span class="icon type1"></span>
 							<span class="text animGoal" data-bind="text: DisplayName"></span>
 						</span>
-						<span class="share_control" data-bind="
-							  visible: !$data.Shared,
-							  click: function () { $parent.openAddressbookSharePopup($data); },
-							  customTooltip: '%MODULENAME%/ACTION_SHARE_ADDRESSBOOK'"
-						></span>
-						<span class="leave_share_control" data-bind="
-							  visible: $data.Shared,
-							  click: function () { console.log('leave share', $data); },
-							  customTooltip: '%MODULENAME%/ACTION_LEAVE_SHARE_ADDRESSBOOK'"
-						></span>
+						<!-- ko if: $parent.shareAddressbookControlView -->
+							<!-- ko template: { name: $parent.shareAddressbookControlView.ViewTemplate, data: $parent.shareAddressbookControlView} --><!-- /ko -->
+						<!-- /ko -->
 					</a>
 				</div>
 			<!-- /ko -->
