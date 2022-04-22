@@ -43,7 +43,7 @@ CAddressBooksSettingsFormView.prototype.populate = function ()
 	Ajax.send('Contacts', 'GetAddressBooks', {}, function (oResponse) {
 		this.loading(false);
 		if (_.isArray(oResponse && oResponse.Result)) {
-			this.addressBooks(oResponse.Result);
+			this.addressBooks(oResponse.Result.filter(addressbook => !addressbook.Shared));
 		} else {
 			Api.showErrorByCode(oResponse);
 		}
