@@ -17,6 +17,7 @@ Enums.ContactSortField = UserSettings.EContactSortField;
  * @enum {number}
  */
 Enums.SharedAddressbookAccess = {
+	'NoAccess': 0,
 	'Write': 1,
 	'Read': 2
 };
