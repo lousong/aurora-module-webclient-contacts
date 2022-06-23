@@ -18,6 +18,7 @@ var
  * @param {boolean} addContactGroups
  * @param {boolean} addUserGroups
  * @param {string} exceptEmail
+ * @param {boolean} addEmailsToGroups
  * @returns {undefined}
  */
 function Callback(oRequest, fResponse, {storage = 'all', addContactGroups = false,
@@ -84,6 +85,7 @@ function Callback(oRequest, fResponse, {storage = 'all', addContactGroups = fals
 						frequency: oItem.Frequency,
 						id: oItem.UUID,
 						storage: oItem.Storage,
+						uuid: oItem.UUID,
 						team: oItem.Storage === 'team',
 						sharedToAll: oItem.Storage === 'shared',
 						hasKey: oItem.HasPgpPublicKey,
