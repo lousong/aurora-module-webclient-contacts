@@ -1016,6 +1016,8 @@ CContactsView.prototype.refreshContactsAndGroups = function ()
 {
 	this.requestContactList();
 	this.requestGroupFullList();
+	// The result is handled in subscription above
+	Ajax.send('GetAddressBooks');
 };
 
 CContactsView.prototype.requestContactList = function ()
