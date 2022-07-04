@@ -22,7 +22,7 @@ var
  * @returns {undefined}
  */
 function Callback(oRequest, fResponse, {storage = 'all', addContactGroups = false,
-					addUserGroups = false, exceptEmail = '', addEmailsToGroups = false})
+					addUserGroups = false, exceptEmail = '', addEmailsToGroups = false, useEmailAsValues = false})
 {
 	var
 		sTerm = oRequest.term,
@@ -60,7 +60,7 @@ function Callback(oRequest, fResponse, {storage = 'all', addContactGroups = fals
 					sValue = oItem.ViewEmail,
 					sLabel = ''
 				;
-				if (oItem.FullName && 0 < $.trim(oItem.FullName).length)
+				if (!useEmailAsValues && oItem.FullName && 0 < $.trim(oItem.FullName).length)
 				{
 					if (oItem.ForSharedToAll)
 					{
