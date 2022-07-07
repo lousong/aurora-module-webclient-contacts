@@ -149,7 +149,7 @@ function CContactModel()
 	this.publicPgpKey = ko.observable('');
 	this.pgpEncryptMessages = ko.observable(false);
 	this.pgpSignMessages = ko.observable(false);
-
+	
 	this.publicPgpKey.subscribe(function (sValue) {
 		if (sValue !== '')
 		{
@@ -246,6 +246,10 @@ function CContactModel()
 		},
 		'owner': this
 	});
+
+	this.showEncryptSignFlags = ko.computed(function () {
+		return !this.team() && this.isOpenPgpInMailEnabled() && this.publicPgpKeyView();
+	}, this);
 
 	this.personalIsEmpty = ko.computed(function () {
 		var sPersonalEmail = (this.personalEmail() !== this.email()) ? this.personalEmail() : '';

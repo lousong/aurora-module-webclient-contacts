@@ -334,10 +334,10 @@
 					<div class="row hint" data-bind="visible: publicPgpKeyView">
 						<span data-bind="text: publicPgpKeyView"></span>
 					</div>
-					<div class="row" data-bind="visible: isOpenPgpInMailEnabled() && publicPgpKeyView()">
+					<div class="row" data-bind="visible: showEncryptSignFlags">
 						<span data-bind="i18n: {'key': '%MODULENAME%/INFO_ENCRYPT_SIGN_MESSAGES'}"></span>
 					</div>
-					<div class="row" data-bind="visible: isOpenPgpInMailEnabled() && publicPgpKeyView()">
+					<div class="row" data-bind="visible: showEncryptSignFlags">
 						<span class="label">
 							<label class="custom_checkbox" data-bind="css: {'checked': pgpEncryptMessages}">
 								<span class="icon"></span>
@@ -346,7 +346,7 @@
 							<label for="pgpEncryptMessages" data-bind="i18n: {'key': '%MODULENAME%/LABEL_ENCRYPT_MESSAGES'}"></label>
 						</span>
 					</div>
-					<div class="row" data-bind="visible: isOpenPgpInMailEnabled() && publicPgpKeyView()">
+					<div class="row" data-bind="visible: showEncryptSignFlags">
 						<span class="label">
 							<label class="custom_checkbox" data-bind="css: {'checked': pgpSignMessages}">
 								<span class="icon"></span>
