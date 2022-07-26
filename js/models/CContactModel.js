@@ -36,7 +36,7 @@ function CContactModel()
 	this.sAddressDefaultType = Enums.ContactsPrimaryAddress.Personal;
 	
 	this.uuid = ko.observable('');
-	this.idUser = ko.observable('');
+	this.idUser = ko.observable(0);
 	this.team = ko.observable(false);
 	this.itsMe = ko.observable(false);
 	this.storage = ko.observable('personal');
@@ -248,7 +248,7 @@ function CContactModel()
 	});
 
 	this.showEncryptSignFlags = ko.computed(function () {
-		return !this.team() && this.isOpenPgpInMailEnabled() && this.publicPgpKeyView();
+		return this.isOpenPgpInMailEnabled() && this.publicPgpKeyView();
 	}, this);
 
 	this.personalIsEmpty = ko.computed(function () {
@@ -495,7 +495,7 @@ CContactModel.birthMonthSelect = [
 CContactModel.prototype.clear = function ()
 {
 	this.uuid('');
-	this.idUser('');
+	this.idUser(0);
 	this.team(false);
 	this.itsMe(false);
 	this.storage('');
@@ -646,13 +646,21 @@ CContactModel.prototype.toObject = function ()
 	return oResult;
 };
 
+function getPgpFlagValue(data, flagName, isTeam) {
+	const userId = App.getUserId();
+	if (isTeam) {
+		return !!data[`${flagName}_${userId}`];
+	}
+	return !!data[flagName];
+}
+
 /**
  * @param {Object} oData
  */
 CContactModel.prototype.parse = function (oData)
 {
 	this.uuid(Types.pString(oData.UUID));
-	this.idUser(Types.pString(oData.IdUser));
+	this.idUser(Types.pInt(oData.IdUser));
 
 	this.team(oData.Storage === 'team');
 	this.storage(Types.pString(oData.Storage));
@@ -705,8 +713,8 @@ CContactModel.prototype.parse = function (oData)
 	this.etag(Types.pString(oData.ETag));
 
 	this.publicPgpKey(Types.pString(oData['OpenPgpWebclient::PgpKey']));
-	this.pgpEncryptMessages(Types.pBool(oData['OpenPgpWebclient::PgpEncryptMessages']));
-	this.pgpSignMessages(Types.pBool(oData['OpenPgpWebclient::PgpSignMessages']));
+	this.pgpEncryptMessages(getPgpFlagValue(oData, 'OpenPgpWebclient::PgpEncryptMessages', this.team()));
+	this.pgpSignMessages(getPgpFlagValue(oData, 'OpenPgpWebclient::PgpSignMessages', this.team()));
 
 	this.sharedToAll(oData.Storage === 'shared');
 

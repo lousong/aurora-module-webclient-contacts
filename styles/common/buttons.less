@@ -22,7 +22,7 @@
 }
 
 .panel_center {
-	.buttons {
+	.buttons:not(.buttons_inline) {
 		margin: 0px;
 		position: relative;
 		z-index: 1;
@@ -40,6 +40,9 @@
 				right: auto;
 			}
 		}
+	}
+	.buttons_inline {
+		text-align: left;
 	}
 }
 

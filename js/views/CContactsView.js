@@ -12,6 +12,7 @@ var
 	
 	Api = require('%PathToCoreWebclientModule%/js/Api.js'),
 	App = require('%PathToCoreWebclientModule%/js/App.js'),
+	CoreAjax = require('%PathToCoreWebclientModule%/js/Ajax.js'),
 	CJua = require('%PathToCoreWebclientModule%/js/CJua.js'),
 	CSelector = require('%PathToCoreWebclientModule%/js/CSelector.js'),
 	ModulesManager = require('%PathToCoreWebclientModule%/js/ModulesManager.js'),
@@ -308,6 +309,7 @@ function CContactsView()
 	}, this);
 	this.importCommand = Utils.createCommand(this, this.executeImport);
 	this.saveCommand = Utils.createCommand(this, this.executeSave);
+	this.saveEncryptSignFlagsCommand = Utils.createCommand(this, this.executeSaveEncryptSignFlags, () => !this.isSaving());
 	this.updateSharedToAllCommand = Utils.createCommand(this, this.executeUpdateSharedToAll, this.isExactlyOneContactSelected);
 	this.composeMessageCommand = Utils.createCommand(this, this.composeMessage, this.isCheckedOrSelected);
 	
@@ -398,6 +400,26 @@ CContactsView.prototype.getCreateOrImportInfo = function ()
 {
 	var sOrImportInfo = this.getFormatDependentText('INFO_OR_IMPORT');
 	return TextUtils.i18n('%MODULENAME%/INFO_CREATE') + (sOrImportInfo === '' ? '' : ' ' + sOrImportInfo) + '.';
+};
+
+CContactsView.prototype.executeSaveEncryptSignFlags = function (contact)
+{
+	if (contact instanceof CContactModel) {
+		const parameters = {
+			UUID: contact.uuid(),
+			PgpEncryptMessages: contact.pgpEncryptMessages(),
+			PgpSignMessages: contact.pgpSignMessages()
+		};
+		this.isSaving(true);
+		CoreAjax.send('OpenPgpWebclient', 'UpdateContactPublicKeyFlags', parameters, (response, request) => {
+			this.isSaving(false);
+			if (response && response.Result) {
+				Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_PGP_SETTINGS_SAVED'));
+			} else {
+				Api.showErrorByCode(response, TextUtils.i18n('%MODULENAME%/ERROR_SAVE_PGP_SETTINGS'));
+			}
+		});
+	}
 };
 
 /**
